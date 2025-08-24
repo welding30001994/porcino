@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Futurista de Seguimiento de Chanchos</title>
+    <style>
+        :root {
+            --primary: #2a2d43;
+            --secondary: #4e4376;
+            --accent: #00b4d8;
+            --light: #f8f9fa;
+            --dark: #121212;
+            --success: #28a745;
+            --warning: #ffc107;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--light);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, var(--accent), #90e0ef);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.8;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .form-section, .list-section {
+            background: rgba(18, 18, 18, 0.7);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+        
+        .form-title {
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--accent);
+            color: var(--accent);
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--light);
+            font-size: 16px;
+        }
+        
+        input:focus, select:focus {
+            outline: 2px solid var(--accent);
+        }
+        
+        button {
+            background: linear-gradient(to right, var(--accent), #0077b6);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 180, 216, 0.4);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        th {
+            background-color: rgba(0, 180, 216, 0.2);
+            color: var(--accent);
+            font-weight: 600;
+        }
+        
+        tr {
+            transition: all 0.3s ease;
+        }
+        
+        tr:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+        
+        tr.selected {
+            background-color: rgba(40, 167, 69, 0.2);
+            text-decoration: line-through;
+            opacity: 0.7;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .actions button {
+            flex: 1;
+        }
+        
+        .btn-remove {
+            background: linear-gradient(to right, #dc3545, #a71e2a);
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--accent);
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .futuristic-element {
+            height: 5px;
+            background: linear-gradient(to right, var(--accent), #0077b6, var(--accent));
+            border-radius: 5px;
+            margin: 15px 0;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Sistema de Seguimiento de Chanchos</h1>
+            <p class="subtitle">Control futurista de aretes, pesos y chanchera</p>
+        </header>
+        
+        <div class="grid">
+            <div class="form-section">
+                <h2 class="form-title">Registrar Nuevo Chancho</h2>
+                
+                <div class="form-group">
+                    <label for="numero-arete">Número de Arete</label>
+                    <input type="text" id="numero-arete" placeholder="Ej: A-001">
+                </div>
+                
+                <div class="form-group">
+                    <label for="peso">Peso (kg)</label>
+                    <input type="number" id="peso" placeholder="Ej: 120.5">
+                </div>
+                
+                <div class="form-group">
+                    <label for="nombre">Nombre de la Persona</label>
+                    <input type="text" id="nombre" placeholder="Nombre responsable">
+                </div>
+                
+                <div class="form-group">
+                    <label for="chanchera">Número de Chanchera</label>
+                    <select id="chanchera">
+                        <option value="">Seleccionar chanchera</option>
+                        <option value="1">Chanchera 1</option>
+                        <option value="2">Chanchera 2</option>
+                        <option value="3">Chanchera 3</option>
+                        <option value="4">Chanchera 4</option>
+                        <option value="5">Chanchera 5</option>
+                    </select>
+                </div>
+                
+                <button id="btn-agregar">Agregar a la Lista</button>
+                
+                <div class="futuristic-element"></div>
+                
+                <div class="stats">
+                    <div class="stat-item">
+                        <div class="stat-value" id="total-chanchos">0</div>
+                        <div class="stat-label">Total</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="sacados">0</div>
+                        <div class="stat-label">Sacados</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="list-section">
+                <h2 class="form-title">Lista de Chanchos Registrados</h2>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Chanchera</th>
+                            <th>Arete</th>
+                            <th>Peso (kg)</th>
+                            <th>Responsable</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lista-chanchos">
+                        <!-- Los chanchos se agregarán aquí dinámicamente -->
+                    </tbody>
+                </table>
+                
+                <div class="actions">
+                    <button id="btn-marcar-todos">Marcar Todos como Sacados</button>
+                    <button class="btn-remove" id="btn-eliminar">Eliminar Seleccionados</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Referencias a elementos del DOM
+            const numeroAreteInput = document.getElementById('numero-arete');
+            const pesoInput = document.getElementById('peso');
+            const nombreInput = document.getElementById('nombre');
+            const chancheraSelect = document.getElementById('chanchera');
+            const btnAgregar = document.getElementById('btn-agregar');
+            const listaChanchos = document.getElementById('lista-chanchos');
+            const btnMarcarTodos = document.getElementById('btn-marcar-todos');
+            const btnEliminar = document.getElementById('btn-eliminar');
+            const totalChanchosSpan = document.getElementById('total-chanchos');
+            const sacadosSpan = document.getElementById('sacados');
+            
+            // Array para almacenar los chanchos
+            let chanchos = [];
+            
+            // Función para agregar un nuevo chancho
+            function agregarChancho() {
+                const numeroArete = numeroAreteInput.value.trim();
+                const peso = pesoInput.value.trim();
+                const nombre = nombreInput.value.trim();
+                const chanchera = chancheraSelect.value;
+                
+                // Validar que todos los campos estén llenos
+                if (!numeroArete || !peso || !nombre || !chanchera) {
+                    alert('Por favor, complete todos los campos.');
+                    return;
+                }
+                
+                // Crear objeto chancho
+                const chancho = {
+                    id: Date.now(), // ID único
+                    numeroArete,
+                    peso,
+                    nombre,
+                    chanchera,
+                    sacado: false
+                };
+                
+                // Agregar al array
+                chanchos.push(chancho);
+                
+                // Actualizar la lista
+                renderizarLista();
+                
+                // Actualizar estadísticas
+                actualizarEstadisticas();
+                
+                // Limpiar formulario
+                numeroAreteInput.value = '';
+                pesoInput.value = '';
+                nombreInput.value = '';
+                chancheraSelect.value = '';
+                
+                // Enfocar el primer campo
+                numeroAreteInput.focus();
+            }
+            
+            // Función para renderizar la lista de chanchos
+            function renderizarLista() {
+                // Ordenar por chanchera
+                chanchos.sort((a, b) => a.chanchera - b.chanchera);
+                
+                // Limpiar lista
+                listaChanchos.innerHTML = '';
+                
+                // Agregar cada chancho a la lista
+                chanchos.forEach(chancho => {
+                    const tr = document.createElement('tr');
+                    
+                    // Marcar como seleccionado si está sacado
+                    if (chancho.sacado) {
+                        tr.classList.add('selected');
+                    }
+                    
+                    tr.innerHTML = `
+                        <td>${chancho.chanchera}</td>
+                        <td>${chancho.numeroArete}</td>
+                        <td>${chancho.peso} kg</td>
+                        <td>${chancho.nombre}</td>
+                        <td>${chancho.sacado ? 'SACADO' : 'PRESENTE'}</td>
+                    `;
+                    
+                    // Evento para marcar/desmarcar al hacer clic
+                    tr.addEventListener('click', () => {
+                        chancho.sacado = !chancho.sacado;
+                        renderizarLista();
+                        actualizarEstadisticas();
+                    });
+                    
+                    listaChanchos.appendChild(tr);
+                });
+            }
+            
+            // Función para actualizar las estadísticas
+            function actualizarEstadisticas() {
+                totalChanchosSpan.textContent = chanchos.length;
+                const sacados = chanchos.filter(chancho => chancho.sacado).length;
+                sacadosSpan.textContent = sacados;
+            }
+            
+            // Función para marcar todos como sacados
+            function marcarTodos() {
+                chanchos.forEach(chancho => {
+                    chancho.sacado = true;
+                });
+                renderizarLista();
+                actualizarEstadisticas();
+            }
+            
+            // Función para eliminar los chanchos seleccionados
+            function eliminarSeleccionados() {
+                chanchos = chanchos.filter(chancho => !chancho.sacado);
+                renderizarLista();
+                actualizarEstadisticas();
+            }
+            
+            // Event Listeners
+            btnAgregar.addEventListener('click', agregarChancho);
+            btnMarcarTodos.addEventListener('click', marcarTodos);
+            btnEliminar.addEventListener('click', eliminarSeleccionados);
+            
+            // Permitir agregar con Enter
+            document.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    agregarChancho();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
