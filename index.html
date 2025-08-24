@@ -15,6 +15,8 @@
             --success-color: #4CAF50;
             --warning-color: #FFC107;
             --danger-color: #FF5252;
+            --paper-color: #f0f0f0;
+            --ink-color: #121212;
         }
         
         * {
@@ -338,6 +340,119 @@
             cursor: pointer;
         }
         
+        /* Estilos para la vista de hoja de datos */
+        .paper-view {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .paper-container {
+            background: var(--paper-color);
+            color: var(--ink-color);
+            width: 100%;
+            max-width: 800px;
+            height: 90vh;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .paper-header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--primary-color);
+        }
+        
+        .paper-header h2 {
+            font-size: 2rem;
+            color: var(--primary-color);
+        }
+        
+        .paper-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+        }
+        
+        .paper-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        
+        .paper-table th {
+            background: var(--primary-color);
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .paper-table td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .paper-table tr:nth-child(even) {
+            background: rgba(0, 0, 0, 0.05);
+        }
+        
+        .paper-table tr:hover {
+            background: rgba(0, 0, 0, 0.1);
+        }
+        
+        .paper-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .paper-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background: var(--primary-color);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .paper-btn:hover {
+            background: var(--secondary-color);
+        }
+        
+        .save-notice {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .save-notice a {
+            color: var(--primary-color);
+            font-weight: bold;
+            text-decoration: none;
+        }
+        
+        .save-notice a:hover {
+            text-decoration: underline;
+        }
+        
         @media (max-width: 768px) {
             h1 {
                 font-size: 2rem;
@@ -360,6 +475,15 @@
             .form-grid {
                 grid-template-columns: 1fr;
             }
+            
+            .paper-table {
+                font-size: 0.8rem;
+            }
+            
+            .paper-table th, 
+            .paper-table td {
+                padding: 8px 5px;
+            }
         }
         
         @media (max-width: 480px) {
@@ -372,6 +496,14 @@
             }
             
             .chancho-numero {
+                font-size: 1.5rem;
+            }
+            
+            .paper-container {
+                padding: 15px;
+            }
+            
+            .paper-header h2 {
                 font-size: 1.5rem;
             }
         }
@@ -417,6 +549,9 @@
             <button class="btn" onclick="guardarProyecto()">
                 <i class="fas fa-save"></i> Guardar Proyecto
             </button>
+            <button class="btn" onclick="verDatos()">
+                <i class="fas fa-eye"></i> Ver Datos Guardados
+            </button>
             <button class="btn" onclick="marcarTodosSacados()">
                 <i class="fas fa-check-double"></i> Marcar Todos como Sacados
             </button>
@@ -435,6 +570,10 @@
             <a href="#" class="download-link" id="descarga-link">
                 <i class="fas fa-download"></i> Descargar Proyecto
             </a>
+            
+            <div class="save-notice">
+                <p><i class="fas fa-info-circle"></i> Para mantener la información guardada, asegúrate de guardar el archivo descargado en una ubicación segura. También puedes <a href="#" id="save-link">copiar este enlace</a> para acceder a tu proyecto más tarde.</p>
+            </div>
         </div>
         
         <footer>
@@ -477,10 +616,62 @@
         </div>
     </div>
 
+    <!-- Vista de hoja de datos -->
+    <div class="paper-view" id="paper-view">
+        <div class="paper-container">
+            <div class="paper-header">
+                <h2><i class="fas fa-file-alt"></i> Registro de Chanchos</h2>
+                <p>Resumen completo de todos los chanchos registrados</p>
+            </div>
+            
+            <div class="paper-content">
+                <table class="paper-table">
+                    <thead>
+                        <tr>
+                            <th>Número</th>
+                            <th>Arete</th>
+                            <th>Peso</th>
+                            <th>Persona</th>
+                            <th>Chanchera</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="paper-table-body">
+                        <!-- Los datos se llenarán con JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="paper-actions">
+                <button class="paper-btn" onclick="imprimirDatos()">
+                    <i class="fas fa-print"></i> Imprimir
+                </button>
+                <button class="paper-btn" onclick="cerrarPaperView()">
+                    <i class="fas fa-times"></i> Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Array para almacenar los chanchos
         let chanchos = [];
         let chanchoEditando = null;
+        
+        // Cargar datos guardados al iniciar
+        document.addEventListener('DOMContentLoaded', function() {
+            const datosGuardados = localStorage.getItem('chanchosData');
+            if (datosGuardados) {
+                chanchos = JSON.parse(datosGuardados);
+            }
+            renderizarChanchos();
+            
+            // Configurar el enlace para guardar
+            document.getElementById('save-link').addEventListener('click', function(e) {
+                e.preventDefault();
+                guardarEnlace();
+            });
+        });
         
         // Función para agregar un nuevo chancho
         function agregarChancho() {
@@ -512,6 +703,7 @@
             
             chanchos.push(nuevoChancho);
             renderizarChanchos();
+            guardarEnLocalStorage();
             
             // Limpiar el formulario
             document.getElementById('numero-chancho').value = '';
@@ -530,6 +722,17 @@
             
             // Ordenar chanchos por número
             chanchos.sort((a, b) => a.numero - b.numero);
+            
+            if (chanchos.length === 0) {
+                listaChanchos.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 40px;">
+                        <i class="fas fa-info-circle" style="font-size: 3rem; margin-bottom: 15px; opacity: 0.5;"></i>
+                        <h3>No hay chanchos registrados</h3>
+                        <p>Agrega chanchos usando el formulario superior</p>
+                    </div>
+                `;
+                return;
+            }
             
             chanchos.forEach(chancho => {
                 const chanchoElement = document.createElement('div');
@@ -566,6 +769,7 @@
             if (chancho) {
                 chancho.sacado = !chancho.sacado;
                 renderizarChanchos();
+                guardarEnLocalStorage();
             }
         }
         
@@ -594,6 +798,7 @@
                 chanchoEditando.chanchera = document.getElementById('edit-chanchera').value;
                 
                 renderizarChanchos();
+                guardarEnLocalStorage();
                 cerrarModal();
             }
         }
@@ -602,6 +807,47 @@
         function cerrarModal() {
             document.getElementById('modal-editar').style.display = 'none';
             chanchoEditando = null;
+        }
+        
+        // Función para guardar en localStorage
+        function guardarEnLocalStorage() {
+            localStorage.setItem('chanchosData', JSON.stringify(chanchos));
+        }
+        
+        // Función para ver los datos en formato de hoja
+        function verDatos() {
+            if (chanchos.length === 0) {
+                alert('No hay chanchos para mostrar');
+                return;
+            }
+            
+            const tableBody = document.getElementById('paper-table-body');
+            tableBody.innerHTML = '';
+            
+            chanchos.forEach(chancho => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${chancho.numero}</td>
+                    <td>${chancho.arete}</td>
+                    <td>${chancho.peso}</td>
+                    <td>${chancho.persona}</td>
+                    <td>${chancho.chanchera}</td>
+                    <td>${chancho.sacado ? 'Sacado' : 'Presente'}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+            
+            document.getElementById('paper-view').style.display = 'flex';
+        }
+        
+        // Función para cerrar la vista de hoja
+        function cerrarPaperView() {
+            document.getElementById('paper-view').style.display = 'none';
+        }
+        
+        // Función para imprimir los datos
+        function imprimirDatos() {
+            window.print();
         }
         
         // Función para guardar el proyecto
@@ -633,6 +879,21 @@
             alert('¡Proyecto guardado con éxito! Ahora puedes descargarlo.');
         }
         
+        // Función para generar enlace de guardado
+        function guardarEnlace() {
+            const dataStr = JSON.stringify(chanchos);
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            
+            const exportFileDefaultName = 'chanchos_data.json';
+            
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileDefaultName);
+            linkElement.click();
+            
+            alert('Enlace de respaldo generado. Guarda este archivo para conservar tus datos.');
+        }
+        
         // Función para marcar todos los chanchos como sacados
         function marcarTodosSacados() {
             if (chanchos.length === 0) {
@@ -645,6 +906,7 @@
                     chancho.sacado = true;
                 });
                 renderizarChanchos();
+                guardarEnLocalStorage();
             }
         }
         
@@ -658,12 +920,10 @@
             if (confirm('¿Estás seguro de que quieres reiniciar la lista? Se eliminarán TODOS los chanchos.')) {
                 chanchos = [];
                 renderizarChanchos();
+                localStorage.removeItem('chanchosData');
                 alert('Lista reiniciada correctamente');
             }
         }
-        
-        // Inicializar la lista al cargar la página
-        document.addEventListener('DOMContentLoaded', renderizarChanchos);
     </script>
 </body>
 </html>
