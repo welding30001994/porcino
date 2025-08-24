@@ -13,6 +13,7 @@
             --dark: #121212;
             --success: #28a745;
             --warning: #ffc107;
+            --danger: #dc3545;
         }
         
         * {
@@ -42,6 +43,7 @@
             border-radius: 15px;
             backdrop-filter: blur(10px);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            position: relative;
         }
         
         h1 {
@@ -58,6 +60,28 @@
         .subtitle {
             font-size: 1.2rem;
             opacity: 0.8;
+        }
+        
+        .header-actions {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .header-btn {
+            background: rgba(0, 0, 0, 0.3);
+            color: var(--light);
+            border: 1px solid var(--accent);
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .header-btn:hover {
+            background: var(--accent);
         }
         
         .grid {
@@ -121,8 +145,6 @@
             font-size: 16px;
             font-weight: bold;
             transition: all 0.3s ease;
-            width: 100%;
-            margin-top: 10px;
         }
         
         button:hover {
@@ -173,7 +195,7 @@
         }
         
         .btn-remove {
-            background: linear-gradient(to right, #dc3545, #a71e2a);
+            background: linear-gradient(to right, var(--danger), #a71e2a);
         }
         
         .stats {
@@ -207,6 +229,148 @@
             margin: 15px 0;
             opacity: 0.7;
         }
+        
+        /* Modal para proyectos */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: var(--dark);
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--accent);
+            padding-bottom: 10px;
+        }
+        
+        .modal-title {
+            color: var(--accent);
+            font-size: 1.5rem;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            color: var(--light);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .project-list {
+            max-height: 300px;
+            overflow-y: auto;
+            margin: 15px 0;
+        }
+        
+        .project-item {
+            padding: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .project-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Estilos para el reporte */
+        .report-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px;
+            background: white;
+            color: #333;
+            border-radius: 10px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .report-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--accent);
+        }
+        
+        .report-title {
+            color: var(--primary);
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .report-date {
+            color: #666;
+            font-style: italic;
+        }
+        
+        .report-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .report-summary-item {
+            text-align: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .report-summary-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--accent);
+        }
+        
+        .report-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        
+        .report-table th {
+            background-color: var(--primary);
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .report-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .report-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .report-footer {
+            text-align: right;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            color: #666;
+        }
     </style>
 </head>
 <body>
@@ -214,11 +378,22 @@
         <header>
             <h1>Sistema de Seguimiento de Chanchos</h1>
             <p class="subtitle">Control futurista de aretes, pesos y chanchera</p>
+            <div class="header-actions">
+                <button class="header-btn" id="btn-nuevo-proyecto">Nuevo Proyecto</button>
+                <button class="header-btn" id="btn-guardar-proyecto">Guardar Proyecto</button>
+                <button class="header-btn" id="btn-cargar-proyecto">Cargar Proyecto</button>
+                <button class="header-btn" id="btn-generar-reporte">Generar Reporte</button>
+            </div>
         </header>
         
         <div class="grid">
             <div class="form-section">
                 <h2 class="form-title">Registrar Nuevo Chancho</h2>
+                
+                <div class="form-group">
+                    <label for="numero-marcado">Nº Marcado</label>
+                    <input type="text" id="numero-marcado" placeholder="Ej: M-001">
+                </div>
                 
                 <div class="form-group">
                     <label for="numero-arete">Número de Arete</label>
@@ -227,7 +402,12 @@
                 
                 <div class="form-group">
                     <label for="peso">Peso (kg)</label>
-                    <input type="number" id="peso" placeholder="Ej: 120.5">
+                    <input type="number" id="peso" placeholder="Ej: 120.5" step="0.1">
+                </div>
+                
+                <div class="form-group">
+                    <label for="precio-kg">Precio por kg ($)</label>
+                    <input type="number" id="precio-kg" placeholder="Ej: 4.50" step="0.01" value="4.50">
                 </div>
                 
                 <div class="form-group">
@@ -257,8 +437,12 @@
                         <div class="stat-label">Total</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-value" id="sacados">0</div>
-                        <div class="stat-label">Sacados</div>
+                        <div class="stat-value" id="peso-total">0 kg</div>
+                        <div class="stat-label">Peso Total</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="valor-total">$0</div>
+                        <div class="stat-label">Valor Total</div>
                     </div>
                 </div>
             </div>
@@ -269,9 +453,11 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Chanchera</th>
+                            <th>Nº Marcado</th>
                             <th>Arete</th>
                             <th>Peso (kg)</th>
+                            <th>Valor</th>
+                            <th>Chanchera</th>
                             <th>Responsable</th>
                             <th>Estado</th>
                         </tr>
@@ -289,11 +475,51 @@
         </div>
     </div>
 
+    <!-- Modal para proyectos -->
+    <div class="modal" id="modal-proyectos">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modal-titulo">Gestión de Proyectos</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div id="modal-contenido">
+                <!-- Contenido dinámico según la acción -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Script de Firebase -->
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyD3MI1klgBSHs1h6QT4VPNoScCfCwMV_Ck",
+            authDomain: "usuario-b0384.firebaseapp.com",
+            databaseURL: "https://usuario-b0384-default-rtdb.firebaseio.com",
+            projectId: "usuario-b0384",
+            storageBucket: "usuario-b0384.firebasestorage.app",
+            messagingSenderId: "196266170863",
+            appId: "1:196266170863:web:4ea57f489df94aba94fe1a"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // Hacer disponible Firebase para el resto del código
+        window.firebaseDatabase = database;
+    </script>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Referencias a elementos del DOM
+            const numeroMarcadoInput = document.getElementById('numero-marcado');
             const numeroAreteInput = document.getElementById('numero-arete');
             const pesoInput = document.getElementById('peso');
+            const precioKgInput = document.getElementById('precio-kg');
             const nombreInput = document.getElementById('nombre');
             const chancheraSelect = document.getElementById('chanchera');
             const btnAgregar = document.getElementById('btn-agregar');
@@ -301,29 +527,50 @@
             const btnMarcarTodos = document.getElementById('btn-marcar-todos');
             const btnEliminar = document.getElementById('btn-eliminar');
             const totalChanchosSpan = document.getElementById('total-chanchos');
-            const sacadosSpan = document.getElementById('sacados');
+            const pesoSpan = document.getElementById('peso-total');
+            const valorSpan = document.getElementById('valor-total');
+            const modal = document.getElementById('modal-proyectos');
+            const modalTitulo = document.getElementById('modal-titulo');
+            const modalContenido = document.getElementById('modal-contenido');
+            const closeModal = document.querySelector('.close-modal');
+            const btnNuevoProyecto = document.getElementById('btn-nuevo-proyecto');
+            const btnGuardarProyecto = document.getElementById('btn-guardar-proyecto');
+            const btnCargarProyecto = document.getElementById('btn-cargar-proyecto');
+            const btnGenerarReporte = document.getElementById('btn-generar-reporte');
             
             // Array para almacenar los chanchos
             let chanchos = [];
+            let proyectoActual = null;
+            
+            // Inicializar desde localStorage si existe
+            cargarDesdeLocalStorage();
             
             // Función para agregar un nuevo chancho
             function agregarChancho() {
+                const numeroMarcado = numeroMarcadoInput.value.trim();
                 const numeroArete = numeroAreteInput.value.trim();
-                const peso = pesoInput.value.trim();
+                const peso = parseFloat(pesoInput.value);
+                const precioKg = parseFloat(precioKgInput.value);
                 const nombre = nombreInput.value.trim();
                 const chanchera = chancheraSelect.value;
                 
                 // Validar que todos los campos estén llenos
-                if (!numeroArete || !peso || !nombre || !chanchera) {
-                    alert('Por favor, complete todos los campos.');
+                if (!numeroMarcado || !numeroArete || isNaN(peso) || isNaN(precioKg) || !nombre || !chanchera) {
+                    alert('Por favor, complete todos los campos correctamente.');
                     return;
                 }
+                
+                // Calcular valor
+                const valor = peso * precioKg;
                 
                 // Crear objeto chancho
                 const chancho = {
                     id: Date.now(), // ID único
+                    numeroMarcado,
                     numeroArete,
                     peso,
+                    precioKg,
+                    valor,
                     nombre,
                     chanchera,
                     sacado: false
@@ -338,14 +585,18 @@
                 // Actualizar estadísticas
                 actualizarEstadisticas();
                 
+                // Guardar en localStorage
+                guardarEnLocalStorage();
+                
                 // Limpiar formulario
+                numeroMarcadoInput.value = '';
                 numeroAreteInput.value = '';
                 pesoInput.value = '';
                 nombreInput.value = '';
                 chancheraSelect.value = '';
                 
                 // Enfocar el primer campo
-                numeroAreteInput.focus();
+                numeroMarcadoInput.focus();
             }
             
             // Función para renderizar la lista de chanchos
@@ -366,9 +617,11 @@
                     }
                     
                     tr.innerHTML = `
-                        <td>${chancho.chanchera}</td>
+                        <td>${chancho.numeroMarcado}</td>
                         <td>${chancho.numeroArete}</td>
                         <td>${chancho.peso} kg</td>
+                        <td>$${chancho.valor.toFixed(2)}</td>
+                        <td>${chancho.chanchera}</td>
                         <td>${chancho.nombre}</td>
                         <td>${chancho.sacado ? 'SACADO' : 'PRESENTE'}</td>
                     `;
@@ -378,6 +631,7 @@
                         chancho.sacado = !chancho.sacado;
                         renderizarLista();
                         actualizarEstadisticas();
+                        guardarEnLocalStorage();
                     });
                     
                     listaChanchos.appendChild(tr);
@@ -387,8 +641,12 @@
             // Función para actualizar las estadísticas
             function actualizarEstadisticas() {
                 totalChanchosSpan.textContent = chanchos.length;
-                const sacados = chanchos.filter(chancho => chancho.sacado).length;
-                sacadosSpan.textContent = sacados;
+                
+                const pesoTotal = chanchos.reduce((total, chancho) => total + chancho.peso, 0);
+                pesoSpan.textContent = `${pesoTotal.toFixed(1)} kg`;
+                
+                const valorTotal = chanchos.reduce((total, chancho) => total + chancho.valor, 0);
+                valorSpan.textContent = `$${valorTotal.toFixed(2)}`;
             }
             
             // Función para marcar todos como sacados
@@ -398,6 +656,7 @@
                 });
                 renderizarLista();
                 actualizarEstadisticas();
+                guardarEnLocalStorage();
             }
             
             // Función para eliminar los chanchos seleccionados
@@ -405,12 +664,346 @@
                 chanchos = chanchos.filter(chancho => !chancho.sacado);
                 renderizarLista();
                 actualizarEstadisticas();
+                guardarEnLocalStorage();
+            }
+            
+            // Función para guardar en localStorage
+            function guardarEnLocalStorage() {
+                const datos = {
+                    chanchos: chanchos,
+                    proyecto: proyectoActual
+                };
+                localStorage.setItem('chanchosData', JSON.stringify(datos));
+            }
+            
+            // Función para cargar desde localStorage
+            function cargarDesdeLocalStorage() {
+                const datosGuardados = localStorage.getItem('chanchosData');
+                if (datosGuardados) {
+                    const datos = JSON.parse(datosGuardados);
+                    chanchos = datos.chanchos || [];
+                    proyectoActual = datos.proyecto || null;
+                    
+                    renderizarLista();
+                    actualizarEstadisticas();
+                }
+            }
+            
+            // Función para mostrar el modal
+            function mostrarModal(titulo, contenidoHTML) {
+                modalTitulo.textContent = titulo;
+                modalContenido.innerHTML = contenidoHTML;
+                modal.style.display = 'flex';
+            }
+            
+            // Función para ocultar el modal
+            function ocultarModal() {
+                modal.style.display = 'none';
+            }
+            
+            // Función para crear un nuevo proyecto
+            function nuevoProyecto() {
+                const nombreProyecto = prompt('Ingrese el nombre del nuevo proyecto:');
+                if (nombreProyecto && nombreProyecto.trim() !== '') {
+                    proyectoActual = {
+                        id: Date.now(),
+                        nombre: nombreProyecto.trim(),
+                        fechaCreacion: new Date().toISOString()
+                    };
+                    chanchos = [];
+                    renderizarLista();
+                    actualizarEstadisticas();
+                    guardarEnLocalStorage();
+                    alert(`Proyecto "${nombreProyecto}" creado con éxito.`);
+                }
+            }
+            
+            // Función para guardar proyecto en Firebase
+            function guardarProyecto() {
+                if (!proyectoActual) {
+                    alert('Primero debe crear un proyecto.');
+                    return;
+                }
+                
+                mostrarModal('Guardar Proyecto', `
+                    <div class="form-group">
+                        <label for="nombre-proyecto-guardar">Nombre del proyecto:</label>
+                        <input type="text" id="nombre-proyecto-guardar" value="${proyectoActual.nombre}">
+                    </div>
+                    <p>Este proyecto se guardará en la nube y podrá accederse desde cualquier dispositivo.</p>
+                    <button id="btn-confirmar-guardar" style="margin-top: 15px;">Guardar en la Nube</button>
+                `);
+                
+                document.getElementById('btn-confirmar-guardar').addEventListener('click', async function() {
+                    const nombre = document.getElementById('nombre-proyecto-guardar').value.trim();
+                    if (!nombre) {
+                        alert('Debe ingresar un nombre para el proyecto.');
+                        return;
+                    }
+                    
+                    // Actualizar nombre si cambió
+                    proyectoActual.nombre = nombre;
+                    proyectoActual.fechaActualizacion = new Date().toISOString();
+                    
+                    try {
+                        // Guardar en Firebase
+                        const db = window.firebaseDatabase;
+                        await set(ref(db, 'proyectos/' + proyectoActual.id), {
+                            nombre: proyectoActual.nombre,
+                            fechaCreacion: proyectoActual.fechaCreacion,
+                            fechaActualizacion: proyectoActual.fechaActualizacion,
+                            chanchos: chanchos
+                        });
+                        
+                        // Guardar en localStorage también
+                        guardarEnLocalStorage();
+                        
+                        alert('Proyecto guardado con éxito en la nube.');
+                        ocultarModal();
+                    } catch (error) {
+                        console.error('Error al guardar en Firebase:', error);
+                        alert('Error al guardar el proyecto. Verifique la conexión.');
+                    }
+                });
+            }
+            
+            // Función para cargar proyectos desde Firebase
+            async function cargarProyecto() {
+                try {
+                    const dbRef = ref(window.firebaseDatabase);
+                    const snapshot = await get(child(dbRef, 'proyectos'));
+                    
+                    if (snapshot.exists()) {
+                        const proyectos = snapshot.val();
+                        let proyectosHTML = '<div class="project-list">';
+                        
+                        for (const id in proyectos) {
+                            const proyecto = proyectos[id];
+                            proyectosHTML += `
+                                <div class="project-item" data-id="${id}">
+                                    <strong>${proyecto.nombre}</strong><br>
+                                    <small>Creado: ${new Date(proyecto.fechaCreacion).toLocaleDateString()}</small>
+                                    ${proyecto.fechaActualizacion ? `<small>Actualizado: ${new Date(proyecto.fechaActualizacion).toLocaleDateString()}</small>` : ''}
+                                </div>
+                            `;
+                        }
+                        
+                        proyectosHTML += '</div>';
+                        
+                        mostrarModal('Cargar Proyecto', proyectosHTML);
+                        
+                        // Agregar event listeners a los items
+                        document.querySelectorAll('.project-item').forEach(item => {
+                            item.addEventListener('click', async function() {
+                                const proyectoId = this.getAttribute('data-id');
+                                const proyectoData = proyectos[proyectoId];
+                                
+                                proyectoActual = {
+                                    id: proyectoId,
+                                    nombre: proyectoData.nombre,
+                                    fechaCreacion: proyectoData.fechaCreacion,
+                                    fechaActualizacion: proyectoData.fechaActualizacion
+                                };
+                                
+                                chanchos = proyectoData.chanchos || [];
+                                
+                                renderizarLista();
+                                actualizarEstadisticas();
+                                guardarEnLocalStorage();
+                                
+                                alert(`Proyecto "${proyectoData.nombre}" cargado con éxito.`);
+                                ocultarModal();
+                            });
+                        });
+                    } else {
+                        mostrarModal('Cargar Proyecto', '<p>No hay proyectos guardados en la nube.</p>');
+                    }
+                } catch (error) {
+                    console.error('Error al cargar proyectos:', error);
+                    mostrarModal('Cargar Proyecto', '<p>Error al cargar proyectos. Verifique la conexión.</p>');
+                }
+            }
+            
+            // Función para generar reporte
+            function generarReporte() {
+                if (chanchos.length === 0) {
+                    alert('No hay chanchos registrados para generar un reporte.');
+                    return;
+                }
+                
+                const pesoTotal = chanchos.reduce((total, chancho) => total + chancho.peso, 0);
+                const valorTotal = chanchos.reduce((total, chancho) => total + chancho.valor, 0);
+                const chanchosPresentes = chanchos.filter(chancho => !chancho.sacado).length;
+                const chanchosSacados = chanchos.filter(chancho => chancho.sacado).length;
+                
+                const fecha = new Date().toLocaleDateString();
+                
+                const reporteHTML = `
+                    <!DOCTYPE html>
+                    <html lang="es">
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <title>Reporte de Chanchos - ${proyectoActual ? proyectoActual.nombre : 'Proyecto'}</title>
+                        <style>
+                            body {
+                                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                                color: #333;
+                                line-height: 1.6;
+                                padding: 20px;
+                            }
+                            .report-container {
+                                max-width: 800px;
+                                margin: 0 auto;
+                                background: white;
+                            }
+                            .report-header {
+                                text-align: center;
+                                margin-bottom: 30px;
+                                padding-bottom: 20px;
+                                border-bottom: 2px solid #00b4d8;
+                            }
+                            .report-title {
+                                color: #2a2d43;
+                                font-size: 2.2rem;
+                                margin-bottom: 10px;
+                            }
+                            .report-date {
+                                color: #666;
+                                font-style: italic;
+                            }
+                            .report-summary {
+                                display: grid;
+                                grid-template-columns: repeat(4, 1fr);
+                                gap: 15px;
+                                margin-bottom: 30px;
+                            }
+                            .report-summary-item {
+                                text-align: center;
+                                padding: 15px;
+                                background: #f8f9fa;
+                                border-radius: 8px;
+                            }
+                            .report-summary-value {
+                                font-size: 1.8rem;
+                                font-weight: bold;
+                                color: #00b4d8;
+                            }
+                            .report-table {
+                                width: 100%;
+                                border-collapse: collapse;
+                                margin-bottom: 30px;
+                            }
+                            .report-table th {
+                                background-color: #2a2d43;
+                                color: white;
+                                padding: 12px;
+                                text-align: left;
+                            }
+                            .report-table td {
+                                padding: 10px 12px;
+                                border-bottom: 1px solid #ddd;
+                            }
+                            .report-table tr:nth-child(even) {
+                                background-color: #f9f9f9;
+                            }
+                            .report-footer {
+                                text-align: right;
+                                margin-top: 40px;
+                                padding-top: 20px;
+                                border-top: 1px solid #ddd;
+                                color: #666;
+                            }
+                            .sacado {
+                                text-decoration: line-through;
+                                color: #888;
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="report-container">
+                            <div class="report-header">
+                                <h1 class="report-title">Reporte de Chanchos</h1>
+                                <h2>${proyectoActual ? proyectoActual.nombre : 'Proyecto'}</h2>
+                                <p class="report-date">Generado el: ${fecha}</p>
+                            </div>
+                            
+                            <div class="report-summary">
+                                <div class="report-summary-item">
+                                    <div class="report-summary-value">${chanchos.length}</div>
+                                    <div class="report-summary-label">Total Chanchos</div>
+                                </div>
+                                <div class="report-summary-item">
+                                    <div class="report-summary-value">${chanchosPresentes}</div>
+                                    <div class="report-summary-label">Presentes</div>
+                                </div>
+                                <div class="report-summary-item">
+                                    <div class="report-summary-value">${pesoTotal.toFixed(1)} kg</div>
+                                    <div class="report-summary-label">Peso Total</div>
+                                </div>
+                                <div class="report-summary-item">
+                                    <div class="report-summary-value">$${valorTotal.toFixed(2)}</div>
+                                    <div class="report-summary-label">Valor Total</div>
+                                </div>
+                            </div>
+                            
+                            <table class="report-table">
+                                <thead>
+                                    <tr>
+                                        <th>Nº Marcado</th>
+                                        <th>Arete</th>
+                                        <th>Peso (kg)</th>
+                                        <th>Valor</th>
+                                        <th>Chanchera</th>
+                                        <th>Responsable</th>
+                                        <th>Estado</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${chanchos.map(chancho => `
+                                        <tr class="${chancho.sacado ? 'sacado' : ''}">
+                                            <td>${chancho.numeroMarcado}</td>
+                                            <td>${chancho.numeroArete}</td>
+                                            <td>${chancho.peso}</td>
+                                            <td>$${chancho.valor.toFixed(2)}</td>
+                                            <td>${chancho.chanchera}</td>
+                                            <td>${chancho.nombre}</td>
+                                            <td>${chancho.sacado ? 'SACADO' : 'PRESENTE'}</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                            
+                            <div class="report-footer">
+                                <p>Sistema de Seguimiento de Chanchos - ${fecha}</p>
+                            </div>
+                        </div>
+                    </body>
+                    </html>
+                `;
+                
+                // Crear ventana para el reporte
+                const ventanaReporte = window.open('', '_blank');
+                ventanaReporte.document.write(reporteHTML);
+                ventanaReporte.document.close();
             }
             
             // Event Listeners
             btnAgregar.addEventListener('click', agregarChancho);
             btnMarcarTodos.addEventListener('click', marcarTodos);
             btnEliminar.addEventListener('click', eliminarSeleccionados);
+            closeModal.addEventListener('click', ocultarModal);
+            btnNuevoProyecto.addEventListener('click', nuevoProyecto);
+            btnGuardarProyecto.addEventListener('click', guardarProyecto);
+            btnCargarProyecto.addEventListener('click', cargarProyecto);
+            btnGenerarReporte.addEventListener('click', generarReporte);
+            
+            // Cerrar modal al hacer clic fuera
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    ocultarModal();
+                }
+            });
             
             // Permitir agregar con Enter
             document.addEventListener('keypress', function(e) {
