@@ -126,7 +126,7 @@
             color: var(--accent-color);
         }
         
-        .form-group input {
+        .form-group input, .form-group select {
             padding: 12px;
             border: none;
             border-radius: 8px;
@@ -135,7 +135,7 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
-        .form-group input:focus {
+        .form-group input:focus, .form-group select:focus {
             outline: none;
             border-color: var(--accent-color);
         }
@@ -521,23 +521,23 @@
             <div class="form-grid">
                 <div class="form-group">
                     <label for="numero-chancho">Número de Chancho</label>
-                    <input type="number" id="numero-chancho" min="1" max="1000">
+                    <input type="number" id="numero-chancho" min="1" max="1000" required>
                 </div>
                 <div class="form-group">
                     <label for="numero-arete">Número de Arete</label>
-                    <input type="number" id="numero-arete" min="1">
+                    <input type="number" id="numero-arete" min="1" required>
                 </div>
                 <div class="form-group">
                     <label for="peso-chancho">Peso (kg)</label>
-                    <input type="number" id="peso-chancho" min="1" step="0.1">
+                    <input type="number" id="peso-chancho" min="1" step="0.1" required>
                 </div>
                 <div class="form-group">
                     <label for="nombre-persona">Nombre de Persona</label>
-                    <input type="text" id="nombre-persona">
+                    <input type="text" id="nombre-persona" required>
                 </div>
                 <div class="form-group">
                     <label for="numero-chanchera">Número de Chanchera</label>
-                    <input type="number" id="numero-chanchera" min="1">
+                    <input type="number" id="numero-chanchera" min="1" required>
                 </div>
             </div>
             <button class="btn" onclick="agregarChancho()">
@@ -662,9 +662,14 @@
         document.addEventListener('DOMContentLoaded', function() {
             const datosGuardados = localStorage.getItem('chanchosData');
             if (datosGuardados) {
-                chanchos = JSON.parse(datosGuardados);
+                try {
+                    chanchos = JSON.parse(datosGuardados);
+                    renderizarChanchos();
+                } catch (e) {
+                    console.error("Error al cargar datos:", e);
+                    chanchos = [];
+                }
             }
-            renderizarChanchos();
             
             // Configurar el enlace para guardar
             document.getElementById('save-link').addEventListener('click', function(e) {
