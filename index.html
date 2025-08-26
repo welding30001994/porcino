@@ -140,6 +140,80 @@
             border-color: var(--accent-color);
         }
         
+        .peso-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .peso-input {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .peso-input label {
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+        
+        .peso-input input {
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .peso-tipo {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .peso-tipo label {
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+        
+        .peso-tipo select {
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .peso-muerto-section {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+        
+        .peso-muerto-section h3 {
+            margin-bottom: 10px;
+            color: var(--accent-color);
+        }
+        
+        .peso-muerto-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .peso-muerto-resultado {
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
         .camera-section {
             margin-top: 20px;
             display: flex;
@@ -537,6 +611,10 @@
                 grid-template-columns: 1fr;
             }
             
+            .peso-section {
+                grid-template-columns: 1fr;
+            }
+            
             .paper-table {
                 font-size: 0.8rem;
             }
@@ -589,16 +667,43 @@
                     <input type="number" id="numero-arete" min="1" required>
                 </div>
                 <div class="form-group">
-                    <label for="peso-chancho">Peso (kg)</label>
-                    <input type="number" id="peso-chancho" min="1" step="0.1" required>
-                </div>
-                <div class="form-group">
                     <label for="nombre-persona">Nombre de Persona</label>
                     <input type="text" id="nombre-persona" required>
                 </div>
                 <div class="form-group">
                     <label for="numero-chanchera">Número de Chanchera</label>
                     <input type="number" id="numero-chanchera" min="1" required>
+                </div>
+            </div>
+            
+            <div class="peso-section">
+                <div class="peso-input">
+                    <label for="peso-chancho">Peso</label>
+                    <input type="number" id="peso-chancho" min="1" step="0.1" required>
+                </div>
+                <div class="peso-tipo">
+                    <label for="tipo-peso">Tipo de Peso</label>
+                    <select id="tipo-peso">
+                        <option value="kg">Kilogramos (kg)</option>
+                        <option value="lb">Libras (lb)</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="peso-muerto-section">
+                <h3><i class="fas fa-weight-hanging"></i> Cálculo de Peso Muerto</h3>
+                <div class="peso-muerto-controls">
+                    <input type="number" id="peso-muerto-input" placeholder="Peso" step="0.1" min="1">
+                    <select id="tipo-peso-muerto">
+                        <option value="kg">Kilogramos (kg)</option>
+                        <option value="lb">Libras (lb)</option>
+                    </select>
+                    <button class="btn" onclick="calcularPesoMuerto()">
+                        <i class="fas fa-calculator"></i> Calcular
+                    </button>
+                </div>
+                <div class="peso-muerto-resultado" id="peso-muerto-resultado">
+                    Resultado aparecerá aquí
                 </div>
             </div>
             
@@ -682,8 +787,15 @@
                     <input type="number" id="edit-arete" min="1">
                 </div>
                 <div class="form-group">
-                    <label for="edit-peso">Peso (kg)</label>
+                    <label for="edit-peso">Peso</label>
                     <input type="number" id="edit-peso" min="1" step="0.1">
+                </div>
+                <div class="form-group">
+                    <label for="edit-tipo-peso">Tipo de Peso</label>
+                    <select id="edit-tipo-peso">
+                        <option value="kg">Kilogramos (kg)</option>
+                        <option value="lb">Libras (lb)</option>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label for="edit-persona">Nombre de Persona</label>
@@ -715,6 +827,7 @@
                             <th>Número</th>
                             <th>Arete</th>
                             <th>Peso</th>
+                            <th>Tipo</th>
                             <th>Persona</th>
                             <th>Chanchera</th>
                             <th>Estado</th>
@@ -854,11 +967,39 @@
             }
         }
         
+        // Función para calcular peso muerto
+        function calcularPesoMuerto() {
+            const pesoInput = document.getElementById('peso-muerto-input');
+            const tipoPeso = document.getElementById('tipo-peso-muerto').value;
+            const resultadoElement = document.getElementById('peso-muerto-resultado');
+            
+            if (!pesoInput.value) {
+                resultadoElement.innerHTML = 'Por favor, ingresa un peso válido';
+                return;
+            }
+            
+            const peso = parseFloat(pesoInput.value);
+            let resultado = '';
+            
+            if (tipoPeso === 'kg') {
+                // Si es en kg, mostrar en kg y convertir a libras
+                const libras = peso * 2.20462;
+                resultado = `${peso} kg = ${libras.toFixed(2)} lb`;
+            } else {
+                // Si es en libras, mostrar en libras y convertir a kg
+                const kilos = peso / 2.20462;
+                resultado = `${peso} lb = ${kilos.toFixed(2)} kg`;
+            }
+            
+            resultadoElement.innerHTML = resultado;
+        }
+        
         // Función para agregar un nuevo chancho
         function agregarChancho() {
             const numero = document.getElementById('numero-chancho').value;
             const arete = document.getElementById('numero-arete').value;
             const peso = document.getElementById('peso-chancho').value;
+            const tipoPeso = document.getElementById('tipo-peso').value;
             const persona = document.getElementById('nombre-persona').value;
             const chanchera = document.getElementById('numero-chanchera').value;
             
@@ -876,7 +1017,8 @@
             const nuevoChancho = {
                 numero: parseInt(numero),
                 arete: arete,
-                peso: peso + " kg",
+                peso: parseFloat(peso),
+                tipoPeso: tipoPeso,
                 persona: persona,
                 chanchera: chanchera,
                 sacado: false,
@@ -940,11 +1082,21 @@
                     imagenHTML = `<div class="chancho-image"><i class="fas fa-piggy-bank" style="font-size: 3rem;"></i><p>Sin imagen</p></div>`;
                 }
                 
+                // Calcular conversión de peso
+                let pesoConvertido = '';
+                if (chancho.tipoPeso === 'kg') {
+                    const libras = chancho.peso * 2.20462;
+                    pesoConvertido = `${chancho.peso} kg (${libras.toFixed(2)} lb)`;
+                } else {
+                    const kilos = chancho.peso / 2.20462;
+                    pesoConvertido = `${chancho.peso} lb (${kilos.toFixed(2)} kg)`;
+                }
+                
                 chanchoElement.innerHTML = `
                     ${imagenHTML}
                     <div class="chancho-header">
                         <div class="chancho-numero">#${chancho.numero}</div>
-                        <div class="chancho-peso">${chancho.peso}</div>
+                        <div class="chancho-peso">${pesoConvertido}</div>
                     </div>
                     <div class="chancho-info">
                         <div><i class="fas fa-hashtag"></i> Arete: ${chancho.arete}</div>
@@ -983,7 +1135,8 @@
                 
                 document.getElementById('edit-numero').value = chancho.numero;
                 document.getElementById('edit-arete').value = chancho.arete;
-                document.getElementById('edit-peso').value = parseFloat(chancho.peso);
+                document.getElementById('edit-peso').value = chancho.peso;
+                document.getElementById('edit-tipo-peso').value = chancho.tipoPeso;
                 document.getElementById('edit-persona').value = chancho.persona;
                 document.getElementById('edit-chanchera').value = chancho.chanchera;
                 
@@ -995,7 +1148,8 @@
         function guardarEdicion() {
             if (chanchoEditando) {
                 chanchoEditando.arete = document.getElementById('edit-arete').value;
-                chanchoEditando.peso = document.getElementById('edit-peso').value + " kg";
+                chanchoEditando.peso = parseFloat(document.getElementById('edit-peso').value);
+                chanchoEditando.tipoPeso = document.getElementById('edit-tipo-peso').value;
                 chanchoEditando.persona = document.getElementById('edit-persona').value;
                 chanchoEditando.chanchera = document.getElementById('edit-chanchera').value;
                 
@@ -1027,11 +1181,22 @@
             tableBody.innerHTML = '';
             
             chanchos.forEach(chancho => {
+                // Calcular conversión de peso
+                let pesoConvertido = '';
+                if (chancho.tipoPeso === 'kg') {
+                    const libras = chancho.peso * 2.20462;
+                    pesoConvertido = `${chancho.peso} kg (${libras.toFixed(2)} lb)`;
+                } else {
+                    const kilos = chancho.peso / 2.20462;
+                    pesoConvertido = `${chancho.peso} lb (${kilos.toFixed(2)} kg)`;
+                }
+                
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${chancho.numero}</td>
                     <td>${chancho.arete}</td>
-                    <td>${chancho.peso}</td>
+                    <td>${pesoConvertido}</td>
+                    <td>${chancho.tipoPeso.toUpperCase()}</td>
                     <td>${chancho.persona}</td>
                     <td>${chancho.chanchera}</td>
                     <td>${chancho.sacado ? 'Sacado' : 'Presente'}</td>
@@ -1059,11 +1224,215 @@
                 return;
             }
             
-            // Crear un blob con el contenido HTML
-            const contenido = document.documentElement.outerHTML;
-            const blob = new Blob([contenido], { type: 'text/html' });
+            // Crear un blob con el contenido HTML completo
+            const contenido = `
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control Futurista de Chanchos - Proyecto Guardado</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Todos los estilos CSS anteriores */
+        ${document.querySelector('style').innerHTML}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-piggy-bank"></i> Control Futurista de Chanchos</h1>
+            <p class="subtitle">Proyecto Guardado - ${new Date().toLocaleDateString()}</p>
+        </header>
+        
+        <div class="controls">
+            <button class="btn" onclick="cargarDatos()">
+                <i class="fas fa-upload"></i> Cargar Datos
+            </button>
+            <button class="btn" onclick="verDatos()">
+                <i class="fas fa-eye"></i> Ver Datos Guardados
+            </button>
+            <button class="btn" onclick="window.print()">
+                <i class="fas fa-print"></i> Imprimir
+            </button>
+        </div>
+        
+        <div class="grid-container" id="lista-chanchos">
+            <!-- Los chanchos se generarán con JavaScript -->
+        </div>
+        
+        <footer>
+            <p>Sistema de Control de Chanchos &copy; 2023 - Proyecto Guardado</p>
+        </footer>
+    </div>
+
+    <!-- Vista de hoja de datos -->
+    <div class="paper-view" id="paper-view">
+        <div class="paper-container">
+            <div class="paper-header">
+                <h2><i class="fas fa-file-alt"></i> Registro de Chanchos</h2>
+                <p>Resumen completo de todos los chanchos registrados</p>
+            </div>
             
-            // Crear URL para descarga
+            <div class="paper-content">
+                <table class="paper-table">
+                    <thead>
+                        <tr>
+                            <th>Número</th>
+                            <th>Arete</th>
+                            <th>Peso</th>
+                            <th>Tipo</th>
+                            <th>Persona</th>
+                            <th>Chanchera</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="paper-table-body">
+                        <!-- Los datos se llenarán con JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="paper-actions">
+                <button class="paper-btn" onclick="imprimirDatos()">
+                    <i class="fas fa-print"></i> Imprimir
+                </button>
+                <button class="paper-btn" onclick="cerrarPaperView()">
+                    <i class="fas fa-times"></i> Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Datos de los chanchos
+        const chanchos = ${JSON.stringify(chanchos)};
+        
+        // Función para cargar los datos al iniciar
+        function cargarDatos() {
+            if (confirm('¿Estás seguro de que quieres cargar estos datos? Se reemplazarán los datos actuales.')) {
+                localStorage.setItem('chanchosData', JSON.stringify(chanchos));
+                alert('Datos cargados correctamente. Recarga la página para ver los cambios.');
+            }
+        }
+        
+        // Función para renderizar la lista de chanchos
+        function renderizarChanchos() {
+            const listaChanchos = document.getElementById('lista-chanchos');
+            listaChanchos.innerHTML = '';
+            
+            if (chanchos.length === 0) {
+                listaChanchos.innerHTML = '
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 40px;">
+                        <i class="fas fa-info-circle" style="font-size: 3rem; margin-bottom: 15px; opacity: 0.5;"></i>
+                        <h3>No hay chanchos registrados</h3>
+                        <p>Este es un proyecto guardado sin datos</p>
+                    </div>
+                ';
+                return;
+            }
+            
+            chanchos.forEach(chancho => {
+                const chanchoElement = document.createElement('div');
+                chanchoElement.className = \`chancho-card \${chancho.sacado ? 'sacado' : ''}\`;
+                chanchoElement.dataset.numero = chancho.numero;
+                
+                // Crear contenido de la imagen
+                let imagenHTML = '';
+                if (chancho.imagen) {
+                    imagenHTML = \`<img src="\${chancho.imagen}" alt="Imagen del chancho #\${chancho.numero}" class="chancho-image">\`;
+                } else {
+                    imagenHTML = '<div class="chancho-image"><i class="fas fa-piggy-bank" style="font-size: 3rem;"></i><p>Sin imagen</p></div>';
+                }
+                
+                // Calcular conversión de peso
+                let pesoConvertido = '';
+                if (chancho.tipoPeso === 'kg') {
+                    const libras = chancho.peso * 2.20462;
+                    pesoConvertido = \`\${chancho.peso} kg (\${libras.toFixed(2)} lb)\`;
+                } else {
+                    const kilos = chancho.peso / 2.20462;
+                    pesoConvertido = \`\${chancho.peso} lb (\${kilos.toFixed(2)} kg)\`;
+                }
+                
+                chanchoElement.innerHTML = \`
+                    \${imagenHTML}
+                    <div class="chancho-header">
+                        <div class="chancho-numero">#\${chancho.numero}</div>
+                        <div class="chancho-peso">\${pesoConvertido}</div>
+                    </div>
+                    <div class="chancho-info">
+                        <div><i class="fas fa-hashtag"></i> Arete: \${chancho.arete}</div>
+                        <div><i class="fas fa-user"></i> \${chancho.persona}</div>
+                    </div>
+                    <div class="chanchera-numero">
+                        Chanchera: \${chancho.chanchera}
+                    </div>
+                    <div class="chancho-estado">
+                        Estado: \${chancho.sacado ? 'Sacado' : 'Presente'}
+                    </div>
+                \`;
+                
+                listaChanchos.appendChild(chanchoElement);
+            });
+        }
+        
+        // Función para ver los datos en formato de hoja
+        function verDatos() {
+            if (chanchos.length === 0) {
+                alert('No hay chanchos para mostrar');
+                return;
+            }
+            
+            const tableBody = document.getElementById('paper-table-body');
+            tableBody.innerHTML = '';
+            
+            chanchos.forEach(chancho => {
+                // Calcular conversión de peso
+                let pesoConvertido = '';
+                if (chancho.tipoPeso === 'kg') {
+                    const libras = chancho.peso * 2.20462;
+                    pesoConvertido = \`\${chancho.peso} kg (\${libras.toFixed(2)} lb)\`;
+                } else {
+                    const kilos = chancho.peso / 2.20462;
+                    pesoConvertido = \`\${chancho.peso} lb (\${kilos.toFixed(2)} kg)\`;
+                }
+                
+                const row = document.createElement('tr');
+                row.innerHTML = \`
+                    <td>\${chancho.numero}</td>
+                    <td>\${chancho.arete}</td>
+                    <td>\${pesoConvertido}</td>
+                    <td>\${chancho.tipoPeso.toUpperCase()}</td>
+                    <td>\${chancho.persona}</td>
+                    <td>\${chancho.chanchera}</td>
+                    <td>\${chancho.sacado ? 'Sacado' : 'Presente'}</td>
+                \`;
+                tableBody.appendChild(row);
+            });
+            
+            document.getElementById('paper-view').style.display = 'flex';
+        }
+        
+        // Función para cerrar la vista de hoja
+        function cerrarPaperView() {
+            document.getElementById('paper-view').style.display = 'none';
+        }
+        
+        // Función para imprimir los datos
+        function imprimirDatos() {
+            window.print();
+        }
+        
+        // Cargar datos al iniciar
+        document.addEventListener('DOMContentLoaded', function() {
+            renderizarChanchos();
+        });
+    </script>
+</body>
+</html>`;
+            
+            const blob = new Blob([contenido], { type: 'text/html' });
             const url = URL.createObjectURL(blob);
             
             // Mostrar enlace de descarga
@@ -1071,7 +1440,7 @@
             const descargaLink = document.getElementById('descarga-link');
             
             descargaLink.href = url;
-            descargaLink.download = 'control_chanchos_futurista.html';
+            descargaLink.download = 'control_chanchos_proyecto.html';
             descargaSection.style.display = 'block';
             
             // Desplazarse hacia la sección de descarga
