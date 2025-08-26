@@ -140,6 +140,54 @@
             border-color: var(--accent-color);
         }
         
+        .camera-section {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .camera-preview {
+            width: 100%;
+            max-width: 300px;
+            height: 200px;
+            background-color: #000;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        
+        .camera-preview video,
+        .camera-preview canvas {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .camera-placeholder {
+            color: #666;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .camera-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .captured-image {
+            width: 100%;
+            max-width: 300px;
+            border-radius: 10px;
+            margin-top: 10px;
+            display: none;
+        }
+        
         .grid-container {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -206,6 +254,19 @@
             background: rgba(0, 0, 0, 0.3);
             padding: 5px 10px;
             border-radius: 20px;
+        }
+        
+        .chancho-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #666;
         }
         
         .chancho-info {
@@ -540,7 +601,30 @@
                     <input type="number" id="numero-chanchera" min="1" required>
                 </div>
             </div>
-            <button class="btn" onclick="agregarChancho()">
+            
+            <div class="camera-section">
+                <h3><i class="fas fa-camera"></i> Foto del Chancho</h3>
+                <div class="camera-preview" id="camera-preview">
+                    <div class="camera-placeholder">
+                        <i class="fas fa-camera" style="font-size: 3rem; margin-bottom: 10px;"></i>
+                        <p>Haz clic en "Activar Cámara"</p>
+                    </div>
+                </div>
+                <img id="captured-image" class="captured-image" alt="Imagen capturada">
+                <div class="camera-controls">
+                    <button class="btn" id="activate-camera">
+                        <i class="fas fa-camera"></i> Activar Cámara
+                    </button>
+                    <button class="btn" id="capture-photo" disabled>
+                        <i class="fas fa-camera-retro"></i> Tomar Foto
+                    </button>
+                    <button class="btn btn-danger" id="retake-photo" style="display: none;">
+                        <i class="fas fa-redo"></i> Volver a Tomar
+                    </button>
+                </div>
+            </div>
+            
+            <button class="btn" onclick="agregarChancho()" style="margin-top: 20px;">
                 <i class="fas fa-plus"></i> Agregar Chancho
             </button>
         </div>
@@ -657,6 +741,8 @@
         // Array para almacenar los chanchos
         let chanchos = [];
         let chanchoEditando = null;
+        let stream = null;
+        let capturedImageData = null;
         
         // Cargar datos guardados al iniciar
         document.addEventListener('DOMContentLoaded', function() {
@@ -676,7 +762,97 @@
                 e.preventDefault();
                 guardarEnlace();
             });
+            
+            // Configurar botones de cámara
+            document.getElementById('activate-camera').addEventListener('click', activarCamara);
+            document.getElementById('capture-photo').addEventListener('click', capturarFoto);
+            document.getElementById('retake-photo').addEventListener('click', volverATomarFoto);
         });
+        
+        // Función para activar la cámara
+        async function activarCamara() {
+            try {
+                // Detener stream existente si hay uno
+                if (stream) {
+                    detenerCamara();
+                }
+                
+                // Solicitar acceso a la cámara
+                stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { 
+                        facingMode: 'environment' // Preferir cámara trasera
+                    }, 
+                    audio: false 
+                });
+                
+                // Crear elemento de video para la vista previa
+                const preview = document.getElementById('camera-preview');
+                preview.innerHTML = '<video autoplay playsinline></video>';
+                const video = preview.querySelector('video');
+                video.srcObject = stream;
+                
+                // Habilitar botón de captura
+                document.getElementById('capture-photo').disabled = false;
+                document.getElementById('activate-camera').style.display = 'none';
+                document.getElementById('retake-photo').style.display = 'none';
+                document.getElementById('captured-image').style.display = 'none';
+                
+            } catch (error) {
+                console.error('Error al acceder a la cámara:', error);
+                alert('No se pudo acceder a la cámara. Asegúrate de permitir el acceso.');
+            }
+        }
+        
+        // Función para capturar foto
+        function capturarFoto() {
+            const preview = document.getElementById('camera-preview');
+            const video = preview.querySelector('video');
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            
+            // Configurar canvas con las dimensiones del video
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            
+            // Dibujar el frame actual en el canvas
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            
+            // Obtener la imagen como data URL
+            capturedImageData = canvas.toDataURL('image/jpeg');
+            
+            // Mostrar la imagen capturada
+            const capturedImg = document.getElementById('captured-image');
+            capturedImg.src = capturedImageData;
+            capturedImg.style.display = 'block';
+            
+            // Ocultar vista previa y mostrar controles para volver a tomar
+            preview.innerHTML = '<div class="camera-placeholder"><i class="fas fa-check-circle" style="font-size: 3rem; color: green; margin-bottom: 10px;"></i><p>Foto capturada</p></div>';
+            
+            // Cambiar estado de botones
+            document.getElementById('capture-photo').disabled = true;
+            document.getElementById('retake-photo').style.display = 'inline-block';
+            
+            // Detener la cámara
+            detenerCamara();
+        }
+        
+        // Función para volver a tomar foto
+        function volverATomarFoto() {
+            // Limpiar imagen capturada
+            capturedImageData = null;
+            document.getElementById('captured-image').style.display = 'none';
+            
+            // Reactivar la cámara
+            activarCamara();
+        }
+        
+        // Función para detener la cámara
+        function detenerCamara() {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+                stream = null;
+            }
+        }
         
         // Función para agregar un nuevo chancho
         function agregarChancho() {
@@ -703,7 +879,8 @@
                 peso: peso + " kg",
                 persona: persona,
                 chanchera: chanchera,
-                sacado: false
+                sacado: false,
+                imagen: capturedImageData // Guardar la imagen
             };
             
             chanchos.push(nuevoChancho);
@@ -716,6 +893,17 @@
             document.getElementById('peso-chancho').value = '';
             document.getElementById('nombre-persona').value = '';
             document.getElementById('numero-chanchera').value = '';
+            
+            // Limpiar la cámara
+            if (stream) {
+                detenerCamara();
+            }
+            capturedImageData = null;
+            document.getElementById('camera-preview').innerHTML = '<div class="camera-placeholder"><i class="fas fa-camera" style="font-size: 3rem; margin-bottom: 10px;"></i><p>Haz clic en "Activar Cámara"</p></div>';
+            document.getElementById('captured-image').style.display = 'none';
+            document.getElementById('capture-photo').disabled = true;
+            document.getElementById('activate-camera').style.display = 'inline-block';
+            document.getElementById('retake-photo').style.display = 'none';
             
             alert('Chancho agregado con éxito!');
         }
@@ -744,7 +932,16 @@
                 chanchoElement.className = `chancho-card ${chancho.sacado ? 'sacado' : ''}`;
                 chanchoElement.dataset.numero = chancho.numero;
                 
+                // Crear contenido de la imagen
+                let imagenHTML = '';
+                if (chancho.imagen) {
+                    imagenHTML = `<img src="${chancho.imagen}" alt="Imagen del chancho #${chancho.numero}" class="chancho-image">`;
+                } else {
+                    imagenHTML = `<div class="chancho-image"><i class="fas fa-piggy-bank" style="font-size: 3rem;"></i><p>Sin imagen</p></div>`;
+                }
+                
                 chanchoElement.innerHTML = `
+                    ${imagenHTML}
                     <div class="chancho-header">
                         <div class="chancho-numero">#${chancho.numero}</div>
                         <div class="chancho-peso">${chancho.peso}</div>
