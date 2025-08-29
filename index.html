@@ -444,6 +444,36 @@
         
         .tab-content {
             padding: 25px 0;
+            position: relative;
+        }
+        
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            z-index: 100;
+            display: none;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 5px solid var(--primary);
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
         
         .tab-pane {
@@ -672,6 +702,11 @@
             </div>
             
             <div class="tab-content">
+                <div class="loading-overlay" id="loading-overlay">
+                    <div class="spinner"></div>
+                    <p>Procesando video, por favor espere...</p>
+                </div>
+                
                 <!-- Pestaña de Registro -->
                 <div class="tab-pane active" id="registro">
                     <div class="grid">
@@ -884,7 +919,6 @@
             const liveWeightLbsInput = document.getElementById('liveWeightLbs');
             const clearBtn = document.getElementById('clear-btn');
             const viewDataBtn = document.getElementById('view-data');
-            const printBtn = document.getElementById('print-btn');
             const printListBtn = document.getElementById('print-list');
             const printVideosBtn = document.getElementById('print-videos');
             const totalPigsSpan = document.getElementById('total-pigs');
@@ -918,6 +952,7 @@
             const projectLinkContainer = document.getElementById('project-link-container');
             const projectLink = document.getElementById('project-link');
             const copyLinkBtn = document.getElementById('copy-link');
+            const loadingOverlay = document.getElementById('loading-overlay');
             
             // Variables para la grabación de video
             let mediaStream = null;
@@ -942,6 +977,21 @@
                 setTimeout(() => {
                     notification.className = 'notification';
                 }, 3000);
+            }
+            
+            // Mostrar/ocultar loading
+            function showLoading(show) {
+                loadingOverlay.style.display = show ? 'flex' : 'none';
+            }
+            
+            // Convertir blob a base64
+            function blobToBase64(blob) {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = () => resolve(reader.result);
+                    reader.onerror = reject;
+                    reader.readAsDataURL(blob);
+                });
             }
             
             // Cambio de pestañas
@@ -972,6 +1022,7 @@
             renderPigsList();
             updateStats();
             updatePigSelection();
+            loadRecordedVideos();
             
             // Manejar envío del formulario
             pigForm.addEventListener('submit', function(e) {
@@ -1075,6 +1126,7 @@
                 renderPigsList();
                 updateStats();
                 updatePigSelection();
+                loadRecordedVideos();
                 
                 showNotification(`Nuevo proyecto "${projectName}" creado`);
             });
@@ -1128,6 +1180,7 @@
                     renderPigsList();
                     updateStats();
                     updatePigSelection();
+                    loadRecordedVideos();
                     
                     showNotification(`Proyecto "${projectName}" cargado correctamente`);
                 } else {
@@ -1219,45 +1272,35 @@
                         }
                     };
                     
-                    mediaRecorder.onstop = function() {
-                        const blob = new Blob(recordedChunks, { type: 'video/mp4' });
-                        const videoUrl = URL.createObjectURL(blob);
+                    mediaRecorder.onstop = async function() {
+                        showLoading(true);
                         
-                        // Guardar el video
-                        const videoData = {
-                            pigNumber: currentPigNumber,
-                            videoUrl: videoUrl,
-                            date: new Date().toLocaleString()
-                        };
-                        
-                        pigVideos.push(videoData);
-                        localStorage.setItem(`pigVideos_${currentProject}`, JSON.stringify(pigVideos));
-                        
-                        // Mostrar el video grabado
-                        const videoItem = document.createElement('div');
-                        videoItem.className = 'video-item';
-                        videoItem.innerHTML = `
-                            <video controls>
-                                <source src="${videoUrl}" type="video/mp4">
-                            </video>
-                            <p>Cerdo #${currentPigNumber} - ${videoData.date}</p>
-                            <button class="btn-danger delete-video"><i class="fas fa-trash"></i> Eliminar</button>
-                        `;
-                        
-                        recordedVideos.appendChild(videoItem);
-                        
-                        // Agregar evento para eliminar video
-                        videoItem.querySelector('.delete-video').addEventListener('click', function() {
-                            const index = pigVideos.findIndex(v => v.videoUrl === videoUrl);
-                            if (index !== -1) {
-                                pigVideos.splice(index, 1);
-                                localStorage.setItem(`pigVideos_${currentProject}`, JSON.stringify(pigVideos));
-                                videoItem.remove();
-                                showNotification('Video eliminado');
-                            }
-                        });
-                        
-                        showNotification('Video guardado correctamente');
+                        try {
+                            const blob = new Blob(recordedChunks, { type: 'video/mp4' });
+                            
+                            // Convertir el video a base64 para almacenamiento permanente
+                            const videoBase64 = await blobToBase64(blob);
+                            
+                            // Guardar el video
+                            const videoData = {
+                                pigNumber: currentPigNumber,
+                                videoData: videoBase64,
+                                date: new Date().toLocaleString()
+                            };
+                            
+                            pigVideos.push(videoData);
+                            localStorage.setItem(`pigVideos_${currentProject}`, JSON.stringify(pigVideos));
+                            
+                            // Mostrar el video grabado
+                            addVideoToRecordedList(videoData);
+                            
+                            showNotification('Video guardado correctamente');
+                        } catch (error) {
+                            showNotification('Error al procesar el video: ' + error.message, 'error');
+                            console.error('Error processing video:', error);
+                        } finally {
+                            showLoading(false);
+                        }
                     };
                     
                     mediaRecorder.start();
@@ -1282,11 +1325,56 @@
                     startRecordBtn.style.display = 'flex';
                     stopRecordBtn.style.display = 'none';
                     
-                    showNotification('Grabación detenida. Video guardado.');
+                    // Detener la cámara
+                    if (mediaStream) {
+                        mediaStream.getTracks().forEach(track => track.stop());
+                        mediaStream = null;
+                    }
+                    
+                    startCameraBtn.style.display = 'flex';
                 }
             });
             
-            // Cargar lista de videos
+            // Añadir video a la lista de grabados
+            function addVideoToRecordedList(videoData) {
+                const videoItem = document.createElement('div');
+                videoItem.className = 'video-item';
+                videoItem.innerHTML = `
+                    <video controls>
+                        <source src="${videoData.videoData}" type="video/mp4">
+                    </video>
+                    <p>Cerdo #${videoData.pigNumber} - ${videoData.date}</p>
+                    <button class="btn-danger delete-video"><i class="fas fa-trash"></i> Eliminar</button>
+                `;
+                
+                recordedVideos.appendChild(videoItem);
+                
+                // Agregar evento para eliminar video
+                videoItem.querySelector('.delete-video').addEventListener('click', function() {
+                    const index = pigVideos.findIndex(v => v.videoData === videoData.videoData);
+                    if (index !== -1) {
+                        pigVideos.splice(index, 1);
+                        localStorage.setItem(`pigVideos_${currentProject}`, JSON.stringify(pigVideos));
+                        videoItem.remove();
+                        showNotification('Video eliminado');
+                    }
+                });
+            }
+            
+            // Cargar videos grabados en la pestaña de registro
+            function loadRecordedVideos() {
+                recordedVideos.innerHTML = '';
+                
+                if (pigVideos.length === 0) {
+                    return;
+                }
+                
+                pigVideos.forEach(videoData => {
+                    addVideoToRecordedList(videoData);
+                });
+            }
+            
+            // Cargar lista de videos en la pestaña de videos
             function loadVideosList(filter = '') {
                 videosList.innerHTML = '';
                 
@@ -1304,14 +1392,14 @@
                     return;
                 }
                 
-                filteredVideos.forEach(video => {
+                filteredVideos.forEach(videoData => {
                     const videoItem = document.createElement('div');
                     videoItem.className = 'video-item';
                     videoItem.innerHTML = `
                         <video controls>
-                            <source src="${video.videoUrl}" type="video/mp4">
+                            <source src="${videoData.videoData}" type="video/mp4">
                         </video>
-                        <p>Cerdo #${video.pigNumber} - ${video.date}</p>
+                        <p>Cerdo #${videoData.pigNumber} - ${videoData.date}</p>
                         <button class="btn-danger delete-video"><i class="fas fa-trash"></i> Eliminar</button>
                     `;
                     
@@ -1319,7 +1407,7 @@
                     
                     // Agregar evento para eliminar video
                     videoItem.querySelector('.delete-video').addEventListener('click', function() {
-                        const index = pigVideos.findIndex(v => v.videoUrl === video.videoUrl);
+                        const index = pigVideos.findIndex(v => v.videoData === videoData.videoData);
                         if (index !== -1) {
                             pigVideos.splice(index, 1);
                             localStorage.setItem(`pigVideos_${currentProject}`, JSON.stringify(pigVideos));
@@ -1347,6 +1435,7 @@
                         <div>
                             <strong>${project}</strong>
                             <div>${localStorage.getItem(`pigData_${project}`) ? JSON.parse(localStorage.getItem(`pigData_${project}`)).length : 0} cerdos registrados</div>
+                            <div>${localStorage.getItem(`pigVideos_${project}`) ? JSON.parse(localStorage.getItem(`pigVideos_${project}`)).length : 0} videos guardados</div>
                         </div>
                         <div class="project-actions">
                             <button class="btn-primary load-project" data-project="${project}"><i class="fas fa-folder-open"></i></button>
@@ -1374,6 +1463,7 @@
                             renderPigsList();
                             updateStats();
                             updatePigSelection();
+                            loadRecordedVideos();
                             
                             showNotification(`Proyecto "${projectName}" cargado correctamente`);
                         }
