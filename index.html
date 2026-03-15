@@ -2,1322 +2,801 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Heydin Kayser • Trading Elite</title>
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
-    <!-- Font Awesome 6 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800;900&family=Rajdhani:wght@300;500;700;800&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Sitio - Autenticación</title>
     <style>
-        /* ===== VARIABLES ===== */
-        :root {
-            --primary: #00ffff;
-            --primary-glow: rgba(0, 255, 255, 0.8);
-            --secondary: #ff00d4;
-            --secondary-glow: rgba(255, 0, 212, 0.7);
-            --accent: #7700ff;
-            --dark: #0a0c12;
-            --darker: #05070a;
-            --card-bg: rgba(12, 16, 22, 0.75);
-            --text-light: #e2f3ff;
-            --transition: all 0.3s ease;
-            --google-color: #db4437;
-            --facebook-color: #4267B2;
-        }
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        html {
-            font-size: 16px;
-        }
-
         body {
-            font-family: 'Rajdhani', 'Syne', sans-serif;
-            background: radial-gradient(circle at 20% 20%, #0b0e14, #030507);
-            color: var(--text-light);
-            line-height: 1.5;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            position: relative;
-            overflow-x: hidden;
-            width: 100%;
-        }
-
-        /* ===== FONDOS ===== */
-        #particles-js {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        .grid-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                linear-gradient(rgba(0, 255, 255, 0.05) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 255, 255, 0.05) 1px, transparent 1px);
-            background-size: 30px 30px;
-            pointer-events: none;
-            z-index: 0;
-            opacity: 0.4;
-        }
-
-        /* ===== LOADER RESPONSIVE ===== */
-        .loader-container {
-            position: fixed;
-            inset: 0;
-            background: #010101;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            transition: opacity 0.9s ease, visibility 0.9s ease;
-            backdrop-filter: blur(8px);
-            padding: 20px;
-            text-align: center;
-        }
-
-        .loader-container.fade-out {
-            opacity: 0;
-            visibility: hidden;
-        }
-
-        .loader-logo {
-            font-size: clamp(2rem, 8vw, 4rem);
-            font-weight: 900;
-            font-family: 'Syne', sans-serif;
             display: flex;
             align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
             justify-content: center;
-            color: #fff;
-            text-shadow: 0 0 20px cyan, 0 0 50px #ff00d4;
-            margin-bottom: 2rem;
-            letter-spacing: 2px;
         }
 
-        .loader-logo i {
-            font-size: clamp(2.5rem, 10vw, 5rem);
-            color: cyan;
-            filter: drop-shadow(0 0 15px cyan);
-        }
-
-        .loader {
-            width: min(300px, 80%);
-            height: 5px;
-            background: rgba(0,255,255,0.1);
-            border-radius: 10px;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 0 30px cyan;
-        }
-
-        .loader::before {
-            content: '';
-            position: absolute;
-            width: 150%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, cyan, #ff00d4, cyan, transparent);
-            animation: loadingScan 2.4s infinite linear;
-        }
-
-        @keyframes loadingScan {
-            0% { transform: translateX(-150%); }
-            100% { transform: translateX(80%); }
-        }
-
-        .loader-text {
-            margin-top: 30px;
-            font-size: clamp(1rem, 4vw, 1.4rem);
-            font-weight: 700;
-            text-transform: uppercase;
-            color: #fff;
-            text-shadow: 0 0 10px cyan;
-            letter-spacing: 3px;
-        }
-
-        .loader-dots {
-            display: flex;
-            gap: 15px;
-            margin-top: 30px;
-        }
-
-        .loader-dot {
-            width: clamp(12px, 3vw, 16px);
-            height: clamp(12px, 3vw, 16px);
-            border-radius: 50%;
-            background: cyan;
-            box-shadow: 0 0 20px cyan;
-            animation: dotWave 1.6s infinite ease-in-out alternate;
-        }
-
-        .loader-dot:nth-child(2) { animation-delay: 0.4s; background: #ff00d4; }
-        .loader-dot:nth-child(3) { animation-delay: 0.8s; background: #7700ff; }
-
-        @keyframes dotWave {
-            0% { transform: scale(1); opacity: 0.8; }
-            100% { transform: scale(1.5); opacity: 1; }
-        }
-
-        /* ===== CONTENEDOR PRINCIPAL RESPONSIVE ===== */
         .container {
             width: 100%;
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 15px;
-            position: relative;
-            z-index: 10;
+            max-width: 450px;
+            padding: 20px;
         }
 
-        @media (min-width: 640px) {
-            .container { padding: 0 20px; }
-        }
-
-        @media (min-width: 1024px) {
-            .container { padding: 0 30px; }
-        }
-
-        /* ===== HEADER RESPONSIVE ===== */
-        header {
-            background: rgba(3, 6, 10, 0.85);
-            backdrop-filter: blur(20px);
-            border-bottom: 2px solid rgba(0, 255, 255, 0.3);
-            box-shadow: 0 5px 30px rgba(0,255,255,0.2);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            padding: 0.7rem 0;
-            width: 100%;
-        }
-
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .logo {
-            font-size: clamp(1.2rem, 5vw, 2rem);
-            font-weight: 900;
-            font-family: 'Syne', sans-serif;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: white;
-            text-shadow: 0 0 15px cyan;
-            letter-spacing: 1px;
-        }
-
-        .logo i {
-            font-size: clamp(1.4rem, 6vw, 2.5rem);
-            color: cyan;
-            filter: drop-shadow(0 0 10px cyan);
-        }
-
-        .nav-links {
-            display: none;
-        }
-
-        @media (min-width: 768px) {
-            .nav-links {
-                display: flex;
-                gap: 20px;
-            }
-            
-            .nav-links a {
-                color: #e0f0ff;
-                text-decoration: none;
-                font-weight: 700;
-                font-size: 1rem;
-                letter-spacing: 1px;
-                padding: 5px 0;
-                position: relative;
-                transition: 0.2s;
-                text-transform: uppercase;
-            }
-            
-            .nav-links a::after {
-                content: '';
-                position: absolute;
-                bottom: 0;
-                left: 0;
-                width: 0%;
-                height: 2px;
-                background: linear-gradient(90deg, cyan, #ff00d4);
-                transition: 0.3s;
-            }
-            
-            .nav-links a:hover {
-                color: cyan;
-                text-shadow: 0 0 10px cyan;
-            }
-            
-            .nav-links a:hover::after {
-                width: 100%;
-            }
-        }
-
-        /* ===== BOTONES DE AUTENTICACIÓN RESPONSIVE ===== */
-        .auth-buttons {
-            display: flex;
-            gap: 8px;
-        }
-
-        .auth-buttons button {
-            padding: 10px 16px;
-            border-radius: 40px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            font-size: 0.75rem;
-            border: none;
-            cursor: pointer;
-            transition: 0.3s;
-            white-space: nowrap;
-        }
-
-        @media (min-width: 480px) {
-            .auth-buttons button {
-                padding: 12px 20px;
-                font-size: 0.8rem;
-                letter-spacing: 2px;
-            }
-        }
-
-        @media (min-width: 768px) {
-            .auth-buttons button {
-                padding: 14px 28px;
-                font-size: 0.9rem;
-            }
-        }
-
-        .login-btn {
-            background: transparent;
-            border: 1.5px solid cyan !important;
-            color: cyan;
-            box-shadow: 0 0 15px transparent;
-        }
-
-        .login-btn:hover {
-            background: rgba(0, 255, 255, 0.15);
-            box-shadow: 0 0 30px cyan;
-        }
-
-        .register-btn {
-            background: linear-gradient(145deg, #00e0ff, #0088ff);
-            color: black;
-            font-weight: 900;
-            border: 1.5px solid cyan;
-            box-shadow: 0 0 25px rgba(0, 255, 255, 0.5);
-        }
-
-        .register-btn:hover {
-            background: linear-gradient(145deg, #ff00d4, #7700ff);
-            color: white;
-            box-shadow: 0 0 40px #ff00d4;
-        }
-
-        /* ===== HERO RESPONSIVE ===== */
-        .hero {
-            padding: 4rem 0 3rem;
-            text-align: center;
-            position: relative;
-            z-index: 10;
-        }
-
-        @media (min-width: 640px) {
-            .hero { padding: 6rem 0 4rem; }
-        }
-
-        @media (min-width: 1024px) {
-            .hero { padding: 8rem 0 6rem; }
-        }
-
-        .hero h1 {
-            font-size: clamp(2.2rem, 10vw, 5.5rem);
-            font-weight: 900;
-            font-family: 'Syne', sans-serif;
-            background: linear-gradient(45deg, #fff, cyan, #ff00d4);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 40px rgba(0, 255, 255, 0.5);
-            margin-bottom: 1rem;
-            letter-spacing: 2px;
-            line-height: 1.2;
-            padding: 0 10px;
-        }
-
-        .hero p {
-            font-size: clamp(1rem, 4vw, 1.6rem);
-            max-width: 900px;
-            margin: 0 auto 2rem;
-            font-weight: 500;
-            color: #e6f7ff;
-            text-shadow: 0 0 15px rgba(0,0,0,0.7);
-            background: rgba(0,0,0,0.3);
-            backdrop-filter: blur(5px);
-            padding: 12px 20px;
-            border-radius: 60px;
-            border: 1px solid rgba(0,255,255,0.3);
-            width: 90%;
-        }
-
-        .cta-button {
-            padding: 14px 30px;
-            font-size: clamp(1rem, 4vw, 1.4rem);
-            font-weight: 900;
-            background: rgba(0,0,0,0.3);
-            backdrop-filter: blur(10px);
-            color: white;
-            border: 2px solid cyan;
-            border-radius: 60px;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            cursor: pointer;
-            transition: 0.3s;
-            box-shadow: 0 0 30px cyan;
-            width: auto;
-            min-width: 250px;
-            max-width: 90%;
-        }
-
-        @media (min-width: 768px) {
-            .cta-button {
-                padding: 18px 45px;
-                font-size: 1.3rem;
-                min-width: 300px;
-            }
-        }
-
-        .cta-button:hover {
-            background: cyan;
-            color: black;
-            border-color: #ff00d4;
-            box-shadow: 0 0 50px cyan, 0 0 80px #ff00d4;
-            transform: scale(1.05);
-        }
-
-        /* ===== FEATURES RESPONSIVE ===== */
-        .features {
-            padding: 3rem 0 4rem;
-        }
-
-        @media (min-width: 768px) {
-            .features { padding: 4rem 0 6rem; }
-        }
-
-        @media (min-width: 1024px) {
-            .features { padding: 5rem 0 8rem; }
-        }
-
-        .section-title h2 {
-            font-size: clamp(2rem, 8vw, 3.5rem);
-            font-weight: 900;
-            font-family: 'Syne', sans-serif;
-            background: linear-gradient(135deg, cyan, #ffffff, #ff00d4);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
-            margin-bottom: 1rem;
-            letter-spacing: 2px;
-            text-align: center;
-            padding: 0 15px;
-        }
-
-        .section-title p {
-            font-size: clamp(1rem, 3.5vw, 1.3rem);
-            color: #cdf0ff;
-            max-width: 800px;
-            margin: 0 auto;
-            text-align: center;
-            padding: 0 20px;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 1.5rem;
-            margin-top: 3rem;
-            padding: 0 15px;
-        }
-
-        @media (min-width: 640px) {
-            .features-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 1.8rem;
-            }
-        }
-
-        @media (min-width: 1024px) {
-            .features-grid {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 2.5rem;
-                padding: 0;
-            }
-        }
-
-        .feature-card {
-            background: var(--card-bg);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(0, 255, 255, 0.3);
+        .card {
+            background: white;
+            padding: 40px;
             border-radius: 20px;
-            padding: 2rem 1.5rem;
-            transition: 0.3s;
-            position: relative;
-            overflow: hidden;
-            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            animation: slideIn 0.5s ease;
         }
 
-        @media (min-width: 768px) {
-            .feature-card {
-                padding: 2.5rem 2rem;
-                border-radius: 25px;
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
 
-        .feature-card:hover {
-            transform: translateY(-8px);
-            border-color: cyan;
-            box-shadow: 0 0 30px rgba(0,255,255,0.3);
-        }
-
-        .feature-icon i {
-            font-size: clamp(2.5rem, 8vw, 3.8rem);
-            color: cyan;
-            text-shadow: 0 0 20px cyan;
-            margin-bottom: 1rem;
-        }
-
-        .feature-card h3 {
-            font-size: clamp(1.3rem, 5vw, 1.8rem);
-            font-weight: 800;
-            margin-bottom: 0.8rem;
-            background: linear-gradient(45deg, cyan, #fff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .feature-card p {
-            font-size: clamp(0.95rem, 3vw, 1.1rem);
-            color: #d0eaff;
-            font-weight: 500;
-            line-height: 1.5;
-        }
-
-        /* ===== SOCIAL BUTTONS ===== */
-        .social-auth-divider {
-            display: flex;
-            align-items: center;
+        h1, h2 {
             text-align: center;
-            margin: 20px 0;
-            color: rgba(0, 255, 255, 0.6);
-        }
-
-        .social-auth-divider::before,
-        .social-auth-divider::after {
-            content: '';
-            flex: 1;
-            border-bottom: 1px solid rgba(0, 255, 255, 0.3);
-        }
-
-        .social-auth-divider span {
-            padding: 0 10px;
-            font-size: 0.9rem;
+            color: #333;
+            margin-bottom: 30px;
             font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
         }
 
-        .social-auth-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 15px;
+        h2 {
+            color: #667eea;
+            font-size: 28px;
         }
 
-        .social-auth-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            padding: 12px;
-            border: none;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            cursor: pointer;
-            transition: 0.3s;
-            color: white;
-            width: 100%;
-            backdrop-filter: blur(10px);
+        .form-group {
+            margin-bottom: 20px;
         }
 
-        .social-auth-btn i {
-            font-size: 1.2rem;
-        }
-
-        .google-btn {
-            background: rgba(219, 68, 55, 0.2);
-            border: 1.5px solid var(--google-color);
-            box-shadow: 0 0 20px rgba(219, 68, 55, 0.3);
-        }
-
-        .google-btn:hover {
-            background: var(--google-color);
-            transform: translateY(-3px);
-            box-shadow: 0 0 30px var(--google-color);
-        }
-
-        .facebook-btn {
-            background: rgba(66, 103, 178, 0.2);
-            border: 1.5px solid var(--facebook-color);
-            box-shadow: 0 0 20px rgba(66, 103, 178, 0.3);
-        }
-
-        .facebook-btn:hover {
-            background: var(--facebook-color);
-            transform: translateY(-3px);
-            box-shadow: 0 0 30px var(--facebook-color);
-        }
-
-        @media (max-width: 768px) {
-            .social-auth-btn:active {
-                transform: scale(0.95);
-            }
-            
-            .google-btn:active {
-                background: var(--google-color);
-            }
-            
-            .facebook-btn:active {
-                background: var(--facebook-color);
-            }
-        }
-
-        /* ===== FOOTER RESPONSIVE ===== */
-        footer {
-            background: rgba(0,0,0,0.85);
-            backdrop-filter: blur(25px);
-            border-top: 2px solid rgba(0,255,255,0.4);
-            padding: 2.5rem 0 1.5rem;
-            position: relative;
-            z-index: 20;
-            width: 100%;
-        }
-
-        @media (min-width: 768px) {
-            footer { padding: 4rem 0 2rem; }
-        }
-
-        .footer-logo {
-            font-size: clamp(1.6rem, 6vw, 2.2rem);
-            font-weight: 900;
-            font-family: 'Syne', sans-serif;
-            color: white;
-            text-shadow: 0 0 20px cyan;
-            text-align: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .footer-links {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 15px 25px;
-            margin-bottom: 1.5rem;
-        }
-
-        .footer-links a {
-            color: #bbf0ff;
-            text-decoration: none;
-            font-size: clamp(0.9rem, 3vw, 1.1rem);
-            font-weight: 600;
-            transition: 0.2s;
-            padding: 5px 10px;
-        }
-
-        .footer-links a:hover {
-            color: cyan;
-            text-shadow: 0 0 15px cyan;
-        }
-
-        .social-icons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            justify-content: center;
-            margin: 20px 0;
-        }
-
-        .social-icons a {
-            color: white;
-            font-size: clamp(1.4rem, 5vw, 2rem);
-            width: clamp(45px, 10vw, 60px);
-            height: clamp(45px, 10vw, 60px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            background: rgba(0,255,255,0.08);
-            border: 1px solid rgba(0,255,255,0.5);
-            transition: 0.3s;
-        }
-
-        .social-icons a:hover {
-            background: cyan;
-            color: black;
-            border-color: #ff00d4;
-            box-shadow: 0 0 30px cyan;
-            transform: translateY(-5px);
-        }
-
-        .copyright {
-            color: rgba(200, 240, 255, 0.7);
-            font-size: clamp(0.8rem, 3vw, 0.95rem);
-            text-align: center;
-            margin-top: 2rem;
-            padding: 0 20px;
-        }
-
-        /* ===== MODAL RESPONSIVE ===== */
-        .auth-modal {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.95);
-            backdrop-filter: blur(20px);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            padding: 15px;
-        }
-
-        .auth-container {
-            background: rgba(5, 8, 15, 0.95);
-            backdrop-filter: blur(30px);
-            border: 2px solid cyan;
-            border-radius: 30px;
-            width: 100%;
-            max-width: 500px;
-            padding: 2rem 1.5rem;
-            box-shadow: 0 0 50px cyan;
-            animation: modalGlitch 0.4s;
-            margin: 0 auto;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        @media (min-width: 480px) {
-            .auth-container { padding: 2.5rem; }
-        }
-
-        @keyframes modalGlitch {
-            0% { transform: scale(0.9); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        .auth-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.8rem;
-        }
-
-        .auth-header h2 {
-            font-size: clamp(1.6rem, 6vw, 2.2rem);
-            font-weight: 900;
-            background: linear-gradient(45deg, cyan, #ff00d4);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: 2px;
-        }
-
-        .close-auth {
-            background: none;
-            border: none;
-            color: cyan;
-            font-size: clamp(2rem, 7vw, 2.8rem);
-            cursor: pointer;
-            transition: 0.3s;
-            line-height: 1;
-        }
-
-        .close-auth:hover {
-            color: #ff00d4;
-            transform: rotate(180deg);
-        }
-
-        .auth-form {
-            display: flex;
-            flex-direction: column;
-            gap: 1.2rem;
-        }
-
-        .auth-form input {
-            padding: 14px 18px;
-            background: rgba(0, 255, 255, 0.05);
-            border: 1.5px solid rgba(0,255,255,0.4);
-            border-radius: 50px;
-            font-size: 1rem;
-            color: white;
-            font-weight: 500;
-            transition: 0.3s;
-            width: 100%;
-        }
-
-        @media (min-width: 480px) {
-            .auth-form input {
-                padding: 16px 22px;
-                font-size: 1.1rem;
-            }
-        }
-
-        .auth-form input:focus {
-            border-color: #ff00d4;
-            background: rgba(0,0,0,0.5);
-            box-shadow: 0 0 25px rgba(255,0,212,0.5);
-            outline: none;
-        }
-
-        .auth-submit {
-            padding: 14px;
-            background: linear-gradient(145deg, cyan, #0099ff);
-            border: none;
-            border-radius: 50px;
-            font-weight: 900;
-            font-size: clamp(1.1rem, 4vw, 1.3rem);
-            color: black;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            cursor: pointer;
-            transition: 0.3s;
-            box-shadow: 0 0 25px cyan;
-            margin-top: 0.5rem;
-        }
-
-        .auth-submit:hover {
-            background: linear-gradient(145deg, #ff00d4, #7700ff);
-            color: white;
-            box-shadow: 0 0 45px #ff00d4;
-        }
-
-        .auth-toggle {
-            margin-top: 1.8rem;
-            color: #bbf0ff;
-            font-size: clamp(0.95rem, 3.5vw, 1.1rem);
-            text-align: center;
-        }
-
-        .auth-toggle span {
-            color: cyan;
-            font-weight: 800;
-            cursor: pointer;
-            border-bottom: 1px solid cyan;
-            padding-bottom: 2px;
-            transition: 0.2s;
-        }
-
-        .auth-toggle span:hover {
-            color: #ff00d4;
-            border-bottom-color: #ff00d4;
-        }
-
-        .auth-error {
-            color: #ff7b9c;
-            font-weight: 700;
-            font-size: 0.95rem;
-            text-align: center;
-            text-shadow: 0 0 10px rgba(255,0,0,0.5);
-            margin-bottom: 0.5rem;
-        }
-
-        /* ===== UTILIDADES RESPONSIVE ===== */
-        .mobile-menu-btn {
+        label {
             display: block;
-            font-size: 1.8rem;
-            color: cyan;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
             cursor: pointer;
+            transition: all 0.3s;
+            margin: 5px 0;
         }
 
-        @media (min-width: 768px) {
-            .mobile-menu-btn {
-                display: none;
-            }
+        .btn-primary {
+            background: #667eea;
+            color: white;
         }
 
-        /* ===== AJUSTES TÁCTILES PARA MÓVIL ===== */
-        @media (max-width: 768px) {
-            .feature-card:hover {
-                transform: translateY(-5px);
+        .btn-primary:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-danger {
+            background: #e53e3e;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c53030;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(229, 62, 62, 0.4);
+        }
+
+        .btn-google {
+            background: #DB4437;
+            color: white;
+        }
+
+        .btn-google:hover {
+            background: #c53929;
+        }
+
+        .btn-facebook {
+            background: #4267B2;
+            color: white;
+        }
+
+        .btn-facebook:hover {
+            background: #365899;
+        }
+
+        .btn-phone {
+            background: #34b7f1;
+            color: white;
+        }
+
+        .btn-phone:hover {
+            background: #2a9fd4;
+        }
+
+        .btn-secondary {
+            background: #718096;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #4a5568;
+        }
+
+        .divider {
+            text-align: center;
+            margin: 25px 0;
+            position: relative;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            width: 45%;
+            height: 1px;
+            background: #e0e0e0;
+        }
+
+        .divider::before {
+            left: 0;
+        }
+
+        .divider::after {
+            right: 0;
+        }
+
+        .divider span {
+            background: white;
+            padding: 0 10px;
+            color: #888;
+            font-size: 14px;
+        }
+
+        .form-footer {
+            text-align: center;
+            margin-top: 25px;
+        }
+
+        .form-footer a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            margin: 0 10px;
+        }
+
+        .form-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .user-info {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+        }
+
+        .user-info h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+
+        .user-info p {
+            margin: 12px 0;
+            color: #555;
+            font-size: 16px;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 8px;
+        }
+
+        .user-info p:last-child {
+            border-bottom: none;
+        }
+
+        .user-info strong {
+            color: #333;
+            width: 120px;
+            display: inline-block;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .nav-buttons .btn {
+            flex: 1;
+            padding: 10px;
+            font-size: 14px;
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 500;
+            animation: slideIn 0.3s ease;
+        }
+
+        .success {
+            background: #c6f6d5;
+            color: #22543d;
+            border: 1px solid #9ae6b4;
+        }
+
+        .error {
+            background: #fed7d7;
+            color: #742a2a;
+            border: 1px solid #fc8181;
+        }
+
+        .info {
+            background: #bee3f8;
+            color: #2c5282;
+            border: 1px solid #90cdf4;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .phone-input-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        .phone-input-container select {
+            width: 30%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 15px;
+        }
+
+        .phone-input-container input {
+            width: 70%;
+        }
+
+        @media (max-width: 480px) {
+            .card {
+                padding: 25px;
             }
             
-            .cta-button:active {
-                background: cyan;
-                color: black;
-                transform: scale(0.98);
-            }
-            
-            .auth-buttons button:active {
-                transform: scale(0.95);
-            }
-            
-            .social-icons a:active {
-                background: cyan;
-                color: black;
-                transform: scale(0.9);
+            .nav-buttons {
+                flex-direction: column;
             }
         }
     </style>
 </head>
 <body>
-    <!-- PARTICLES -->
-    <div id="particles-js"></div>
-    <div class="grid-overlay"></div>
-
-    <!-- LOADER -->
-    <div class="loader-container" id="loader">
-        <div class="loader-logo">
-            <i class="fas fa-chart-line"></i>
-            <span>HEYDIN KAYSER</span>
+    <div class="container">
+        <!-- Pantalla de Inicio -->
+        <div id="home-screen" class="card">
+            <h2>Bienvenido a Mi Sitio</h2>
+            <div class="nav-buttons">
+                <button onclick="showScreen('login-screen')" class="btn btn-primary">Iniciar Sesión</button>
+                <button onclick="showScreen('register-screen')" class="btn btn-secondary">Registrarse</button>
+            </div>
         </div>
-        <div class="loader"></div>
-        <div class="loader-text">Desbloqueando terminal VIP</div>
-        <div class="loader-dots">
-            <div class="loader-dot"></div>
-            <div class="loader-dot"></div>
-            <div class="loader-dot"></div>
+
+        <!-- Pantalla de Login -->
+        <div id="login-screen" class="card hidden">
+            <h2>Iniciar Sesión</h2>
+            
+            <form id="login-form" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="login-email">Correo Electrónico</label>
+                    <input type="email" id="login-email" required placeholder="ejemplo@correo.com">
+                </div>
+                
+                <div class="form-group">
+                    <label for="login-password">Contraseña</label>
+                    <input type="password" id="login-password" required placeholder="••••••••">
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+            </form>
+            
+            <div class="divider">
+                <span>O continúa con</span>
+            </div>
+            
+            <button onclick="handleGoogleAuth()" class="btn btn-google">
+                Google
+            </button>
+            
+            <button onclick="handleFacebookAuth()" class="btn btn-facebook">
+                Facebook
+            </button>
+            
+            <button onclick="handlePhoneAuth()" class="btn btn-phone">
+                Teléfono
+            </button>
+            
+            <div class="form-footer">
+                <a href="#" onclick="showScreen('reset-screen')">¿Olvidaste tu contraseña?</a>
+                <p>¿No tienes cuenta? <a href="#" onclick="showScreen('register-screen')">Regístrate</a></p>
+                <a href="#" onclick="showScreen('home-screen')">← Volver al inicio</a>
+            </div>
+        </div>
+
+        <!-- Pantalla de Registro -->
+        <div id="register-screen" class="card hidden">
+            <h2>Registro</h2>
+            
+            <form id="register-form" onsubmit="handleRegister(event)">
+                <div class="form-group">
+                    <label for="register-name">Nombre Completo</label>
+                    <input type="text" id="register-name" required placeholder="Juan Pérez">
+                </div>
+                
+                <div class="form-group">
+                    <label for="register-email">Correo Electrónico</label>
+                    <input type="email" id="register-email" required placeholder="ejemplo@correo.com">
+                </div>
+                
+                <div class="form-group">
+                    <label for="register-phone">Teléfono (opcional)</label>
+                    <input type="tel" id="register-phone" placeholder="+52 123 456 7890">
+                </div>
+                
+                <div class="form-group">
+                    <label for="register-password">Contraseña</label>
+                    <input type="password" id="register-password" required placeholder="••••••••">
+                </div>
+                
+                <div class="form-group">
+                    <label for="register-confirm-password">Confirmar Contraseña</label>
+                    <input type="password" id="register-confirm-password" required placeholder="••••••••">
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Registrarse</button>
+            </form>
+            
+            <div class="divider">
+                <span>O regístrate con</span>
+            </div>
+            
+            <button onclick="handleGoogleAuth()" class="btn btn-google">
+                Google
+            </button>
+            
+            <button onclick="handleFacebookAuth()" class="btn btn-facebook">
+                Facebook
+            </button>
+            
+            <button onclick="handlePhoneAuth()" class="btn btn-phone">
+                Teléfono
+            </button>
+            
+            <div class="form-footer">
+                <p>¿Ya tienes cuenta? <a href="#" onclick="showScreen('login-screen')">Inicia Sesión</a></p>
+                <a href="#" onclick="showScreen('home-screen')">← Volver al inicio</a>
+            </div>
+        </div>
+
+        <!-- Pantalla de Restablecer Contraseña -->
+        <div id="reset-screen" class="card hidden">
+            <h2>Restablecer Contraseña</h2>
+            
+            <form id="reset-form" onsubmit="handleResetPassword(event)">
+                <div class="form-group">
+                    <label for="reset-email">Correo Electrónico</label>
+                    <input type="email" id="reset-email" required placeholder="ejemplo@correo.com">
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Enviar correo</button>
+            </form>
+            
+            <div class="form-footer">
+                <a href="#" onclick="showScreen('login-screen')">← Volver al login</a>
+            </div>
+        </div>
+
+        <!-- Pantalla de Dashboard -->
+        <div id="dashboard-screen" class="card hidden">
+            <h2>Mi Panel</h2>
+            
+            <div class="user-info" id="user-info">
+                <h3>Datos del Usuario</h3>
+                <p><strong>Nombre:</strong> <span id="user-name">-</span></p>
+                <p><strong>Email:</strong> <span id="user-email">-</span></p>
+                <p><strong>Teléfono:</strong> <span id="user-phone">-</span></p>
+                <p><strong>Método:</strong> <span id="auth-method">-</span></p>
+                <p><strong>ID:</strong> <span id="user-id">-</span></p>
+            </div>
+            
+            <div class="nav-buttons">
+                <button onclick="logout()" class="btn btn-danger">Cerrar Sesión</button>
+            </div>
+        </div>
+
+        <!-- Verificación de teléfono (modal) -->
+        <div id="phone-verification-screen" class="card hidden">
+            <h2>Verificación de Teléfono</h2>
+            
+            <div class="form-group">
+                <label for="phone-number">Número de Teléfono</label>
+                <input type="tel" id="phone-number" placeholder="+521234567890">
+            </div>
+            
+            <button onclick="sendPhoneCode()" class="btn btn-primary">Enviar código</button>
+            
+            <div class="form-group hidden" id="code-input-group">
+                <label for="verification-code">Código de verificación</label>
+                <input type="text" id="verification-code" placeholder="123456">
+                <button onclick="verifyPhoneCode()" class="btn btn-primary">Verificar</button>
+            </div>
+            
+            <div class="form-footer">
+                <a href="#" onclick="showScreen('login-screen')">Cancelar</a>
+            </div>
         </div>
     </div>
 
-    <header>
-        <div class="container">
-            <nav>
-                <div class="logo">
-                    <i class="fas fa-crown"></i>
-                    <span>HEYDIN KAYSER</span>
-                </div>
-                <div class="nav-links">
-                    <a href="beneficio.html">VENTAJAS</a>
-                    <a href="contacto.html">ÉLITE</a>
-                </div>
-                <div class="auth-buttons">
-                    <button class="login-btn" id="openLogin"><i class="fas fa-arrow-right-to-bracket"></i> <span class="btn-text">ACCESO</span></button>
-                    <button class="register-btn" id="openRegister"><i class="fas fa-user-plus"></i> <span class="btn-text">VIP</span></button>
-                </div>
-            </nav>
-        </div>
-    </header>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        import { 
+            getAuth, 
+            createUserWithEmailAndPassword,
+            signInWithEmailAndPassword,
+            signInWithPopup,
+            GoogleAuthProvider,
+            FacebookAuthProvider,
+            signOut,
+            onAuthStateChanged,
+            sendPasswordResetEmail,
+            RecaptchaVerifier,
+            signInWithPhoneNumber,
+            updateProfile
+        } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
 
-    <section class="hero">
-        <div class="container">
-            <h1>HEYDIN KAYSER</h1>
-            <p><i class="fas fa-bolt" style="color:cyan;"></i> Trading cuántico · Señales láser · Élite financiera <i class="fas fa-bolt" style="color:#ff00d4;"></i></p>
-            <button class="cta-button" id="heroCta">ACTIVAR MODO VIP</button>
-        </div>
-    </section>
-
-    <section class="features" id="features">
-        <div class="container">
-            <div class="section-title">
-                <h2>ARMA SECRETA DEL TRADER</h2>
-                <p>Solo para los que exigen máximos beneficios. Entorno hiper-futurista, señales en tiempo real.</p>
-            </div>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon"><i class="fas fa-satellite-dish"></i></div>
-                    <h3>SEÑALES NEÓN</h3>
-                    <p>Alertas instantáneas con IA. Entradas, salidas y stops de alta precisión.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon"><i class="fas fa-robot"></i></div>
-                    <h3>BOT CUÁNTICO</h3>
-                    <p>Estrategias automatizadas con backtesting para mercados volátiles.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon"><i class="fas fa-shield-halos"></i></div>
-                    <h3>SOPORTE VIP</h3>
-                    <p>Atención 1 a 1, análisis de cartera y asesoría con expertos.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <footer>
-        <div class="container">
-            <div class="footer-logo">
-                <i class="fas fa-crown"></i> HEYDIN KAYSER
-            </div>
-            <div class="footer-links">
-                <a href="beneficio.html">TÉRMINOS</a>
-                <a href="contacto.html">SOPORTE</a>
-            </div>
-            <div class="social-icons">
-                <a href="https://www.facebook.com/profile.php?id=61579696913394" target="_blank"><i class="fab fa-facebook-f"></i></a>
-                <a href="https://www.tiktok.com/@beaver_trading_oficial" target="_blank"><i class="fab fa-tiktok"></i></a>
-                <a href="https://www.youtube.com/@beavertrading2025" target="_blank"><i class="fab fa-youtube"></i></a>
-                <a href="https://www.instagram.com/weldingmiguel/" target="_blank"><i class="fab fa-instagram"></i></a>
-                <a href="https://wa.me/593986122265" target="_blank"><i class="fab fa-whatsapp"></i></a>
-                <a href="https://t.me/+x8P5ya17Dek4YjBh" target="_blank"><i class="fab fa-telegram-plane"></i></a>
-            </div>
-            <div class="copyright">
-                © 2025 HEYDIN KAYSER TRADING. TERMINAL CUÁNTICA.
-            </div>
-        </div>
-    </footer>
-
-    <!-- MODAL AUTH -->
-    <div class="auth-modal" id="authModal">
-        <div class="auth-container">
-            <div class="auth-header">
-                <h2 id="authModalTitle">ACCESO VIP</h2>
-                <button class="close-auth" id="closeAuth">&times;</button>
-            </div>
-            
-            <!-- Social Login Buttons -->
-            <div class="social-auth-buttons">
-                <button class="social-auth-btn google-btn" id="googleLogin">
-                    <i class="fab fa-google"></i>
-                    <span>CONTINUAR CON GOOGLE</span>
-                </button>
-                <button class="social-auth-btn facebook-btn" id="facebookLogin">
-                    <i class="fab fa-facebook-f"></i>
-                    <span>CONTINUAR CON FACEBOOK</span>
-                </button>
-            </div>
-            
-            <div class="social-auth-divider">
-                <span>O CONTINÚA CON EMAIL</span>
-            </div>
-            
-            <form class="auth-form" id="loginForm">
-                <div id="authError" class="auth-error"></div>
-                <input type="email" id="loginEmail" placeholder="Correo electrónico" required>
-                <input type="password" id="loginPassword" placeholder="Contraseña" required>
-                <button type="submit" class="auth-submit">INGRESAR</button>
-            </form>
-            
-            <form class="auth-form" id="registerForm" style="display: none;">
-                <div id="registerError" class="auth-error"></div>
-                <input type="text" id="registerName" placeholder="Nombre completo" required>
-                <input type="email" id="registerEmail" placeholder="Correo electrónico" required>
-                <input type="password" id="registerPassword" placeholder="Contraseña" required>
-                <input type="password" id="registerConfirmPassword" placeholder="Confirmar contraseña" required>
-                <button type="submit" class="auth-submit">ACTIVAR VIP</button>
-            </form>
-            
-            <div class="auth-toggle">
-                <span id="toggleAuthForm">¿Sin membresía? Activa VIP ahora</span>
-            </div>
-        </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-    <script>
-        // Firebase Config
+        // Configuración de Firebase
         const firebaseConfig = {
-            apiKey: "AIzaSyB1Cs2os3tTfrMbYSAmDeJAGnP4tTtsFdw",
-            authDomain: "beaver-trading.firebaseapp.com",
-            databaseURL: "https://beaver-trading-default-rtdb.firebaseio.com",
-            projectId: "beaver-trading",
-            storageBucket: "beaver-trading.firebasestorage.app",
-            messagingSenderId: "926610131904",
-            appId: "1:926610131904:web:c147bd337bd12b4d085625",
-            measurementId: "G-1K51WWF2ZJ"
+            apiKey: "AIzaSyCpFnSLx-ZUq6j27T-w_nvsdSvUrNs688g",
+            authDomain: "heyding-kayser.firebaseapp.com",
+            databaseURL: "https://heyding-kayser-default-rtdb.firebaseio.com",
+            projectId: "heyding-kayser",
+            storageBucket: "heyding-kayser.firebasestorage.app",
+            messagingSenderId: "231005618306",
+            appId: "1:231005618306:web:b349379b513145b6e6349b",
+            measurementId: "G-0F9T839VVZ"
         };
-        
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const database = firebase.database();
 
-        // Configurar proveedores
-        const googleProvider = new firebase.auth.GoogleAuthProvider();
-        const facebookProvider = new firebase.auth.FacebookAuthProvider();
+        // Inicializar Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
         
-        // Configurar alcances adicionales para Facebook
-        facebookProvider.addScope('email');
-        facebookProvider.addScope('public_profile');
+        // Proveedores
+        const googleProvider = new GoogleAuthProvider();
+        const facebookProvider = new FacebookAuthProvider();
+        
+        // Variables globales
+        let confirmationResult = null;
+        let currentMessage = null;
 
-        // Loader
-        window.addEventListener('load', function() {
+        // Función para mostrar mensajes
+        window.showMessage = function(text, type) {
+            if (currentMessage) {
+                currentMessage.remove();
+            }
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            messageDiv.textContent = text;
+            
+            const activeCard = document.querySelector('.card:not(.hidden)');
+            activeCard.insertBefore(messageDiv, activeCard.firstChild);
+            
+            currentMessage = messageDiv;
+            
             setTimeout(() => {
-                document.getElementById('loader').classList.add('fade-out');
-                setTimeout(() => document.getElementById('loader').style.display = 'none', 800);
-            }, 2500);
-        });
+                if (messageDiv.parentNode) {
+                    messageDiv.remove();
+                }
+                currentMessage = null;
+            }, 5000);
+        };
 
-        function showLoader(msg = 'PROCESANDO...') {
-            const loader = document.getElementById('loader');
-            loader.style.display = 'flex';
-            loader.classList.remove('fade-out');
-            document.querySelector('.loader-text').textContent = msg;
+        // Función para cambiar entre pantallas
+        window.showScreen = function(screenId) {
+            const screens = ['home-screen', 'login-screen', 'register-screen', 'reset-screen', 'dashboard-screen', 'phone-verification-screen'];
+            
+            screens.forEach(screen => {
+                const element = document.getElementById(screen);
+                if (element) {
+                    element.classList.add('hidden');
+                }
+            });
+            
+            const targetScreen = document.getElementById(screenId);
+            if (targetScreen) {
+                targetScreen.classList.remove('hidden');
+            }
+            
+            // Limpiar formularios
+            if (screenId === 'login-screen') {
+                document.getElementById('login-form')?.reset();
+            } else if (screenId === 'register-screen') {
+                document.getElementById('register-form')?.reset();
+            } else if (screenId === 'reset-screen') {
+                document.getElementById('reset-form')?.reset();
+            }
+        };
+
+        // Mostrar información del usuario
+        function displayUserInfo(user) {
+            const userNameSpan = document.getElementById('user-name');
+            const userEmailSpan = document.getElementById('user-email');
+            const userPhoneSpan = document.getElementById('user-phone');
+            const authMethodSpan = document.getElementById('auth-method');
+            const userIdSpan = document.getElementById('user-id');
+            
+            if (userNameSpan) {
+                userNameSpan.textContent = user.displayName || 'No especificado';
+            }
+            
+            if (userEmailSpan) {
+                userEmailSpan.textContent = user.email || 'No especificado';
+            }
+            
+            if (userPhoneSpan) {
+                userPhoneSpan.textContent = user.phoneNumber || 'No especificado';
+            }
+            
+            if (userIdSpan) {
+                userIdSpan.textContent = user.uid;
+            }
+            
+            if (authMethodSpan) {
+                const providers = user.providerData.map(p => {
+                    switch(p.providerId) {
+                        case 'google.com': return 'Google';
+                        case 'facebook.com': return 'Facebook';
+                        case 'phone': return 'Teléfono';
+                        default: return 'Email/Contraseña';
+                    }
+                }).join(', ');
+                authMethodSpan.textContent = providers || 'Email/Contraseña';
+            }
         }
 
-        function hideLoader() {
-            const loader = document.getElementById('loader');
-            loader.classList.add('fade-out');
-            setTimeout(() => loader.style.display = 'none', 800);
-        }
-
-        // Función para manejar el login social
-        function handleSocialLogin(provider, providerName) {
-            showLoader(`CONECTANDO CON ${providerName}...`);
-            
-            auth.signInWithPopup(provider)
-                .then((result) => {
-                    // El usuario ha iniciado sesión
-                    const user = result.user;
-                    
-                    // Verificar si es un usuario nuevo
-                    const isNewUser = result.additionalUserInfo.isNewUser;
-                    
-                    if (isNewUser) {
-                        // Guardar información adicional del usuario en la base de datos
-                        const userData = {
-                            email: user.email,
-                            name: user.displayName || 'Usuario',
-                            vipAccess: true,
-                            provider: providerName,
-                            createdAt: firebase.database.ServerValue.TIMESTAMP
-                        };
-                        
-                        // Si no hay nombre, usar el email
-                        if (!userData.name && user.email) {
-                            userData.name = user.email.split('@')[0];
-                        }
-                        
-                        database.ref('users/' + user.uid).set(userData)
-                            .then(() => {
-                                document.querySelector('.loader-text').textContent = '¡BIENVENIDO A LA ÉLITE!';
-                                setTimeout(() => { window.location.href = 'home.html'; }, 1500);
-                            })
-                            .catch(error => {
-                                console.error('Error guardando usuario:', error);
-                                document.querySelector('.loader-text').textContent = 'REDIRIGIENDO...';
-                                setTimeout(() => { window.location.href = 'home.html'; }, 1500);
-                            });
-                    } else {
-                        // Usuario existente
-                        document.querySelector('.loader-text').textContent = 'ACCESO CONCEDIDO';
-                        setTimeout(() => { window.location.href = 'home.html'; }, 1500);
-                    }
-                })
-                .catch((error) => {
-                    hideLoader();
-                    
-                    let errorMessage = 'ERROR DE AUTENTICACIÓN';
-                    
-                    switch(error.code) {
-                        case 'auth/popup-closed-by-user':
-                            errorMessage = 'VENTANA CERRADA';
-                            break;
-                        case 'auth/cancelled-popup-request':
-                            errorMessage = 'OPERACIÓN CANCELADA';
-                            break;
-                        case 'auth/popup-blocked':
-                            errorMessage = 'POP-UP BLOQUEADO';
-                            break;
-                        case 'auth/account-exists-with-different-credential':
-                            errorMessage = 'ESTE CORREO YA ESTÁ REGISTRADO CON OTRO MÉTODO';
-                            break;
-                        default:
-                            errorMessage = 'ERROR: ' + error.message;
-                    }
-                    
-                    // Mostrar error en el modal según qué formulario esté activo
-                    if (loginForm.style.display === 'flex') {
-                        authError.textContent = errorMessage;
-                    } else {
-                        registerError.textContent = errorMessage;
-                    }
-                });
-        }
-
-        // Particles
-        particlesJS('particles-js', {
-            particles: {
-                number: { value: 80, density: { enable: true, value_area: 800 } },
-                color: { value: "#00ffff" },
-                shape: { type: "circle" },
-                opacity: { value: 0.4, random: true },
-                size: { value: 2.5, random: true },
-                line_linked: { enable: true, distance: 130, color: "#00ffff", opacity: 0.2, width: 1 },
-                move: { enable: true, speed: 1, direction: "none", random: true, out_mode: "out" }
-            },
-            interactivity: {
-                events: { onhover: { enable: true, mode: "repulse" }, onclick: { enable: true, mode: "push" } }
-            },
-            retina_detect: true
-        });
-
-        // Modal
-        const modal = document.getElementById('authModal');
-        const openLogin = document.getElementById('openLogin');
-        const openRegister = document.getElementById('openRegister');
-        const closeBtn = document.getElementById('closeAuth');
-        const loginForm = document.getElementById('loginForm');
-        const registerForm = document.getElementById('registerForm');
-        const modalTitle = document.getElementById('authModalTitle');
-        const toggleSpan = document.getElementById('toggleAuthForm');
-        const authError = document.getElementById('authError');
-        const registerError = document.getElementById('registerError');
-        
-        // Botones sociales
-        const googleBtn = document.getElementById('googleLogin');
-        const facebookBtn = document.getElementById('facebookLogin');
-
-        openLogin.addEventListener('click', () => {
-            modal.style.display = 'flex';
-            loginForm.style.display = 'flex';
-            registerForm.style.display = 'none';
-            modalTitle.innerText = 'ACCESO VIP';
-            toggleSpan.innerText = '¿Sin membresía? Activa VIP ahora';
-            authError.innerText = '';
-            document.body.style.overflow = 'hidden';
-        });
-
-        openRegister.addEventListener('click', () => {
-            modal.style.display = 'flex';
-            loginForm.style.display = 'none';
-            registerForm.style.display = 'flex';
-            modalTitle.innerText = 'ACTIVAR VIP';
-            toggleSpan.innerText = '¿Ya eres VIP? Inicia sesión';
-            registerError.innerText = '';
-            document.body.style.overflow = 'hidden';
-        });
-
-        closeBtn.addEventListener('click', () => {
-            modal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        });
-
-        modal.addEventListener('click', (e) => { 
-            if(e.target === modal) {
-                modal.style.display = 'none';
-                document.body.style.overflow = 'auto';
-            }
-        });
-
-        toggleSpan.addEventListener('click', () => {
-            if (loginForm.style.display === 'none') {
-                loginForm.style.display = 'flex';
-                registerForm.style.display = 'none';
-                modalTitle.innerText = 'ACCESO VIP';
-                toggleSpan.innerText = '¿Sin membresía? Activa VIP ahora';
-                registerError.innerText = '';
-            } else {
-                loginForm.style.display = 'none';
-                registerForm.style.display = 'flex';
-                modalTitle.innerText = 'ACTIVAR VIP';
-                toggleSpan.innerText = '¿Ya eres VIP? Inicia sesión';
-                authError.innerText = '';
-            }
-        });
-
-        // Eventos para login social
-        googleBtn.addEventListener('click', () => {
-            handleSocialLogin(googleProvider, 'GOOGLE');
-        });
-
-        facebookBtn.addEventListener('click', () => {
-            handleSocialLogin(facebookProvider, 'FACEBOOK');
-        });
-
-        // Login
-        loginForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
-            showLoader('VERIFICANDO CREDENCIALES');
-            
-            auth.signInWithEmailAndPassword(email, password)
-                .then(() => {
-                    document.querySelector('.loader-text').textContent = 'REDIRIGIENDO...';
-                    setTimeout(() => { window.location.href = 'home.html'; }, 1500);
-                })
-                .catch(error => {
-                    hideLoader();
-                    authError.textContent = 'ERROR: ' + error.message;
-                });
-        });
-
-        // Registro
-        registerForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const name = document.getElementById('registerName').value;
-            const email = document.getElementById('registerEmail').value;
-            const pass = document.getElementById('registerPassword').value;
-            const confirm = document.getElementById('registerConfirmPassword').value;
-            
-            if (pass !== confirm) {
-                registerError.textContent = 'LAS CONTRASEÑAS NO COINCIDEN';
-                return;
-            }
-            if (pass.length < 6) {
-                registerError.textContent = 'MÍNIMO 6 CARACTERES';
-                return;
-            }
-            
-            showLoader('CREANDO ACCESO VIP');
-            
-            auth.createUserWithEmailAndPassword(email, pass)
-                .then((userCred) => {
-                    const user = userCred.user;
-                    
-                    // Actualizar el perfil con el nombre
-                    return user.updateProfile({
-                        displayName: name
-                    }).then(() => {
-                        return database.ref('users/' + user.uid).set({
-                            name: name,
-                            email: email,
-                            vipAccess: true,
-                            provider: 'EMAIL',
-                            createdAt: firebase.database.ServerValue.TIMESTAMP
-                        });
-                    });
-                })
-                .then(() => {
-                    document.querySelector('.loader-text').textContent = 'BIENVENIDO A LA ÉLITE';
-                    setTimeout(() => { window.location.href = 'home.html'; }, 1500);
-                })
-                .catch(error => {
-                    hideLoader();
-                    registerError.textContent = 'ERROR: ' + error.message;
-                });
-        });
-
-        // CTA
-        document.getElementById('heroCta').addEventListener('click', () => openRegister.click());
-
-        // Auth state
-        auth.onAuthStateChanged((user) => {
+        // Verificar estado de autenticación
+        onAuthStateChanged(auth, (user) => {
             if (user) {
-                // Si está logueado y está en index, redirigir a home
-                if (window.location.pathname.includes('index') || window.location.pathname === '/' || window.location.pathname.endsWith('.html') === false) {
-                    window.location.href = 'home.html';
+                showScreen('dashboard-screen');
+                displayUserInfo(user);
+            } else {
+                const currentScreen = document.querySelector('.card:not(.hidden)');
+                if (currentScreen && currentScreen.id === 'dashboard-screen') {
+                    showScreen('home-screen');
                 }
             }
         });
+
+        // Registro manual
+        window.handleRegister = async function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('register-name').value;
+            const email = document.getElementById('register-email').value;
+            const phone = document.getElementById('register-phone').value;
+            const password = document.getElementById('register-password').value;
+            const confirmPassword = document.getElementById('register-confirm-password').value;
+            
+            if (password !== confirmPassword) {
+                showMessage('Las contraseñas no coinciden', 'error');
+                return;
+            }
+            
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                
+                // Actualizar perfil con el nombre
+                if (name) {
+                    await updateProfile(userCredential.user, {
+                        displayName: name
+                    });
+                }
+                
+                showMessage('Registro exitoso', 'success');
+                
+            } catch (error) {
+                console.error('Error:', error);
+                showMessage(getErrorMessage(error.code), 'error');
+            }
+        };
+
+        // Login manual
+        window.handleLogin = async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+                showMessage('Inicio de sesión exitoso', 'success');
+                
+            } catch (error) {
+                console.error('Error:', error);
+                showMessage(getErrorMessage(error.code), 'error');
+            }
+        };
+
+        // Autenticación con Google
+        window.handleGoogleAuth = async function() {
+            try {
+                const result = await signInWithPopup(auth, googleProvider);
+                showMessage(`Bienvenido ${result.user.displayName}`, 'success');
+                
+            } catch (error) {
+                console.error('Error:', error);
+                showMessage(getErrorMessage(error.code), 'error');
+            }
+        };
+
+        // Autenticación con Facebook
+        window.handleFacebookAuth = async function() {
+            try {
+                const result = await signInWithPopup(auth, facebookProvider);
+                showMessage(`Bienvenido ${result.user.displayName}`, 'success');
+                
+            } catch (error) {
+                console.error('Error:', error);
+                showMessage(getErrorMessage(error.code), 'error');
+            }
+        };
+
+        // Autenticación con teléfono
+        window.handlePhoneAuth = function() {
+            showScreen('phone-verification-screen');
+        };
+
+        window.sendPhoneCode = async function() {
+            const phoneNumber = document.getElementById('phone-number').value;
+            
+            if (!phoneNumber) {
+                showMessage('Ingresa un número de teléfono', 'error');
+                return;
+            }
+            
+            try {
+                // Configurar reCAPTCHA
+                if (!window.recaptchaVerifier) {
+                    window.recaptchaVerifier = new RecaptchaVerifier(auth, 'phone-number', {
+                        size: 'invisible',
+                        callback: () => {}
+                    });
+                }
+                
+                confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, window.recaptchaVerifier);
+                
+                document.getElementById('code-input-group').classList.remove('hidden');
+                showMessage('Código enviado', 'success');
+                
+            } catch (error) {
+                console.error('Error:', error);
+                showMessage(getErrorMessage(error.code), 'error');
+            }
+        };
+
+        window.verifyPhoneCode = async function() {
+            const code = document.getElementById('verification-code').value;
+            
+            if (!code) {
+                showMessage('Ingresa el código de verificación', 'error');
+                return;
+            }
+            
+            try {
+                const result = await confirmationResult.confirm(code);
+                showMessage('Verificación exitosa', 'success');
+                
+            } catch (error) {
+                console.error('Error:', error);
+                showMessage(getErrorMessage(error.code), 'error');
+            }
+        };
+
+        // Restablecer contraseña
+        window.handleResetPassword = async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('reset-email').value;
+            
+            try {
+                await sendPasswordResetEmail(auth, email);
+                showMessage('Correo de restablecimiento enviado', 'success');
+                
+                setTimeout(() => {
+                    showScreen('login-screen');
+                }, 3000);
+                
+            } catch (error) {
+                console.error('Error:', error);
+                showMessage(getErrorMessage(error.code), 'error');
+            }
+        };
+
+        // Cerrar sesión
+        window.logout = async function() {
+            try {
+                await signOut(auth);
+                showScreen('home-screen');
+                showMessage('Sesión cerrada', 'info');
+                
+            } catch (error) {
+                console.error('Error:', error);
+                showMessage(getErrorMessage(error.code), 'error');
+            }
+        };
+
+        // Función para traducir mensajes de error
+        function getErrorMessage(errorCode) {
+            const errors = {
+                'auth/email-already-in-use': 'El correo ya está registrado',
+                'auth/invalid-email': 'Correo electrónico inválido',
+                'auth/operation-not-allowed': 'Operación no permitida',
+                'auth/weak-password': 'La contraseña debe tener al menos 6 caracteres',
+                'auth/user-disabled': 'Usuario deshabilitado',
+                'auth/user-not-found': 'Usuario no encontrado',
+                'auth/wrong-password': 'Contraseña incorrecta',
+                'auth/popup-closed-by-user': 'Ventana cerrada antes de completar',
+                'auth/cancelled-popup-request': 'Operación cancelada',
+                'auth/popup-blocked': 'Ventana emergente bloqueada',
+                'auth/network-request-failed': 'Error de conexión',
+                'auth/invalid-verification-code': 'Código de verificación inválido',
+                'auth/invalid-phone-number': 'Número de teléfono inválido',
+                'auth/too-many-requests': 'Demasiados intentos. Intenta más tarde'
+            };
+            
+            return errors[errorCode] || 'Error en la autenticación: ' + errorCode;
+        }
+
+        // Limpiar verificación de teléfono al salir
+        window.cleanupPhoneVerification = function() {
+            confirmationResult = null;
+            document.getElementById('phone-number').value = '';
+            document.getElementById('verification-code').value = '';
+            document.getElementById('code-input-group').classList.add('hidden');
+        };
     </script>
 </body>
 </html>
