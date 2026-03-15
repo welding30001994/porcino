@@ -2,605 +2,1845 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Heydin Kayser · Fibonacci Exacto</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HEYDIN KAYSER TRADING - Futurista</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* ESTILOS FUTURISTAS */
+        :root {
+            --primary: #00ffff;
+            --secondary: #ff00ff;
+            --accent: #ffff00;
+            --dark: #0a0a0f;
+            --darker: #050508;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --neon-shadow: 0 0 10px rgba(0, 255, 255, 0.5),
+                           0 0 20px rgba(0, 255, 255, 0.3),
+                           0 0 30px rgba(0, 255, 255, 0.1);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
 
         body {
+            font-family: 'Rajdhani', sans-serif;
+            background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
+            color: #fff;
             min-height: 100vh;
-            background: radial-gradient(circle at 70% 30%, #0d1428, #02050c);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Partículas */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Modal de Perfil */
+        .profile-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .profile-modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, rgba(10, 10, 15, 0.95), rgba(5, 5, 8, 0.95));
+            border: 2px solid var(--primary);
+            border-radius: 30px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            box-shadow: 0 0 50px rgba(0, 255, 255, 0.3);
+            animation: modalAppear 0.5s ease;
+        }
+
+        @keyframes modalAppear {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 2rem;
+            color: var(--primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .close-modal:hover {
+            color: var(--secondary);
+            transform: rotate(90deg);
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 3px solid var(--primary);
+            margin: 0 auto 20px;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 0.8rem;
+            font-size: 4rem;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: #000;
+            box-shadow: 0 0 30px var(--primary);
         }
 
-        .container {
-            max-width: 1200px;
-            width: 100%;
-            background: rgba(5, 15, 25, 0.5);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1.5px solid rgba(255, 80, 255, 0.4);
-            border-radius: 2.5rem;
-            padding: 1.5rem 1.2rem;
-            box-shadow: 0 20px 50px rgba(255, 0, 255, 0.2), 0 0 0 1px rgba(0, 255, 255, 0.2) inset;
+        .profile-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-top: 20px;
         }
 
-        .header {
+        .profile-form input {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            padding: 15px;
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        .profile-form input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+        }
+
+        .profile-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .profile-stat {
+            background: rgba(0, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .profile-stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .profile-stat-label {
+            font-size: 0.8rem;
+            color: #888;
+        }
+
+        /* Navbar futurista */
+        .navbar {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 1400px;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 50px;
+            padding: 10px 30px;
+            z-index: 1000;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        .nav-container {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
-            gap: 0.8rem;
         }
 
-        .title h1 {
-            font-size: clamp(1.8rem, 6vw, 2.8rem);
-            font-weight: 700;
-            background: linear-gradient(135deg, #fff, #ffccff, #ccccff);
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
             -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 0 0 30px #ff88ff, 0 0 15px cyan;
-            letter-spacing: -0.02em;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            letter-spacing: 2px;
+            cursor: pointer;
         }
 
-        .badge {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 0, 255, 0.5);
-            border-radius: 40px;
-            padding: 0.4rem 1.2rem;
-            color: #fff;
-            font-size: 0.9rem;
-            box-shadow: 0 0 20px rgba(255, 0, 255, 0.3);
+        .logo .glow {
+            animation: pulse 2s infinite;
+            background: linear-gradient(45deg, var(--secondary), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .input-panel {
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .nav-menu {
             display: flex;
-            flex-wrap: wrap;
-            gap: 0.8rem;
-            background: rgba(0, 15, 25, 0.4);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(0, 255, 255, 0.3);
-            border-radius: 40px;
-            padding: 1.2rem 1rem;
-            margin-bottom: 1.8rem;
+            list-style: none;
+            gap: 25px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-menu li a {
+            color: #fff;
+            text-decoration: none;
+            padding: 12px 20px;
+            border-radius: 30px;
+            display: flex;
             align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            font-size: 1rem;
+            letter-spacing: 1px;
+        }
+
+        .nav-menu li a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .nav-menu li a:hover::before {
+            left: 100%;
+        }
+
+        .nav-menu li a:hover,
+        .nav-menu li a.active {
+            background: rgba(0, 255, 255, 0.1);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+            color: var(--primary);
+        }
+
+        .profile-item {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .profile-pulse {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: var(--primary);
+            animation: pulse-ring 2s infinite;
+        }
+
+        @keyframes pulse-ring {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            100% { transform: scale(1.3); opacity: 0; }
+        }
+
+        /* Menú hamburguesa */
+        .menu-toggle {
+            display: none;
+            cursor: pointer;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background: #fff;
+            margin: 5px 0;
+            transition: all 0.3s ease;
+        }
+
+        /* Main content */
+        .main-content {
+            position: relative;
+            z-index: 1;
+            padding: 120px 20px 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section {
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+
+        .section.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .glitch-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            position: relative;
+            color: #fff;
+            text-shadow: 0.05em 0 0 var(--primary), -0.05em -0.05em 0 var(--secondary);
+            animation: glitch 1s infinite;
+            letter-spacing: 5px;
+        }
+
+        @keyframes glitch {
+            0%, 100% { text-shadow: 0.05em 0 0 var(--primary), -0.05em -0.05em 0 var(--secondary); }
+            25% { text-shadow: -0.05em -0.025em 0 var(--primary), 0.025em 0.05em 0 var(--secondary); }
+            50% { text-shadow: 0.025em 0.05em 0 var(--primary), -0.05em -0.025em 0 var(--secondary); }
+            75% { text-shadow: -0.025em -0.05em 0 var(--primary), 0.05em 0.025em 0 var(--secondary); }
+        }
+
+        /* Cards */
+        .card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 0 50px rgba(0, 255, 255, 0.2);
+            border-color: rgba(0, 255, 255, 0.3);
+        }
+
+        .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Formularios */
+        .signal-form {
+            display: grid;
+            gap: 20px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
         }
 
         .input-group {
-            flex: 1 1 160px;
-            min-width: 130px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }
 
         .input-group label {
-            display: block;
-            color: #b0d0ff;
-            font-size: 0.7rem;
-            letter-spacing: 1.5px;
+            font-size: 0.9rem;
+            color: var(--primary);
             text-transform: uppercase;
-            margin-bottom: 4px;
-            text-shadow: 0 0 8px magenta;
+            letter-spacing: 1px;
         }
 
-        .input-group input {
-            width: 100%;
+        .input-group input,
+        .input-group textarea,
+        .input-group select {
             background: rgba(0, 0, 0, 0.3);
-            border: 1.5px solid rgba(255, 0, 255, 0.6);
-            border-radius: 30px;
-            padding: 12px 16px;
-            font-size: 1.2rem;
-            font-weight: 500;
-            color: white;
-            outline: none;
-            backdrop-filter: blur(5px);
-            box-shadow: 0 0 15px rgba(255, 0, 255, 0.3);
-        }
-
-        .direction-group {
-            display: flex;
-            gap: 5px;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 40px;
-            padding: 4px;
-            border: 1px solid rgba(255, 0, 255, 0.6);
-        }
-
-        .dir-btn {
-            background: transparent;
-            border: none;
-            border-radius: 40px;
-            padding: 10px 20px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #ccc;
-            cursor: pointer;
-            transition: 0.15s;
-        }
-
-        .dir-btn.active {
-            background: rgba(255, 70, 255, 0.4);
-            color: white;
-            text-shadow: 0 0 15px white;
-            box-shadow: 0 0 30px #ff66ff;
-            border: 1px solid white;
-        }
-
-        #btnBuy.active {
-            background: rgba(0, 255, 200, 0.4);
-            box-shadow: 0 0 30px cyan;
-        }
-
-        .calc-btn {
-            background: rgba(255, 200, 0, 0.25);
-            border: 2px solid rgba(255, 200, 0, 0.8);
-            border-radius: 50px;
-            padding: 10px 25px;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: white;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 0 40px orange;
-            cursor: pointer;
-            min-width: 70px;
-        }
-
-        .signal-bar {
-            background: rgba(20, 0, 30, 0.4);
-            backdrop-filter: blur(16px);
-            border: 1.5px solid rgba(255, 0, 200, 0.7);
-            border-radius: 50px;
-            padding: 1rem 1.5rem;
-            margin: 1.5rem 0;
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: space-between;
-            gap: 1rem;
-            box-shadow: 0 0 40px rgba(255, 0, 255, 0.3);
-        }
-
-        .direction-large {
-            font-size: clamp(1.4rem, 4vw, 2rem);
-            font-weight: 700;
-            background: rgba(0, 0, 0, 0.3);
-            padding: 0.3rem 1.8rem;
-            border-radius: 40px;
-            border: 1px solid white;
-            color: white;
-            text-shadow: 0 0 20px magenta;
-        }
-
-        .key-levels {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .key-level {
-            background: rgba(0, 20, 40, 0.6);
-            backdrop-filter: blur(8px);
-            border: 1.5px solid gold;
-            border-radius: 40px;
-            padding: 0.5rem 1.5rem;
-            font-size: 1.1rem;
-            color: white;
-            font-weight: 500;
-        }
-
-        /* Grid principal - cuadrados más pequeños como solicitaste */
-        .fibo-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-            gap: 10px;
-            margin: 1.5rem 0;
-        }
-
-        .fibo-card {
-            background: rgba(8, 20, 32, 0.5);
-            backdrop-filter: blur(12px);
-            border: 1.5px solid rgba(255, 0, 255, 0.5);
-            border-radius: 20px;
-            padding: 0.8rem 0.2rem;
-            text-align: center;
-            transition: 0.15s;
-            cursor: pointer;
-            box-shadow: 0 4px 0 rgba(0, 50, 70, 0.5);
-            color: white;
-        }
-
-        .fibo-card.selected {
-            border: 3px solid #ff44ff;
-            background: rgba(40, 10, 50, 0.7);
-            box-shadow: 0 0 40px #ff80ff, 0 4px 0 #880088;
-            transform: scale(1.02);
-        }
-
-        .fibo-label {
-            font-size: 0.9rem;
-            font-weight: 600;
-            background: rgba(0, 60, 100, 0.6);
-            backdrop-filter: blur(4px);
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 30px;
-            border: 1px solid cyan;
-            color: white;
-            margin-bottom: 4px;
-        }
-
-        .fibo-value {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: white !important;
-            text-shadow: 0 0 15px cyan;
-            margin: 4px 0;
-            word-break: break-word;
-        }
-
-        .zone-tag {
-            font-size: 0.7rem;
-            background: rgba(30, 20, 40, 0.6);
-            backdrop-filter: blur(4px);
-            padding: 4px 8px;
-            border-radius: 30px;
-            border: 1px solid #ffaa00;
-            color: #fff0c0;
-            display: inline-block;
-            font-weight: 500;
-        }
-
-        .selection-panel {
-            background: rgba(10, 5, 20, 0.5);
-            backdrop-filter: blur(16px);
-            border: 2px solid rgba(255, 70, 255, 0.7);
-            border-radius: 50px;
-            padding: 1rem 1.2rem;
-            margin: 1.5rem 0;
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: space-between;
-            gap: 1rem;
-        }
-
-        .selected-display {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .selected-chip {
-            background: rgba(0, 0, 0, 0.4);
-            border: 1.5px solid cyan;
-            border-radius: 40px;
-            padding: 0.4rem 1.2rem;
-            font-size: 0.9rem;
-            color: white;
-            font-weight: 500;
-            backdrop-filter: blur(5px);
-        }
-
-        .apply-btn {
-            background: rgba(200, 0, 255, 0.25);
-            border: 2px solid #ff88ff;
-            border-radius: 50px;
-            padding: 0.5rem 1.5rem;
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            padding: 12px 15px;
+            color: #fff;
+            font-family: 'Rajdhani', sans-serif;
             font-size: 1rem;
-            font-weight: 600;
-            color: white;
-            backdrop-filter: blur(12px);
-            box-shadow: 0 0 40px magenta;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus,
+        .input-group textarea:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+        }
+
+        .full-width {
+            grid-column: span 2;
+        }
+
+        .radio-group {
+            grid-column: span 1;
+        }
+
+        .radio-options {
+            display: flex;
+            gap: 20px;
+            margin-top: 5px;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
             cursor: pointer;
         }
 
-        .recursive-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        .radio-option input[type="radio"] {
+            display: none;
+        }
+
+        .radio-label {
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .radio-label.buy {
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid #00ff00;
+            color: #00ff00;
+        }
+
+        .radio-label.sell {
+            background: rgba(255, 0, 0, 0.1);
+            border: 1px solid #ff0000;
+            color: #ff0000;
+        }
+
+        .radio-option input[type="radio"]:checked + .radio-label.buy {
+            background: #00ff00;
+            color: #000;
+            box-shadow: 0 0 20px #00ff00;
+        }
+
+        .radio-option input[type="radio"]:checked + .radio-label.sell {
+            background: #ff0000;
+            color: #000;
+            box-shadow: 0 0 20px #ff0000;
+        }
+
+        /* Botones */
+        .btn-glow {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            border: none;
+            border-radius: 30px;
+            padding: 15px 40px;
+            color: #000;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             gap: 10px;
-            margin: 1rem 0;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+            width: 100%;
         }
 
-        .recursive-card {
-            background: rgba(8, 18, 35, 0.6);
-            backdrop-filter: blur(12px);
-            border: 1.5px solid rgba(0, 255, 255, 0.5);
+        .btn-glow::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn-glow:hover::before {
+            left: 100%;
+        }
+
+        .btn-glow:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 30px var(--primary);
+        }
+
+        .btn-glow.small {
+            padding: 10px 20px;
+            font-size: 0.9rem;
+            width: auto;
+        }
+
+        /* Señales grid */
+        .signals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .signal-card {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .signal-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 30px rgba(0, 255, 255, 0.2);
+        }
+
+        .signal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .signal-pair {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .signal-type {
+            padding: 5px 15px;
             border-radius: 20px;
-            padding: 0.8rem 0.2rem;
-            text-align: center;
-            color: white;
+            font-weight: 600;
+            text-transform: uppercase;
         }
 
-        .footnote {
-            text-align: center;
-            color: #aac0dd;
+        .signal-type.buy {
+            background: rgba(0, 255, 0, 0.2);
+            color: #00ff00;
+        }
+
+        .signal-type.sell {
+            background: rgba(255, 0, 0, 0.2);
+            color: #ff0000;
+        }
+
+        .signal-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .detail-label {
             font-size: 0.8rem;
-            margin-top: 2rem;
-            border-top: 1px dashed rgba(255, 0, 255, 0.5);
-            padding-top: 1rem;
+            color: #888;
+            text-transform: uppercase;
         }
 
-        @media (max-width: 480px) {
-            .container { padding: 1rem 0.8rem; }
-            .fibo-grid { grid-template-columns: repeat(3, 1fr); }
-            .fibo-value { font-size: 1rem; }
+        .detail-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .signal-comment {
+            margin: 15px 0;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            font-style: italic;
+        }
+
+        .signal-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.8rem;
+            color: #888;
+        }
+
+        /* Chat */
+        .chat-container {
+            height: 500px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .chat-message {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 15px;
+            max-width: 80%;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(-20px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 0.8rem;
+        }
+
+        .message-author {
+            color: var(--primary);
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .message-author:hover {
+            text-decoration: underline;
+        }
+
+        .message-time {
+            color: #888;
+        }
+
+        .message-content {
+            word-wrap: break-word;
+        }
+
+        .chat-input-area {
+            display: flex;
+            gap: 10px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .chat-input-area input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            padding: 12px 20px;
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        .chat-input-area input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        /* Posts */
+        .posts-container {
+            display: grid;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .post-card {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .post-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.1);
+        }
+
+        .post-title {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .post-content {
+            line-height: 1.6;
+            margin: 15px 0;
+            color: #ddd;
+        }
+
+        .post-meta {
+            display: flex;
+            gap: 20px;
+            font-size: 0.8rem;
+            color: #888;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 10px;
+        }
+
+        .post-author {
+            color: var(--primary);
+            cursor: pointer;
+        }
+
+        .post-author:hover {
+            text-decoration: underline;
+        }
+
+        .post-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .post-action {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: #888;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .post-action:hover {
+            color: var(--primary);
+        }
+
+        .post-action.liked {
+            color: #ff4444;
+        }
+
+        /* Estadísticas */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .stat-card {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 25px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: scale(1.05);
+            border-color: var(--primary);
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
+        }
+
+        .stat-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+        }
+
+        .stat-info h3 {
+            font-size: 1rem;
+            color: #888;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            .nav-menu {
+                position: fixed;
+                top: 80px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 80px);
+                background: rgba(10, 10, 15, 0.95);
+                backdrop-filter: blur(10px);
+                flex-direction: column;
+                align-items: center;
+                justify-content: flex-start;
+                padding-top: 40px;
+                transition: left 0.3s ease;
+                z-index: 999;
+            }
+
+            .nav-menu.active {
+                left: 0;
+            }
+
+            .nav-menu li {
+                width: 100%;
+                text-align: center;
+            }
+
+            .nav-menu li a {
+                justify-content: center;
+                font-size: 1.2rem;
+                padding: 15px;
+            }
+
+            .hamburger.active span:nth-child(1) {
+                transform: rotate(45deg) translate(5px, 5px);
+            }
+
+            .hamburger.active span:nth-child(2) {
+                opacity: 0;
+            }
+
+            .hamburger.active span:nth-child(3) {
+                transform: rotate(-45deg) translate(7px, -6px);
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .full-width {
+                grid-column: span 1;
+            }
+
+            .glitch-text {
+                font-size: 2rem;
+            }
+
+            .signals-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .logo {
+                font-size: 1.2rem;
+            }
+        }
+
+        /* Animaciones adicionales */
+        @keyframes scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+
+        .hologram-effect {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(transparent 50%, rgba(0, 255, 255, 0.05) 50%);
+            background-size: 100% 4px;
+            pointer-events: none;
+            animation: scanline 8s linear infinite;
+            opacity: 0.3;
+        }
+
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        @keyframes slideOutRight {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+        
+        .notification {
+            font-family: 'Rajdhani', sans-serif;
+            letter-spacing: 1px;
+        }
+        
+        /* Scrollbar personalizado */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, var(--secondary), var(--primary));
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <div class="header">
-        <div class="title">
-            <h1>HEYDIN KAYSER</h1>
+    <!-- Partículas de fondo -->
+    <div id="particles-js"></div>
+
+    <!-- Modal de Perfil -->
+    <div id="profileModal" class="profile-modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeProfileModal()">&times;</span>
+            <div class="profile-avatar" id="modalAvatar">
+                <i class="fas fa-user-astronaut"></i>
+            </div>
+            <h2 style="text-align: center; color: var(--primary);" id="modalName">Usuario</h2>
+            
+            <div class="profile-stats" id="modalStats">
+                <div class="profile-stat">
+                    <div class="profile-stat-value" id="modalSignals">0</div>
+                    <div class="profile-stat-label">Señales</div>
+                </div>
+                <div class="profile-stat">
+                    <div class="profile-stat-value" id="modalPosts">0</div>
+                    <div class="profile-stat-label">Publicaciones</div>
+                </div>
+                <div class="profile-stat">
+                    <div class="profile-stat-value" id="modalMessages">0</div>
+                    <div class="profile-stat-label">Mensajes</div>
+                </div>
+                <div class="profile-stat">
+                    <div class="profile-stat-value" id="modalJoined">0</div>
+                    <div class="profile-stat-label">Días</div>
+                </div>
+            </div>
+
+            <form class="profile-form" id="profileForm">
+                <input type="text" id="profileNameInput" placeholder="Nombre de usuario" value="Trader_123">
+                <button type="submit" class="btn-glow">ACTUALIZAR PERFIL</button>
+            </form>
         </div>
-        <div class="badge">FIBO · EXACT</div>
     </div>
+    
+    <!-- Menú futurista -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo" onclick="showSection('inicio')">
+                <i class="fas fa-chart-line"></i>
+                HEYDIN <span class="glow">KAYSER</span> TRADING
+            </div>
+            
+            <div class="menu-toggle" id="menuToggle">
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
 
-    <div class="input-panel">
-        <div class="input-group">
-            <label>MAX</label>
-            <input type="number" id="maxInput" step="0.01" value="73940.02">
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#inicio" class="active" onclick="showSection('inicio')"><i class="fas fa-home"></i> Inicio</a></li>
+                <li><a href="#señales" onclick="showSection('señales')"><i class="fas fa-bolt"></i> Señales</a></li>
+                <li><a href="#chat" onclick="showSection('chat')"><i class="fas fa-comments"></i> Chat</a></li>
+                <li><a href="#publicar" onclick="showSection('publicar')"><i class="fas fa-pen-fancy"></i> Publicar</a></li>
+                <li><a href="#estadisticas" onclick="showSection('estadisticas')"><i class="fas fa-chart-bar"></i> Estadísticas</a></li>
+                <li class="profile-item" onclick="openProfileModal(currentUser.id)">
+                    <a href="#perfil">
+                        <div class="profile-pulse"></div>
+                        <i class="fas fa-user-astronaut"></i>
+                        <span id="navUserName">Perfil</span>
+                    </a>
+                </li>
+            </ul>
         </div>
-        <div class="input-group">
-            <label>MIN</label>
-            <input type="number" id="minInput" step="0.01" value="70297.96">
-        </div>
-        <div class="direction-group">
-            <button class="dir-btn" id="btnBuy">BUY</button>
-            <button class="dir-btn active" id="btnSell">SELL</button>
-        </div>
-        <button class="calc-btn" id="calcMain">⟳</button>
-    </div>
+    </nav>
 
-    <div class="signal-bar">
-        <div class="direction-large" id="mainDirection">SELL</div>
-        <div class="key-levels">
-            <div class="key-level" id="price50">50% 72126.05</div>
-            <div class="key-level" id="price618">61.8% 71160.27</div>
-        </div>
-    </div>
+    <!-- Contenido principal -->
+    <main class="main-content">
+        <!-- Sección de inicio -->
+        <section id="inicio" class="section active">
+            <div class="section-header">
+                <h2 class="glitch-text" data-text="BIENVENIDO A HEYDIN KAYSER">BIENVENIDO A HEYDIN KAYSER</h2>
+                <div class="hologram-effect"></div>
+            </div>
+            
+            <div class="card">
+                <h3><i class="fas fa-robot"></i> TRADING INTELIGENTE</h3>
+                <p style="font-size: 1.2rem; line-height: 1.6; margin-bottom: 20px;">
+                    Bienvenido a la plataforma de trading más avanzada. Comparte señales en tiempo real, 
+                    conecta con otros traders y mejora tus resultados con análisis colaborativo.
+                </p>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 30px;">
+                    <div style="text-align: center; padding: 20px; background: rgba(0,255,255,0.05); border-radius: 10px;">
+                        <i class="fas fa-bolt" style="font-size: 2rem; color: var(--primary);"></i>
+                        <h4>Señales en Vivo</h4>
+                        <p>Comparte y recibe señales de trading al instante</p>
+                    </div>
+                    <div style="text-align: center; padding: 20px; background: rgba(255,0,255,0.05); border-radius: 10px;">
+                        <i class="fas fa-comments" style="font-size: 2rem; color: var(--secondary);"></i>
+                        <h4>Chat Global</h4>
+                        <p>Conecta con la comunidad de traders</p>
+                    </div>
+                    <div style="text-align: center; padding: 20px; background: rgba(255,255,0,0.05); border-radius: 10px;">
+                        <i class="fas fa-chart-line" style="font-size: 2rem; color: var(--accent);"></i>
+                        <h4>Análisis Técnico</h4>
+                        <p>Publica tus análisis y estrategias</p>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-    <div class="fibo-grid" id="fiboGrid"></div>
+        <!-- Sección de señales de trading -->
+        <section id="señales" class="section">
+            <div class="section-header">
+                <h2 class="glitch-text" data-text="SEÑALES EN VIVO">SEÑALES EN VIVO</h2>
+                <div class="hologram-effect"></div>
+            </div>
 
-    <div class="selection-panel">
-        <div class="selected-display">
-            <div class="selected-chip" id="selectedFirst">—</div>
-            <div class="selected-chip" id="selectedSecond">—</div>
-        </div>
-        <button class="apply-btn" id="applyBtn">🔄 NUEVA SECUENCIA</button>
-    </div>
+            <!-- Formulario para nueva señal -->
+            <div class="card signal-form-card">
+                <h3><i class="fas fa-satellite-dish"></i> NUEVA SEÑAL DE TRADING</h3>
+                <form id="signalForm" class="signal-form">
+                    <div class="form-row">
+                        <div class="input-group">
+                            <label><i class="fas fa-coins"></i> Par</label>
+                            <input type="text" id="pair" placeholder="EUR/USD" required>
+                        </div>
+                        <div class="input-group">
+                            <label><i class="fas fa-arrow-right"></i> Entrada</label>
+                            <input type="number" id="entry" step="0.00001" placeholder="1.12345" required>
+                        </div>
+                    </div>
 
-    <h3 style="color:white; margin: 1rem 0 0.5rem; font-weight:400; text-shadow:0 0 15px magenta;">nueva secuencia fibonacci</h3>
-    <div class="recursive-grid" id="recursiveGrid"></div>
+                    <div class="form-row">
+                        <div class="input-group">
+                            <label><i class="fas fa-stop"></i> Stop Loss</label>
+                            <input type="number" id="sl" step="0.00001" placeholder="1.12000" required>
+                        </div>
+                        <div class="input-group">
+                            <label><i class="fas fa-flag"></i> TP 1</label>
+                            <input type="number" id="tp1" step="0.00001" placeholder="1.12500" required>
+                        </div>
+                    </div>
 
-    <div class="footnote">
-        ✦ cálculos exactos de Fibonacci · 0% = mínimo, 100% = máximo ✦
-    </div>
-</div>
+                    <div class="form-row">
+                        <div class="input-group">
+                            <label><i class="fas fa-flag"></i> TP 2</label>
+                            <input type="number" id="tp2" step="0.00001" placeholder="1.12700">
+                        </div>
+                        <div class="input-group">
+                            <label><i class="fas fa-flag"></i> TP 3</label>
+                            <input type="number" id="tp3" step="0.00001" placeholder="1.12900">
+                        </div>
+                    </div>
 
-<script>
-    (function() {
-        const FIB_LEVELS = [0, 23.6, 38.2, 50, 61.8, 75, 100, 161.8, 261.8];
-        
-        const maxInput = document.getElementById('maxInput');
-        const minInput = document.getElementById('minInput');
-        const btnBuy = document.getElementById('btnBuy');
-        const btnSell = document.getElementById('btnSell');
-        const calcMain = document.getElementById('calcMain');
-        const fiboGrid = document.getElementById('fiboGrid');
-        const selectedFirst = document.getElementById('selectedFirst');
-        const selectedSecond = document.getElementById('selectedSecond');
-        const applyBtn = document.getElementById('applyBtn');
-        const recursiveGrid = document.getElementById('recursiveGrid');
-        const mainDirection = document.getElementById('mainDirection');
-        const price50 = document.getElementById('price50');
-        const price618 = document.getElementById('price618');
+                    <div class="form-row">
+                        <div class="input-group radio-group">
+                            <label>Tipo:</label>
+                            <div class="radio-options">
+                                <label class="radio-option">
+                                    <input type="radio" name="type" value="BUY" checked>
+                                    <span class="radio-label buy">COMPRA</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="type" value="SELL">
+                                    <span class="radio-label sell">VENTA</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label><i class="fas fa-calendar"></i> Fecha</label>
+                            <input type="datetime-local" id="date" required>
+                        </div>
+                    </div>
 
-        let currentDirection = 'SELL';
-        let selectedIndices = [];
-        let currentLevels = [];
+                    <div class="form-row">
+                        <div class="input-group full-width">
+                            <label><i class="fas fa-pencil-alt"></i> Comentario</label>
+                            <textarea id="comment" placeholder="Análisis técnico adicional..." rows="3"></textarea>
+                        </div>
+                    </div>
 
-        function setDirection(dir) {
-            currentDirection = dir;
-            if (dir === 'BUY') {
-                btnBuy.classList.add('active');
-                btnSell.classList.remove('active');
-            } else {
-                btnSell.classList.add('active');
-                btnBuy.classList.remove('active');
-            }
-            mainDirection.innerText = dir;
-            computeAndRender();
+                    <button type="submit" class="btn-glow">
+                        <span>PUBLICAR SEÑAL</span>
+                        <i class="fas fa-rocket"></i>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Lista de señales -->
+            <div id="signalsList" class="signals-grid"></div>
+        </section>
+
+        <!-- Sección de chat -->
+        <section id="chat" class="section">
+            <div class="section-header">
+                <h2 class="glitch-text" data-text="CHAT GLOBAL">CHAT GLOBAL</h2>
+            </div>
+
+            <div class="card chat-container">
+                <div id="chatMessages" class="chat-messages"></div>
+                <div class="chat-input-area">
+                    <input type="text" id="chatMessage" placeholder="Escribe tu mensaje..." maxlength="500">
+                    <button id="sendChatBtn" class="btn-glow small">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección de publicaciones -->
+        <section id="publicar" class="section">
+            <div class="section-header">
+                <h2 class="glitch-text" data-text="PUBLICACIONES">PUBLICACIONES</h2>
+            </div>
+
+            <div class="card post-form-card">
+                <h3><i class="fas fa-newspaper"></i> CREAR PUBLICACIÓN</h3>
+                <form id="postForm">
+                    <div class="input-group full-width">
+                        <label>Título</label>
+                        <input type="text" id="postTitle" placeholder="Título de la publicación" required>
+                    </div>
+                    <div class="input-group full-width">
+                        <label>Contenido</label>
+                        <textarea id="postContent" placeholder="Escribe tu análisis o comentario..." rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="btn-glow">
+                        <span>PUBLICAR</span>
+                        <i class="fas fa-share-alt"></i>
+                    </button>
+                </form>
+            </div>
+
+            <div id="postsList" class="posts-container"></div>
+        </section>
+
+        <!-- Sección de estadísticas -->
+        <section id="estadisticas" class="section">
+            <div class="section-header">
+                <h2 class="glitch-text" data-text="ESTADÍSTICAS">ESTADÍSTICAS</h2>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
+                    <div class="stat-info">
+                        <h3>Señales totales</h3>
+                        <span id="totalSignals" class="stat-value">0</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+                    <div class="stat-info">
+                        <h3>Señales BUY</h3>
+                        <span id="buySignals" class="stat-value">0</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-times-circle"></i></div>
+                    <div class="stat-info">
+                        <h3>Señales SELL</h3>
+                        <span id="sellSignals" class="stat-value">0</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-comments"></i></div>
+                    <div class="stat-info">
+                        <h3>Mensajes chat</h3>
+                        <span id="totalMessages" class="stat-value">0</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-newspaper"></i></div>
+                    <div class="stat-info">
+                        <h3>Publicaciones</h3>
+                        <span id="totalPosts" class="stat-value">0</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-users"></i></div>
+                    <div class="stat-info">
+                        <h3>Traders activos</h3>
+                        <span id="activeTraders" class="stat-value">0</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-analytics-compat.js"></script>
+
+    <script>
+        // Configuración de Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyCpFnSLx-ZUq6j27T-w_nvsdSvUrNs688g",
+            authDomain: "heyding-kayser.firebaseapp.com",
+            databaseURL: "https://heyding-kayser-default-rtdb.firebaseio.com",
+            projectId: "heyding-kayser",
+            storageBucket: "heyding-kayser.firebasestorage.app",
+            messagingSenderId: "231005618306",
+            appId: "1:231005618306:web:b349379b513145b6e6349b",
+            measurementId: "G-0F9T839VVZ"
+        };
+
+        // Inicializar Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        const analytics = firebase.analytics();
+
+        // Referencias a la base de datos
+        const signalsRef = database.ref('signals');
+        const chatRef = database.ref('chat');
+        const postsRef = database.ref('posts');
+        const usersRef = database.ref('users');
+
+        // Variables globales
+        let currentUser = {
+            id: 'user_' + Math.random().toString(36).substr(2, 9),
+            name: 'Trader_' + Math.floor(Math.random() * 1000),
+            avatar: '👤',
+            joinDate: new Date().toISOString()
+        };
+
+        // Guardar usuario en Firebase
+        function saveUserToFirebase() {
+            usersRef.child(currentUser.id).set({
+                name: currentUser.name,
+                avatar: currentUser.avatar,
+                joinDate: currentUser.joinDate,
+                lastSeen: firebase.database.ServerValue.TIMESTAMP
+            });
         }
 
-        btnBuy.addEventListener('click', () => setDirection('BUY'));
-        btnSell.addEventListener('click', () => setDirection('SELL'));
+        // Actualizar UI con nombre de usuario
+        document.getElementById('navUserName').textContent = currentUser.name;
+        document.getElementById('profileNameInput').value = currentUser.name;
 
-        function getZoneLabel(pct, dir) {
-            if (pct === 50) return '⚖️ NEUTRAL';
-            if (pct === 61.8) return dir === 'BUY' ? '🟢 ENTRADA BUY' : '🔻 ENTRADA SELL';
-            if (pct === 38.2) return '⚠️ REBOTE';
-            if (pct === 75) return '🧊 SOP/RES';
-            if (pct === 23.6) return '🌊 INICIO';
-            if (pct === 100) return '🎯 100%';
-            if (pct === 161.8) return '🚀 EXTENSIÓN 161.8';
-            if (pct === 261.8) return '🚀 EXTENSIÓN 261.8';
-            return '';
-        }
-
-        function computeAndRender() {
-            let maxVal = parseFloat(maxInput.value);
-            let minVal = parseFloat(minInput.value);
-
-            if (isNaN(maxVal) || isNaN(minVal) || maxVal <= minVal) {
-                maxVal = 73940.02;
-                minVal = 70297.96;
-                maxInput.value = maxVal.toFixed(2);
-                minInput.value = minVal.toFixed(2);
-            }
-
-            const diff = maxVal - minVal;
-
-            let levels = FIB_LEVELS.map(pct => {
-                let value;
-                if (currentDirection === 'BUY') {
-                    // Para BUY: desde mínimo hacia arriba
-                    value = minVal + (diff * pct / 100);
-                } else {
-                    // Para SELL: desde máximo hacia abajo
-                    value = maxVal - (diff * pct / 100);
+        // Inicializar partículas
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 80, density: { enable: true, value_area: 800 } },
+                color: { value: '#00ffff' },
+                shape: { type: 'circle' },
+                opacity: { value: 0.5, random: true },
+                size: { value: 3, random: true },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: '#00ffff',
+                    opacity: 0.2,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 2,
+                    direction: 'none',
+                    random: true,
+                    straight: false,
+                    out_mode: 'out',
+                    bounce: false
                 }
-                return { pct, value };
-            });
-
-            currentLevels = levels.slice();
-            selectedIndices = [];
-            updateSelectedDisplay();
-
-            fiboGrid.innerHTML = '';
-
-            levels.forEach((level, idx) => {
-                const card = document.createElement('div');
-                card.className = 'fibo-card';
-                card.dataset.index = idx;
-
-                card.innerHTML = `
-                    <div class="fibo-label">${level.pct}%</div>
-                    <div class="fibo-value">${level.value.toFixed(2)}</div>
-                    <div class="zone-tag">${getZoneLabel(level.pct, currentDirection)}</div>
-                `;
-
-                card.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    toggleSelect(idx, card);
-                });
-
-                fiboGrid.appendChild(card);
-            });
-
-            // Actualizar precios 50% y 61.8% según dirección
-            let v50, v618;
-            if (currentDirection === 'BUY') {
-                v50 = minVal + (diff * 50 / 100);
-                v618 = minVal + (diff * 61.8 / 100);
-            } else {
-                v50 = maxVal - (diff * 50 / 100);
-                v618 = maxVal - (diff * 61.8 / 100);
-            }
-            price50.innerText = `50% ${v50.toFixed(2)}`;
-            price618.innerText = `61.8% ${v618.toFixed(2)}`;
-
-            recursiveGrid.innerHTML = '';
-        }
-
-        function toggleSelect(index, cardElement) {
-            if (selectedIndices.includes(index)) {
-                selectedIndices = selectedIndices.filter(i => i !== index);
-                cardElement.classList.remove('selected');
-            } else {
-                if (selectedIndices.length >= 2) {
-                    const oldIdx = selectedIndices.shift();
-                    const oldCard = document.querySelector(`.fibo-card[data-index="${oldIdx}"]`);
-                    if (oldCard) oldCard.classList.remove('selected');
+            },
+            interactivity: {
+                detect_on: 'canvas',
+                events: {
+                    onhover: { enable: true, mode: 'repulse' },
+                    onclick: { enable: true, mode: 'push' },
+                    resize: true
                 }
-                selectedIndices.push(index);
-                cardElement.classList.add('selected');
-            }
-            updateSelectedDisplay();
+            },
+            retina_detect: true
+        });
+
+        // Función para mostrar secciones
+        function showSection(sectionId) {
+            // Remover clase active de todos los links
+            document.querySelectorAll('.nav-menu a').forEach(l => l.classList.remove('active'));
+            
+            // Activar el link correspondiente
+            const activeLink = document.querySelector(`.nav-menu a[href="#${sectionId}"]`);
+            if (activeLink) activeLink.classList.add('active');
+            
+            // Ocultar todas las secciones
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            
+            // Mostrar la sección seleccionada
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Cerrar menú móvil
+            document.getElementById('menuToggle').classList.remove('active');
+            document.getElementById('navMenu').classList.remove('active');
         }
 
-        function updateSelectedDisplay() {
-            if (selectedIndices.length === 0) {
-                selectedFirst.innerText = '—';
-                selectedSecond.innerText = '—';
-                return;
-            }
-            const first = currentLevels[selectedIndices[0]];
-            selectedFirst.innerText = first ? `${first.pct}% ${first.value.toFixed(2)}` : '—';
-            if (selectedIndices.length >= 2) {
-                const second = currentLevels[selectedIndices[1]];
-                selectedSecond.innerText = second ? `${second.pct}% ${second.value.toFixed(2)}` : '—';
-            } else {
-                selectedSecond.innerText = '—';
-            }
-        }
+        // Menú móvil
+        const menuToggle = document.getElementById('menuToggle');
+        const navMenu = document.getElementById('navMenu');
 
-        function applyNewFibonacci() {
-            if (selectedIndices.length < 2) {
-                alert('selecciona dos niveles');
-                return;
-            }
+        menuToggle.addEventListener('click', () => {
+            menuToggle.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
 
-            const l1 = currentLevels[selectedIndices[0]];
-            const l2 = currentLevels[selectedIndices[1]];
-
-            let newMax, newMin;
-            if (l1.value > l2.value) {
-                newMax = l1.value;
-                newMin = l2.value;
-            } else {
-                newMax = l2.value;
-                newMin = l1.value;
-            }
-
-            const diff = newMax - newMin;
-
-            const newLevels = FIB_LEVELS.map(pct => {
-                let val;
-                if (currentDirection === 'BUY') {
-                    val = newMin + (diff * pct / 100);
-                } else {
-                    val = newMax - (diff * pct / 100);
+        // Funciones del modal de perfil
+        function openProfileModal(userId = currentUser.id) {
+            const modal = document.getElementById('profileModal');
+            
+            // Cargar datos del usuario
+            usersRef.child(userId).once('value', (snapshot) => {
+                const userData = snapshot.val();
+                if (userData) {
+                    document.getElementById('modalName').textContent = userData.name || 'Usuario';
+                    document.getElementById('profileNameInput').value = userData.name || '';
                 }
-                return { pct, value: val };
             });
 
-            recursiveGrid.innerHTML = '';
-
-            const maxCard = document.createElement('div');
-            maxCard.className = 'recursive-card';
-            maxCard.style.borderColor = '#ff8888';
-            maxCard.innerHTML = `<div style="font-weight:600">NUEVO MÁX</div><div style="font-size:1.2rem">${newMax.toFixed(2)}</div>`;
-            recursiveGrid.appendChild(maxCard);
-
-            const minCard = document.createElement('div');
-            minCard.className = 'recursive-card';
-            minCard.style.borderColor = '#8888ff';
-            minCard.innerHTML = `<div style="font-weight:600">NUEVO MÍN</div><div style="font-size:1.2rem">${newMin.toFixed(2)}</div>`;
-            recursiveGrid.appendChild(minCard);
-
-            newLevels.forEach(level => {
-                const card = document.createElement('div');
-                card.className = 'recursive-card';
-                card.innerHTML = `
-                    <div class="fibo-label" style="font-size:0.8rem; padding:3px 8px;">${level.pct}%</div>
-                    <div style="font-size:1.2rem; font-weight:500; color:white; text-shadow:0 0 15px cyan;">${level.value.toFixed(2)}</div>
-                    <div class="zone-tag" style="font-size:0.65rem;">${getZoneLabel(level.pct, currentDirection)}</div>
-                `;
-                recursiveGrid.appendChild(card);
+            // Cargar estadísticas del usuario
+            signalsRef.once('value', (snapshot) => {
+                const signals = snapshot.val();
+                if (signals) {
+                    const userSignals = Object.values(signals).filter(s => s.authorId === userId).length;
+                    document.getElementById('modalSignals').textContent = userSignals;
+                }
             });
+
+            postsRef.once('value', (snapshot) => {
+                const posts = snapshot.val();
+                if (posts) {
+                    const userPosts = Object.values(posts).filter(p => p.authorId === userId).length;
+                    document.getElementById('modalPosts').textContent = userPosts;
+                }
+            });
+
+            chatRef.once('value', (snapshot) => {
+                const messages = snapshot.val();
+                if (messages) {
+                    const userMessages = Object.values(messages).filter(m => m.authorId === userId).length;
+                    document.getElementById('modalMessages').textContent = userMessages;
+                }
+            });
+
+            // Calcular días desde que se unió
+            const joinDate = new Date(currentUser.joinDate);
+            const today = new Date();
+            const diffTime = Math.abs(today - joinDate);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            document.getElementById('modalJoined').textContent = diffDays;
+
+            modal.classList.add('active');
         }
 
-        calcMain.addEventListener('click', (e) => {
+        function closeProfileModal() {
+            document.getElementById('profileModal').classList.remove('active');
+        }
+
+        // Cerrar modal con ESC
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeProfileModal();
+            }
+        });
+
+        // Formulario de perfil
+        document.getElementById('profileForm').addEventListener('submit', (e) => {
             e.preventDefault();
-            computeAndRender();
+            const newName = document.getElementById('profileNameInput').value.trim();
+            
+            if (newName && newName !== currentUser.name) {
+                currentUser.name = newName;
+                document.getElementById('navUserName').textContent = newName;
+                document.getElementById('modalName').textContent = newName;
+                saveUserToFirebase();
+                showNotification('✅ Perfil actualizado', 'success');
+            }
+            
+            closeProfileModal();
         });
 
-        applyBtn.addEventListener('click', applyNewFibonacci);
-
-        window.addEventListener('load', () => {
-            setDirection('SELL');
+        // Formulario de señales
+        document.getElementById('signalForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const signal = {
+                pair: document.getElementById('pair').value,
+                entry: parseFloat(document.getElementById('entry').value),
+                sl: parseFloat(document.getElementById('sl').value),
+                tp1: parseFloat(document.getElementById('tp1').value),
+                tp2: document.getElementById('tp2').value ? parseFloat(document.getElementById('tp2').value) : null,
+                tp3: document.getElementById('tp3').value ? parseFloat(document.getElementById('tp3').value) : null,
+                type: document.querySelector('input[name="type"]:checked').value,
+                date: document.getElementById('date').value,
+                comment: document.getElementById('comment').value,
+                author: currentUser.name,
+                authorId: currentUser.id,
+                timestamp: firebase.database.ServerValue.TIMESTAMP
+            };
+            
+            try {
+                await signalsRef.push(signal);
+                e.target.reset();
+                showNotification('✅ Señal publicada exitosamente', 'success');
+                setCurrentDateTime();
+                saveUserToFirebase();
+            } catch (error) {
+                console.error('Error al publicar señal:', error);
+                showNotification('❌ Error al publicar la señal', 'error');
+            }
         });
-    })();
-</script>
+
+        // Escuchar nuevas señales
+        signalsRef.on('child_added', (snapshot) => {
+            const signal = snapshot.val();
+            signal.id = snapshot.key;
+            displaySignal(signal);
+            updateStats();
+        });
+
+        // Mostrar señal en la UI
+        function displaySignal(signal) {
+            const signalsList = document.getElementById('signalsList');
+            const signalCard = document.createElement('div');
+            signalCard.className = 'signal-card';
+            signalCard.setAttribute('data-id', signal.id);
+            
+            const date = signal.date ? new Date(signal.date) : new Date();
+            const formattedDate = date.toLocaleString();
+            
+            let tp2Html = '';
+            let tp3Html = '';
+            
+            if (signal.tp2) {
+                tp2Html = `
+                <div class="detail-item">
+                    <span class="detail-label">TP 2</span>
+                    <span class="detail-value" style="color: #44ff44">${signal.tp2}</span>
+                </div>
+                `;
+            }
+            
+            if (signal.tp3) {
+                tp3Html = `
+                <div class="detail-item">
+                    <span class="detail-label">TP 3</span>
+                    <span class="detail-value" style="color: #44ff44">${signal.tp3}</span>
+                </div>
+                `;
+            }
+            
+            signalCard.innerHTML = `
+                <div class="signal-header">
+                    <span class="signal-pair">${signal.pair}</span>
+                    <span class="signal-type ${signal.type.toLowerCase()}">${signal.type}</span>
+                </div>
+                <div class="signal-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Entrada</span>
+                        <span class="detail-value">${signal.entry}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">SL</span>
+                        <span class="detail-value" style="color: #ff4444">${signal.sl}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">TP 1</span>
+                        <span class="detail-value" style="color: #44ff44">${signal.tp1}</span>
+                    </div>
+                    ${tp2Html}
+                    ${tp3Html}
+                </div>
+                ${signal.comment ? `<div class="signal-comment">💬 ${signal.comment}</div>` : ''}
+                <div class="signal-footer">
+                    <span class="post-author" onclick="openProfileModal('${signal.authorId}')">👤 ${signal.author}</span>
+                    <span>📅 ${formattedDate}</span>
+                </div>
+            `;
+            
+            signalsList.insertBefore(signalCard, signalsList.firstChild);
+        }
+
+        // Chat
+        document.getElementById('sendChatBtn').addEventListener('click', sendChatMessage);
+        document.getElementById('chatMessage').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendChatMessage();
+        });
+
+        async function sendChatMessage() {
+            const input = document.getElementById('chatMessage');
+            const message = input.value.trim();
+            
+            if (message) {
+                const chatMessage = {
+                    text: message,
+                    author: currentUser.name,
+                    authorId: currentUser.id,
+                    timestamp: firebase.database.ServerValue.TIMESTAMP
+                };
+                
+                try {
+                    await chatRef.push(chatMessage);
+                    input.value = '';
+                    saveUserToFirebase();
+                    updateStats();
+                } catch (error) {
+                    console.error('Error al enviar mensaje:', error);
+                    showNotification('❌ Error al enviar mensaje', 'error');
+                }
+            }
+        }
+
+        // Escuchar mensajes del chat
+        chatRef.on('child_added', (snapshot) => {
+            const message = snapshot.val();
+            displayChatMessage(message);
+        });
+
+        function displayChatMessage(message) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'chat-message';
+            
+            const time = message.timestamp ? new Date(message.timestamp) : new Date();
+            const formattedTime = time.toLocaleTimeString();
+            
+            messageDiv.innerHTML = `
+                <div class="message-header">
+                    <span class="message-author" onclick="openProfileModal('${message.authorId}')">${message.author}</span>
+                    <span class="message-time">${formattedTime}</span>
+                </div>
+                <div class="message-content">${message.text}</div>
+            `;
+            
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Formulario de publicaciones - CORREGIDO
+        document.getElementById('postForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const title = document.getElementById('postTitle').value.trim();
+            const content = document.getElementById('postContent').value.trim();
+            
+            if (!title || !content) {
+                showNotification('❌ Completá todos los campos', 'error');
+                return;
+            }
+            
+            const post = {
+                title: title,
+                content: content,
+                author: currentUser.name,
+                authorId: currentUser.id,
+                timestamp: firebase.database.ServerValue.TIMESTAMP,
+                likes: 0,
+                likedBy: {}
+            };
+            
+            try {
+                await postsRef.push(post);
+                e.target.reset();
+                showNotification('✅ Publicación creada exitosamente', 'success');
+                saveUserToFirebase();
+                updateStats();
+            } catch (error) {
+                console.error('Error al crear publicación:', error);
+                showNotification('❌ Error al crear publicación', 'error');
+            }
+        });
+
+        // Escuchar nuevas publicaciones
+        postsRef.on('child_added', (snapshot) => {
+            const post = snapshot.val();
+            post.id = snapshot.key;
+            displayPost(post);
+            updateStats();
+        });
+
+        // Escuchar cambios en publicaciones (para likes)
+        postsRef.on('child_changed', (snapshot) => {
+            const post = snapshot.val();
+            post.id = snapshot.key;
+            updatePostLikes(post);
+        });
+
+        function displayPost(post) {
+            const postsList = document.getElementById('postsList');
+            
+            // Evitar duplicados
+            if (document.querySelector(`.post-card[data-id="${post.id}"]`)) {
+                return;
+            }
+            
+            const postDiv = document.createElement('div');
+            postDiv.className = 'post-card';
+            postDiv.setAttribute('data-id', post.id);
+            
+            const date = post.timestamp ? new Date(post.timestamp) : new Date();
+            const formattedDate = date.toLocaleString();
+            
+            const hasLiked = post.likedBy && post.likedBy[currentUser.id];
+            
+            postDiv.innerHTML = `
+                <h3 class="post-title">${escapeHtml(post.title)}</h3>
+                <div class="post-content">${escapeHtml(post.content).replace(/\n/g, '<br>')}</div>
+                <div class="post-meta">
+                    <span class="post-author" onclick="openProfileModal('${post.authorId}')">👤 ${escapeHtml(post.author)}</span>
+                    <span>📅 ${formattedDate}</span>
+                </div>
+                <div class="post-actions">
+                    <div class="post-action ${hasLiked ? 'liked' : ''}" onclick="likePost('${post.id}')">
+                        <i class="fas fa-heart"></i>
+                        <span class="likes-count">${post.likes || 0}</span>
+                    </div>
+                    <div class="post-action" onclick="showSection('chat')">
+                        <i class="fas fa-comment"></i>
+                        <span>Comentar</span>
+                    </div>
+                </div>
+            `;
+            
+            postsList.insertBefore(postDiv, postsList.firstChild);
+        }
+
+        function updatePostLikes(post) {
+            const postElement = document.querySelector(`.post-card[data-id="${post.id}"]`);
+            if (postElement) {
+                const likesSpan = postElement.querySelector('.likes-count');
+                const likeAction = postElement.querySelector('.post-action:first-child');
+                if (likesSpan) likesSpan.textContent = post.likes || 0;
+                if (likeAction && post.likedBy && post.likedBy[currentUser.id]) {
+                    likeAction.classList.add('liked');
+                } else if (likeAction) {
+                    likeAction.classList.remove('liked');
+                }
+            }
+        }
+
+        // Función para dar like
+        async function likePost(postId) {
+            try {
+                const postRef = postsRef.child(postId);
+                const snapshot = await postRef.once('value');
+                const post = snapshot.val();
+                
+                if (!post.likedBy) post.likedBy = {};
+                
+                if (post.likedBy[currentUser.id]) {
+                    // Quitar like
+                    post.likes = (post.likes || 1) - 1;
+                    delete post.likedBy[currentUser.id];
+                } else {
+                    // Dar like
+                    post.likes = (post.likes || 0) + 1;
+                    post.likedBy[currentUser.id] = true;
+                }
+                
+                await postRef.update({
+                    likes: post.likes,
+                    likedBy: post.likedBy
+                });
+                
+            } catch (error) {
+                console.error('Error al dar like:', error);
+            }
+        }
+
+        // Función para escapar HTML
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Actualizar estadísticas
+        function updateStats() {
+            signalsRef.once('value', (snapshot) => {
+                const signals = snapshot.val();
+                if (signals) {
+                    const signalsArray = Object.values(signals);
+                    document.getElementById('totalSignals').textContent = signalsArray.length;
+                    
+                    const buySignals = signalsArray.filter(s => s.type === 'BUY').length;
+                    const sellSignals = signalsArray.filter(s => s.type === 'SELL').length;
+                    
+                    document.getElementById('buySignals').textContent = buySignals;
+                    document.getElementById('sellSignals').textContent = sellSignals;
+                }
+            });
+            
+            chatRef.once('value', (snapshot) => {
+                const messages = snapshot.val();
+                if (messages) {
+                    document.getElementById('totalMessages').textContent = Object.keys(messages).length;
+                }
+            });
+
+            postsRef.once('value', (snapshot) => {
+                const posts = snapshot.val();
+                if (posts) {
+                    document.getElementById('totalPosts').textContent = Object.keys(posts).length;
+                }
+            });
+
+            usersRef.once('value', (snapshot) => {
+                const users = snapshot.val();
+                if (users) {
+                    document.getElementById('activeTraders').textContent = Object.keys(users).length;
+                }
+            });
+        }
+
+        // Sistema de notificaciones
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <div class="notification-content">
+                    ${message}
+                </div>
+            `;
+            
+            notification.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                padding: 15px 25px;
+                background: ${type === 'success' ? 'rgba(0, 255, 0, 0.2)' : 'rgba(255, 0, 0, 0.2)'};
+                border: 1px solid ${type === 'success' ? '#00ff00' : '#ff0000'};
+                border-radius: 10px;
+                color: #fff;
+                font-weight: 600;
+                backdrop-filter: blur(10px);
+                z-index: 9999;
+                animation: slideInRight 0.3s ease;
+                box-shadow: 0 0 20px ${type === 'success' ? 'rgba(0, 255, 0, 0.3)' : 'rgba(255, 0, 0, 0.3)'};
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOutRight 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // Función para establecer fecha y hora actual
+        function setCurrentDateTime() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            document.getElementById('date').value = `${year}-${month}-${day}T${hours}:${minutes}`;
+        }
+
+        // Inicializar
+        setCurrentDateTime();
+        updateStats();
+        saveUserToFirebase();
+
+        // Cargar señales existentes al inicio
+        signalsRef.once('value', (snapshot) => {
+            const signals = snapshot.val();
+            if (signals) {
+                const signalsArray = Object.entries(signals);
+                signalsArray.reverse().forEach(([key, signal]) => {
+                    signal.id = key;
+                    displaySignal(signal);
+                });
+            }
+        });
+
+        // Cargar mensajes existentes
+        chatRef.once('value', (snapshot) => {
+            const messages = snapshot.val();
+            if (messages) {
+                const messagesArray = Object.values(messages);
+                messagesArray.forEach(message => {
+                    displayChatMessage(message);
+                });
+            }
+        });
+
+        // Cargar publicaciones existentes
+        postsRef.once('value', (snapshot) => {
+            const posts = snapshot.val();
+            if (posts) {
+                const postsArray = Object.entries(posts);
+                postsArray.reverse().forEach(([key, post]) => {
+                    post.id = key;
+                    displayPost(post);
+                });
+            }
+        });
+
+        // Actualizar último visto
+        setInterval(() => {
+            usersRef.child(currentUser.id).update({
+                lastSeen: firebase.database.ServerValue.TIMESTAMP
+            });
+        }, 60000); // Cada minuto
+    </script>
 </body>
 </html>
