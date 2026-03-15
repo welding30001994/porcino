@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Heydin Kayser · Fibonacci Elegante</title>
+    <title>Heydin Kayser · Fibonacci Exacto</title>
     <style>
         * {
             margin: 0;
@@ -22,7 +22,7 @@
         }
 
         .container {
-            max-width: 1100px;
+            max-width: 1200px;
             width: 100%;
             background: rgba(5, 15, 25, 0.5);
             backdrop-filter: blur(20px);
@@ -33,7 +33,6 @@
             box-shadow: 0 20px 50px rgba(255, 0, 255, 0.2), 0 0 0 1px rgba(0, 255, 255, 0.2) inset;
         }
 
-        /* header */
         .header {
             display: flex;
             justify-content: space-between;
@@ -57,30 +56,25 @@
         .badge {
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 0, 255, 0.5);
             border-radius: 40px;
             padding: 0.4rem 1.2rem;
             color: #fff;
-            font-weight: 400;
             font-size: 0.9rem;
             box-shadow: 0 0 20px rgba(255, 0, 255, 0.3);
         }
 
-        /* panel de entrada */
         .input-panel {
             display: flex;
             flex-wrap: wrap;
             gap: 0.8rem;
             background: rgba(0, 15, 25, 0.4);
             backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(0, 255, 255, 0.3);
             border-radius: 40px;
             padding: 1.2rem 1rem;
             margin-bottom: 1.8rem;
             align-items: center;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
 
         .input-group {
@@ -92,7 +86,6 @@
             display: block;
             color: #b0d0ff;
             font-size: 0.7rem;
-            font-weight: 400;
             letter-spacing: 1.5px;
             text-transform: uppercase;
             margin-bottom: 4px;
@@ -110,13 +103,7 @@
             color: white;
             outline: none;
             backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
             box-shadow: 0 0 15px rgba(255, 0, 255, 0.3);
-        }
-
-        .input-group input:focus {
-            border-color: cyan;
-            box-shadow: 0 0 25px cyan;
         }
 
         .direction-group {
@@ -138,7 +125,6 @@
             color: #ccc;
             cursor: pointer;
             transition: 0.15s;
-            backdrop-filter: blur(5px);
         }
 
         .dir-btn.active {
@@ -163,17 +149,14 @@
             font-weight: 700;
             color: white;
             backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
             box-shadow: 0 0 40px orange;
             cursor: pointer;
             min-width: 70px;
         }
 
-        /* señal principal */
         .signal-bar {
             background: rgba(20, 0, 30, 0.4);
             backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
             border: 1.5px solid rgba(255, 0, 200, 0.7);
             border-radius: 50px;
             padding: 1rem 1.5rem;
@@ -206,7 +189,6 @@
         .key-level {
             background: rgba(0, 20, 40, 0.6);
             backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
             border: 1.5px solid gold;
             border-radius: 40px;
             padding: 0.5rem 1.5rem;
@@ -215,64 +197,61 @@
             font-weight: 500;
         }
 
-        /* GRID DESCENDENTE - LIMPIO Y ORDENADO */
+        /* Grid principal - cuadrados más pequeños como solicitaste */
         .fibo-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 12px;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 10px;
             margin: 1.5rem 0;
         }
 
         .fibo-card {
             background: rgba(8, 20, 32, 0.5);
             backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
             border: 1.5px solid rgba(255, 0, 255, 0.5);
-            border-radius: 28px;
-            padding: 1.2rem 0.3rem;
+            border-radius: 20px;
+            padding: 0.8rem 0.2rem;
             text-align: center;
             transition: 0.15s;
             cursor: pointer;
-            box-shadow: 0 8px 0 rgba(0, 50, 70, 0.5);
+            box-shadow: 0 4px 0 rgba(0, 50, 70, 0.5);
             color: white;
         }
 
         .fibo-card.selected {
             border: 3px solid #ff44ff;
             background: rgba(40, 10, 50, 0.7);
-            box-shadow: 0 0 40px #ff80ff, 0 8px 0 #880088;
+            box-shadow: 0 0 40px #ff80ff, 0 4px 0 #880088;
             transform: scale(1.02);
         }
 
         .fibo-label {
-            font-size: 1.1rem;
+            font-size: 0.9rem;
             font-weight: 600;
             background: rgba(0, 60, 100, 0.6);
             backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
             display: inline-block;
-            padding: 6px 20px;
+            padding: 4px 12px;
             border-radius: 30px;
             border: 1px solid cyan;
             color: white;
-            margin-bottom: 8px;
+            margin-bottom: 4px;
         }
 
         .fibo-value {
-            font-size: 1.4rem;
+            font-size: 1.1rem;
             font-weight: 600;
             color: white !important;
-            text-shadow: 0 0 20px cyan;
-            margin: 8px 0;
+            text-shadow: 0 0 15px cyan;
+            margin: 4px 0;
             word-break: break-word;
         }
 
         .zone-tag {
-            font-size: 0.85rem;
+            font-size: 0.7rem;
             background: rgba(30, 20, 40, 0.6);
             backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
-            padding: 6px 10px;
+            padding: 4px 8px;
             border-radius: 30px;
             border: 1px solid #ffaa00;
             color: #fff0c0;
@@ -280,15 +259,13 @@
             font-weight: 500;
         }
 
-        /* panel selección */
         .selection-panel {
             background: rgba(10, 5, 20, 0.5);
             backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
             border: 2px solid rgba(255, 70, 255, 0.7);
             border-radius: 50px;
-            padding: 1.2rem 1.5rem;
-            margin: 1.8rem 0;
+            padding: 1rem 1.2rem;
+            margin: 1.5rem 0;
             display: flex;
             flex-wrap: wrap;
             align-items: center;
@@ -298,7 +275,7 @@
 
         .selected-display {
             display: flex;
-            gap: 15px;
+            gap: 10px;
             flex-wrap: wrap;
         }
 
@@ -306,8 +283,8 @@
             background: rgba(0, 0, 0, 0.4);
             border: 1.5px solid cyan;
             border-radius: 40px;
-            padding: 0.6rem 1.8rem;
-            font-size: 1rem;
+            padding: 0.4rem 1.2rem;
+            font-size: 0.9rem;
             color: white;
             font-weight: 500;
             backdrop-filter: blur(5px);
@@ -317,31 +294,28 @@
             background: rgba(200, 0, 255, 0.25);
             border: 2px solid #ff88ff;
             border-radius: 50px;
-            padding: 0.7rem 2rem;
-            font-size: 1.1rem;
+            padding: 0.5rem 1.5rem;
+            font-size: 1rem;
             font-weight: 600;
             color: white;
             backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
             box-shadow: 0 0 40px magenta;
             cursor: pointer;
         }
 
-        /* grid recursivo */
         .recursive-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 12px;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
             margin: 1rem 0;
         }
 
         .recursive-card {
             background: rgba(8, 18, 35, 0.6);
             backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
             border: 1.5px solid rgba(0, 255, 255, 0.5);
-            border-radius: 24px;
-            padding: 1rem 0.2rem;
+            border-radius: 20px;
+            padding: 0.8rem 0.2rem;
             text-align: center;
             color: white;
         }
@@ -352,19 +326,13 @@
             font-size: 0.8rem;
             margin-top: 2rem;
             border-top: 1px dashed rgba(255, 0, 255, 0.5);
-            padding-top: 1.2rem;
+            padding-top: 1rem;
         }
 
-        /* responsive extra */
         @media (max-width: 480px) {
             .container { padding: 1rem 0.8rem; }
-            .input-panel { border-radius: 30px; }
-            .input-group input { font-size: 1rem; padding: 10px 12px; }
-            .dir-btn { padding: 8px 12px; font-size: 0.9rem; }
-            .fibo-label { font-size: 0.9rem; padding: 4px 12px; }
-            .fibo-value { font-size: 1.2rem; }
-            .zone-tag { font-size: 0.7rem; }
-            .selected-chip { padding: 0.4rem 1rem; font-size: 0.9rem; }
+            .fibo-grid { grid-template-columns: repeat(3, 1fr); }
+            .fibo-value { font-size: 1rem; }
         }
     </style>
 </head>
@@ -374,18 +342,17 @@
         <div class="title">
             <h1>HEYDIN KAYSER</h1>
         </div>
-        <div class="badge">FIBO · ELEGANCE</div>
+        <div class="badge">FIBO · EXACT</div>
     </div>
 
-    <!-- panel entrada -->
     <div class="input-panel">
         <div class="input-group">
             <label>MAX</label>
-            <input type="number" id="maxInput" step="0.01" value="71312.32">
+            <input type="number" id="maxInput" step="0.01" value="73940.02">
         </div>
         <div class="input-group">
             <label>MIN</label>
-            <input type="number" id="minInput" step="0.01" value="70293.38">
+            <input type="number" id="minInput" step="0.01" value="70297.96">
         </div>
         <div class="direction-group">
             <button class="dir-btn" id="btnBuy">BUY</button>
@@ -394,19 +361,16 @@
         <button class="calc-btn" id="calcMain">⟳</button>
     </div>
 
-    <!-- señal -->
     <div class="signal-bar">
         <div class="direction-large" id="mainDirection">SELL</div>
         <div class="key-levels">
-            <div class="key-level" id="price50">50% 70802.85</div>
-            <div class="key-level" id="price618">61.8% 70682.57</div>
+            <div class="key-level" id="price50">50% 72126.05</div>
+            <div class="key-level" id="price618">61.8% 71160.27</div>
         </div>
     </div>
 
-    <!-- grid fibonacci descendente (0 a 261.8) -->
     <div class="fibo-grid" id="fiboGrid"></div>
 
-    <!-- panel selección 2 niveles -->
     <div class="selection-panel">
         <div class="selected-display">
             <div class="selected-chip" id="selectedFirst">—</div>
@@ -415,12 +379,11 @@
         <button class="apply-btn" id="applyBtn">🔄 NUEVA SECUENCIA</button>
     </div>
 
-    <!-- resultados nueva secuencia -->
-    <h3 style="color:white; margin: 1rem 0 0.5rem; font-weight:400; letter-spacing:1px; text-shadow:0 0 15px magenta;">nueva secuencia fibonacci</h3>
+    <h3 style="color:white; margin: 1rem 0 0.5rem; font-weight:400; text-shadow:0 0 15px magenta;">nueva secuencia fibonacci</h3>
     <div class="recursive-grid" id="recursiveGrid"></div>
 
     <div class="footnote">
-        ✦ selecciona dos tarjetas para generar nuevo rango · todo permanece dentro del gráfico ✦
+        ✦ cálculos exactos de Fibonacci · 0% = mínimo, 100% = máximo ✦
     </div>
 </div>
 
@@ -428,7 +391,6 @@
     (function() {
         const FIB_LEVELS = [0, 23.6, 38.2, 50, 61.8, 75, 100, 161.8, 261.8];
         
-        // elementos
         const maxInput = document.getElementById('maxInput');
         const minInput = document.getElementById('minInput');
         const btnBuy = document.getElementById('btnBuy');
@@ -447,7 +409,6 @@
         let selectedIndices = [];
         let currentLevels = [];
 
-        // direccion
         function setDirection(dir) {
             currentDirection = dir;
             if (dir === 'BUY') {
@@ -464,7 +425,6 @@
         btnBuy.addEventListener('click', () => setDirection('BUY'));
         btnSell.addEventListener('click', () => setDirection('SELL'));
 
-        // etiqueta formateada
         function getZoneLabel(pct, dir) {
             if (pct === 50) return '⚖️ NEUTRAL';
             if (pct === 61.8) return dir === 'BUY' ? '🟢 ENTRADA BUY' : '🔻 ENTRADA SELL';
@@ -477,14 +437,13 @@
             return '';
         }
 
-        // calcular y renderizar
         function computeAndRender() {
             let maxVal = parseFloat(maxInput.value);
             let minVal = parseFloat(minInput.value);
 
             if (isNaN(maxVal) || isNaN(minVal) || maxVal <= minVal) {
-                maxVal = 71312.32;
-                minVal = 70293.38;
+                maxVal = 73940.02;
+                minVal = 70297.96;
                 maxInput.value = maxVal.toFixed(2);
                 minInput.value = minVal.toFixed(2);
             }
@@ -494,8 +453,10 @@
             let levels = FIB_LEVELS.map(pct => {
                 let value;
                 if (currentDirection === 'BUY') {
+                    // Para BUY: desde mínimo hacia arriba
                     value = minVal + (diff * pct / 100);
                 } else {
+                    // Para SELL: desde máximo hacia abajo
                     value = maxVal - (diff * pct / 100);
                 }
                 return { pct, value };
@@ -505,7 +466,6 @@
             selectedIndices = [];
             updateSelectedDisplay();
 
-            // limpiar grid
             fiboGrid.innerHTML = '';
 
             levels.forEach((level, idx) => {
@@ -527,7 +487,7 @@
                 fiboGrid.appendChild(card);
             });
 
-            // actualizar 50 y 61.8
+            // Actualizar precios 50% y 61.8% según dirección
             let v50, v618;
             if (currentDirection === 'BUY') {
                 v50 = minVal + (diff * 50 / 100);
@@ -539,11 +499,9 @@
             price50.innerText = `50% ${v50.toFixed(2)}`;
             price618.innerText = `61.8% ${v618.toFixed(2)}`;
 
-            // limpiar recursivos
             recursiveGrid.innerHTML = '';
         }
 
-        // toggle selección (máx 2)
         function toggleSelect(index, cardElement) {
             if (selectedIndices.includes(index)) {
                 selectedIndices = selectedIndices.filter(i => i !== index);
@@ -576,7 +534,6 @@
             }
         }
 
-        // nueva secuencia
         function applyNewFibonacci() {
             if (selectedIndices.length < 2) {
                 alert('selecciona dos niveles');
@@ -607,36 +564,32 @@
                 return { pct, value: val };
             });
 
-            // renderizar recursivos
             recursiveGrid.innerHTML = '';
 
-            // max min cards
             const maxCard = document.createElement('div');
             maxCard.className = 'recursive-card';
             maxCard.style.borderColor = '#ff8888';
-            maxCard.innerHTML = `<div style="font-weight:600">NUEVO MÁX</div><div style="font-size:1.4rem">${newMax.toFixed(2)}</div>`;
+            maxCard.innerHTML = `<div style="font-weight:600">NUEVO MÁX</div><div style="font-size:1.2rem">${newMax.toFixed(2)}</div>`;
             recursiveGrid.appendChild(maxCard);
 
             const minCard = document.createElement('div');
             minCard.className = 'recursive-card';
             minCard.style.borderColor = '#8888ff';
-            minCard.innerHTML = `<div style="font-weight:600">NUEVO MÍN</div><div style="font-size:1.4rem">${newMin.toFixed(2)}</div>`;
+            minCard.innerHTML = `<div style="font-weight:600">NUEVO MÍN</div><div style="font-size:1.2rem">${newMin.toFixed(2)}</div>`;
             recursiveGrid.appendChild(minCard);
 
-            // niveles
             newLevels.forEach(level => {
                 const card = document.createElement('div');
                 card.className = 'recursive-card';
                 card.innerHTML = `
-                    <div class="fibo-label" style="font-size:0.9rem; padding:4px 12px;">${level.pct}%</div>
-                    <div style="font-size:1.4rem; font-weight:500; color:white; text-shadow:0 0 15px cyan;">${level.value.toFixed(2)}</div>
-                    <div class="zone-tag" style="font-size:0.7rem;">${getZoneLabel(level.pct, currentDirection)}</div>
+                    <div class="fibo-label" style="font-size:0.8rem; padding:3px 8px;">${level.pct}%</div>
+                    <div style="font-size:1.2rem; font-weight:500; color:white; text-shadow:0 0 15px cyan;">${level.value.toFixed(2)}</div>
+                    <div class="zone-tag" style="font-size:0.65rem;">${getZoneLabel(level.pct, currentDirection)}</div>
                 `;
                 recursiveGrid.appendChild(card);
             });
         }
 
-        // eventos
         calcMain.addEventListener('click', (e) => {
             e.preventDefault();
             computeAndRender();
@@ -644,7 +597,6 @@
 
         applyBtn.addEventListener('click', applyNewFibonacci);
 
-        // init
         window.addEventListener('load', () => {
             setDirection('SELL');
         });
