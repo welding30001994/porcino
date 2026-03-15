@@ -2,1604 +2,1320 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Registro de Cerdos</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Heydin Kayser • Trading Elite</title>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800;900&family=Rajdhani:wght@300;500;700;800&display=swap" rel="stylesheet">
     <style>
+        /* ===== VARIABLES ===== */
         :root {
-            --primary-color: #00ffcc;
-            --secondary-color: #0066ff;
-            --dark-color: #0a0a1a;
-            --light-color: #f0f8ff;
-            --accent-color: #ff00aa;
-            --card-color: rgba(20, 20, 40, 0.9);
+            --primary: #00ffff;
+            --primary-glow: rgba(0, 255, 255, 0.8);
+            --secondary: #ff00d4;
+            --secondary-glow: rgba(255, 0, 212, 0.7);
+            --accent: #7700ff;
+            --dark: #0a0c12;
+            --darker: #05070a;
+            --card-bg: rgba(12, 16, 22, 0.75);
+            --text-light: #e2f3ff;
+            --transition: all 0.3s ease;
+            --google-color: #db4437;
+            --facebook-color: #4267B2;
         }
-        
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
+
+        html {
+            font-size: 16px;
+        }
+
         body {
-            background: linear-gradient(135deg, var(--dark-color), #000033);
-            color: var(--light-color);
+            font-family: 'Rajdhani', 'Syne', sans-serif;
+            background: radial-gradient(circle at 20% 20%, #0b0e14, #030507);
+            color: var(--text-light);
+            line-height: 1.5;
             min-height: 100vh;
-            padding: 15px;
-        }
-        
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-        
-        header {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-bottom: 20px;
-            padding: 15px;
-            background: rgba(10, 10, 26, 0.8);
-            border-radius: 15px;
-            box-shadow: 0 0 20px rgba(0, 255, 204, 0.3);
-        }
-        
-        @media (min-width: 768px) {
-            header {
-                flex-direction: row;
-                justify-content: space-between;
-            }
-        }
-        
-        .logo {
-            font-size: 22px;
-            font-weight: bold;
-            color: var(--primary-color);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-        
-        @media (min-width: 768px) {
-            .logo {
-                margin-bottom: 0;
-                font-size: 24px;
-            }
-        }
-        
-        .controls {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        
-        @media (min-width: 768px) {
-            .controls {
-                justify-content: flex-end;
-            }
-        }
-        
-        .btn {
-            background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
-            color: var(--dark-color);
-            border: none;
-            padding: 8px 15px;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            transition: all 0.3s ease;
-            font-size: 14px;
-        }
-        
-        @media (min-width: 768px) {
-            .btn {
-                padding: 10px 20px;
-                font-size: 16px;
-            }
-        }
-        
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 255, 204, 0.4);
-        }
-        
-        .main-content {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 20px;
-        }
-        
-        @media (min-width: 992px) {
-            .main-content {
-                grid-template-columns: 1fr 1fr;
-                gap: 30px;
-            }
-        }
-        
-        .camera-section, .voice-section {
-            background: var(--card-color);
-            border-radius: 15px;
-            padding: 15px;
-            box-shadow: 0 0 20px rgba(0, 102, 255, 0.3);
-        }
-        
-        @media (min-width: 768px) {
-            .camera-section, .voice-section {
-                padding: 20px;
-            }
-        }
-        
-        .camera-title, .voice-title {
-            font-size: 20px;
-            margin-bottom: 15px;
-            color: var(--primary-color);
-            text-align: center;
-        }
-        
-        @media (min-width: 768px) {
-            .camera-title, .voice-title {
-                font-size: 22px;
-            }
-        }
-        
-        .camera-preview {
-            width: 100%;
-            height: 250px;
-            background-color: #000;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            overflow: hidden;
             position: relative;
-            transform: scaleX(-1);
-        }
-        
-        @media (min-width: 768px) {
-            .camera-preview {
-                height: 300px;
-            }
-        }
-        
-        #videoElement {
+            overflow-x: hidden;
             width: 100%;
-            height: 100%;
-            object-fit: cover;
         }
-        
-        .camera-controls {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-        }
-        
-        .camera-btn {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
-            color: var(--dark-color);
-            border: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        @media (min-width: 768px) {
-            .camera-btn {
-                width: 60px;
-                height: 60px;
-                font-size: 20px;
-            }
-        }
-        
-        .camera-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 20px rgba(0, 255, 204, 0.5);
-        }
-        
-        .record-btn {
-            background: linear-gradient(45deg, var(--accent-color), #ff3300);
-        }
-        
-        .voice-control {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 15px;
-        }
-        
-        .voice-btn {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
-            color: var(--dark-color);
-            border: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 26px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        @media (min-width: 768px) {
-            .voice-btn {
-                width: 80px;
-                height: 80px;
-                font-size: 30px;
-            }
-        }
-        
-        .voice-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 25px rgba(0, 255, 204, 0.5);
-        }
-        
-        .voice-status {
-            text-align: center;
-            margin-bottom: 15px;
-            min-height: 24px;
-            font-style: italic;
-            font-size: 14px;
-        }
-        
-        @media (min-width: 768px) {
-            .voice-status {
-                font-size: 16px;
-            }
-        }
-        
-        .data-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
-        }
-        
-        @media (min-width: 480px) {
-            .data-cards {
-                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-                gap: 20px;
-            }
-        }
-        
-        .data-card {
-            background: rgba(30, 30, 60, 0.8);
-            border-radius: 10px;
-            padding: 12px;
-            position: relative;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-        }
-        
-        .data-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--primary-color);
-            box-shadow: 0 5px 15px rgba(0, 255, 204, 0.3);
-        }
-        
-        .data-card.active {
-            border-color: var(--accent-color);
-            background: rgba(40, 40, 80, 0.9);
-        }
-        
-        .data-card.editing {
-            border-color: var(--primary-color);
-            background: rgba(40, 40, 80, 0.9);
-        }
-        
-        .data-card h3 {
-            color: var(--primary-color);
-            margin-bottom: 8px;
-            font-size: 14px;
-        }
-        
-        @media (min-width: 768px) {
-            .data-card h3 {
-                font-size: 16px;
-            }
-        }
-        
-        .data-card p {
-            font-size: 16px;
-            font-weight: bold;
-            min-height: 24px;
-        }
-        
-        @media (min-width: 768px) {
-            .data-card p {
-                font-size: 18px;
-            }
-        }
-        
-        .card-actions {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            display: none;
-        }
-        
-        .data-card.active .card-actions {
-            display: flex;
-            gap: 8px;
-        }
-        
-        .card-btn {
-            background: transparent;
-            border: none;
-            color: var(--light-color);
-            cursor: pointer;
-            font-size: 12px;
-            width: 25px;
-            height: 25px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        @media (min-width: 768px) {
-            .card-btn {
-                font-size: 14px;
-                width: 30px;
-                height: 30px;
-            }
-        }
-        
-        .card-btn.edit {
-            background-color: var(--primary-color);
-            color: var(--dark-color);
-        }
-        
-        .card-btn.delete {
-            background-color: var(--accent-color);
-            color: white;
-        }
-        
-        .card-btn.sacado {
-            background-color: #ffcc00;
-            color: var(--dark-color);
-        }
-        
-        .card-input {
-            width: 100%;
-            background: transparent;
-            border: 1px solid var(--primary-color);
-            border-radius: 5px;
-            padding: 5px;
-            color: var(--light-color);
-            font-size: 16px;
-            font-weight: bold;
-        }
-        
-        .save-registro-btn {
-            text-align: center;
-            margin-top: 20px;
-        }
-        
-        .videos-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
-            margin-top: 25px;
-        }
-        
-        @media (min-width: 768px) {
-            .videos-container {
-                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-                gap: 20px;
-            }
-        }
-        
-        .video-item {
-            background: var(--card-color);
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 0 15px rgba(0, 102, 255, 0.3);
-        }
-        
-        .video-item video {
-            width: 100%;
-            height: 150px;
-            object-fit: cover;
-            transform: scaleX(-1);
-        }
-        
-        @media (min-width: 768px) {
-            .video-item video {
-                height: 180px;
-            }
-        }
-        
-        .video-info {
-            padding: 10px;
-            font-size: 14px;
-        }
-        
-        .pulse {
-            animation: pulse-animation 1.5s infinite;
-        }
-        
-        @keyframes pulse-animation {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-        
-        .recording {
-            animation: recording-animation 1s infinite;
-        }
-        
-        @keyframes recording-animation {
-            0% { opacity: 1; }
-            50% { opacity: 0.5; }
-            100% { opacity: 1; }
-        }
-        
-        .projects-section {
-            margin-top: 30px;
-            background: var(--card-color);
-            border-radius: 15px;
-            padding: 15px;
-            box-shadow: 0 0 20px rgba(0, 102, 255, 0.3);
-        }
-        
-        @media (min-width: 768px) {
-            .projects-section {
-                padding: 20px;
-                margin-top: 40px;
-            }
-        }
-        
-        .projects-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        
-        .projects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 15px;
-        }
-        
-        @media (min-width: 768px) {
-            .projects-grid {
-                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-                gap: 20px;
-            }
-        }
-        
-        .project-card {
-            background: rgba(30, 30, 60, 0.8);
-            border-radius: 10px;
-            padding: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .project-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0, 255, 204, 0.3);
-        }
-        
-        .project-card h3 {
-            color: var(--primary-color);
-            margin-bottom: 8px;
-            font-size: 16px;
-        }
-        
-        .project-card p {
-            font-size: 14px;
-            color: #aaa;
-        }
-        
-        .modal {
-            display: none;
+
+        /* ===== FONDOS ===== */
+        #particles-js {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-            padding: 15px;
+            z-index: 0;
+            pointer-events: none;
         }
-        
-        .modal-content {
-            background: var(--card-color);
-            border-radius: 15px;
+
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 30px 30px;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.4;
+        }
+
+        /* ===== LOADER RESPONSIVE ===== */
+        .loader-container {
+            position: fixed;
+            inset: 0;
+            background: #010101;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.9s ease, visibility 0.9s ease;
+            backdrop-filter: blur(8px);
             padding: 20px;
-            width: 100%;
-            max-width: 800px;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-        
-        @media (min-width: 768px) {
-            .modal-content {
-                padding: 30px;
-            }
-        }
-        
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        
-        .close-modal {
-            background: transparent;
-            border: none;
-            color: var(--light-color);
-            font-size: 22px;
-            cursor: pointer;
-        }
-        
-        .print-layout {
-            background: white;
-            color: black;
-            padding: 15px;
-            border-radius: 10px;
-        }
-        
-        @media (min-width: 768px) {
-            .print-layout {
-                padding: 20px;
-            }
-        }
-        
-        .print-header {
             text-align: center;
-            margin-bottom: 15px;
         }
-        
-        .print-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 14px;
+
+        .loader-container.fade-out {
+            opacity: 0;
+            visibility: hidden;
         }
-        
-        @media (min-width: 768px) {
-            .print-table {
-                font-size: 16px;
-            }
-        }
-        
-        .print-table th, .print-table td {
-            border: 1px solid #ddd;
-            padding: 6px;
-            text-align: left;
-        }
-        
-        @media (min-width: 768px) {
-            .print-table th, .print-table td {
-                padding: 8px;
-            }
-        }
-        
-        .print-table th {
-            background-color: #f2f2f2;
-        }
-        
-        .step-indicator {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 15px;
-            position: relative;
-        }
-        
-        .step {
-            width: 25px;
-            height: 25px;
-            border-radius: 50%;
-            background: rgba(0, 255, 204, 0.2);
+
+        .loader-logo {
+            font-size: clamp(2rem, 8vw, 4rem);
+            font-weight: 900;
+            font-family: 'Syne', sans-serif;
             display: flex;
             align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
             justify-content: center;
-            font-weight: bold;
-            z-index: 2;
-            font-size: 12px;
+            color: #fff;
+            text-shadow: 0 0 20px cyan, 0 0 50px #ff00d4;
+            margin-bottom: 2rem;
+            letter-spacing: 2px;
         }
-        
-        @media (min-width: 768px) {
-            .step {
-                width: 30px;
-                height: 30px;
-                font-size: 14px;
-            }
+
+        .loader-logo i {
+            font-size: clamp(2.5rem, 10vw, 5rem);
+            color: cyan;
+            filter: drop-shadow(0 0 15px cyan);
         }
-        
-        .step.active {
-            background: var(--primary-color);
-            color: var(--dark-color);
+
+        .loader {
+            width: min(300px, 80%);
+            height: 5px;
+            background: rgba(0,255,255,0.1);
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 30px cyan;
         }
-        
-        .step.completed {
-            background: var(--secondary-color);
-            color: var(--light-color);
-        }
-        
-        .step-indicator::before {
+
+        .loader::before {
             content: '';
             position: absolute;
-            top: 50%;
-            left: 12px;
-            right: 12px;
-            height: 2px;
-            background: rgba(0, 255, 204, 0.2);
-            transform: translateY(-50%);
-            z-index: 1;
+            width: 150%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, cyan, #ff00d4, cyan, transparent);
+            animation: loadingScan 2.4s infinite linear;
         }
-        
-        @media (min-width: 768px) {
-            .step-indicator::before {
-                left: 15px;
-                right: 15px;
-            }
+
+        @keyframes loadingScan {
+            0% { transform: translateX(-150%); }
+            100% { transform: translateX(80%); }
         }
-        
-        .section-title {
-            font-size: 20px;
-            color: var(--primary-color);
-            margin: 25px 0 15px;
+
+        .loader-text {
+            margin-top: 30px;
+            font-size: clamp(1rem, 4vw, 1.4rem);
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #fff;
+            text-shadow: 0 0 10px cyan;
+            letter-spacing: 3px;
+        }
+
+        .loader-dots {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .loader-dot {
+            width: clamp(12px, 3vw, 16px);
+            height: clamp(12px, 3vw, 16px);
+            border-radius: 50%;
+            background: cyan;
+            box-shadow: 0 0 20px cyan;
+            animation: dotWave 1.6s infinite ease-in-out alternate;
+        }
+
+        .loader-dot:nth-child(2) { animation-delay: 0.4s; background: #ff00d4; }
+        .loader-dot:nth-child(3) { animation-delay: 0.8s; background: #7700ff; }
+
+        @keyframes dotWave {
+            0% { transform: scale(1); opacity: 0.8; }
+            100% { transform: scale(1.5); opacity: 1; }
+        }
+
+        /* ===== CONTENEDOR PRINCIPAL RESPONSIVE ===== */
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 15px;
+            position: relative;
+            z-index: 10;
+        }
+
+        @media (min-width: 640px) {
+            .container { padding: 0 20px; }
+        }
+
+        @media (min-width: 1024px) {
+            .container { padding: 0 30px; }
+        }
+
+        /* ===== HEADER RESPONSIVE ===== */
+        header {
+            background: rgba(3, 6, 10, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 2px solid rgba(0, 255, 255, 0.3);
+            box-shadow: 0 5px 30px rgba(0,255,255,0.2);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 0.7rem 0;
+            width: 100%;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .logo {
+            font-size: clamp(1.2rem, 5vw, 2rem);
+            font-weight: 900;
+            font-family: 'Syne', sans-serif;
             display: flex;
             align-items: center;
             gap: 8px;
+            color: white;
+            text-shadow: 0 0 15px cyan;
+            letter-spacing: 1px;
         }
-        
+
+        .logo i {
+            font-size: clamp(1.4rem, 6vw, 2.5rem);
+            color: cyan;
+            filter: drop-shadow(0 0 10px cyan);
+        }
+
+        .nav-links {
+            display: none;
+        }
+
         @media (min-width: 768px) {
-            .section-title {
-                font-size: 24px;
-                margin: 30px 0 20px;
-                gap: 10px;
-            }
-        }
-        
-        .registros-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
-        }
-        
-        @media (min-width: 768px) {
-            .registros-container {
-                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            .nav-links {
+                display: flex;
                 gap: 20px;
             }
+            
+            .nav-links a {
+                color: #e0f0ff;
+                text-decoration: none;
+                font-weight: 700;
+                font-size: 1rem;
+                letter-spacing: 1px;
+                padding: 5px 0;
+                position: relative;
+                transition: 0.2s;
+                text-transform: uppercase;
+            }
+            
+            .nav-links a::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 0%;
+                height: 2px;
+                background: linear-gradient(90deg, cyan, #ff00d4);
+                transition: 0.3s;
+            }
+            
+            .nav-links a:hover {
+                color: cyan;
+                text-shadow: 0 0 10px cyan;
+            }
+            
+            .nav-links a:hover::after {
+                width: 100%;
+            }
         }
-        
-        .registro-card {
-            background: var(--card-color);
-            border-radius: 10px;
-            padding: 15px;
+
+        /* ===== BOTONES DE AUTENTICACIÓN RESPONSIVE ===== */
+        .auth-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .auth-buttons button {
+            padding: 10px 16px;
+            border-radius: 40px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-size: 0.75rem;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+            white-space: nowrap;
+        }
+
+        @media (min-width: 480px) {
+            .auth-buttons button {
+                padding: 12px 20px;
+                font-size: 0.8rem;
+                letter-spacing: 2px;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .auth-buttons button {
+                padding: 14px 28px;
+                font-size: 0.9rem;
+            }
+        }
+
+        .login-btn {
+            background: transparent;
+            border: 1.5px solid cyan !important;
+            color: cyan;
+            box-shadow: 0 0 15px transparent;
+        }
+
+        .login-btn:hover {
+            background: rgba(0, 255, 255, 0.15);
+            box-shadow: 0 0 30px cyan;
+        }
+
+        .register-btn {
+            background: linear-gradient(145deg, #00e0ff, #0088ff);
+            color: black;
+            font-weight: 900;
+            border: 1.5px solid cyan;
+            box-shadow: 0 0 25px rgba(0, 255, 255, 0.5);
+        }
+
+        .register-btn:hover {
+            background: linear-gradient(145deg, #ff00d4, #7700ff);
+            color: white;
+            box-shadow: 0 0 40px #ff00d4;
+        }
+
+        /* ===== HERO RESPONSIVE ===== */
+        .hero {
+            padding: 4rem 0 3rem;
+            text-align: center;
             position: relative;
+            z-index: 10;
         }
-        
-        .registro-card h3 {
-            color: var(--primary-color);
-            margin-bottom: 10px;
-            font-size: 18px;
+
+        @media (min-width: 640px) {
+            .hero { padding: 6rem 0 4rem; }
+        }
+
+        @media (min-width: 1024px) {
+            .hero { padding: 8rem 0 6rem; }
+        }
+
+        .hero h1 {
+            font-size: clamp(2.2rem, 10vw, 5.5rem);
+            font-weight: 900;
+            font-family: 'Syne', sans-serif;
+            background: linear-gradient(45deg, #fff, cyan, #ff00d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 40px rgba(0, 255, 255, 0.5);
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
+            line-height: 1.2;
+            padding: 0 10px;
+        }
+
+        .hero p {
+            font-size: clamp(1rem, 4vw, 1.6rem);
+            max-width: 900px;
+            margin: 0 auto 2rem;
+            font-weight: 500;
+            color: #e6f7ff;
+            text-shadow: 0 0 15px rgba(0,0,0,0.7);
+            background: rgba(0,0,0,0.3);
+            backdrop-filter: blur(5px);
+            padding: 12px 20px;
+            border-radius: 60px;
+            border: 1px solid rgba(0,255,255,0.3);
+            width: 90%;
+        }
+
+        .cta-button {
+            padding: 14px 30px;
+            font-size: clamp(1rem, 4vw, 1.4rem);
+            font-weight: 900;
+            background: rgba(0,0,0,0.3);
+            backdrop-filter: blur(10px);
+            color: white;
+            border: 2px solid cyan;
+            border-radius: 60px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 0 30px cyan;
+            width: auto;
+            min-width: 250px;
+            max-width: 90%;
+        }
+
+        @media (min-width: 768px) {
+            .cta-button {
+                padding: 18px 45px;
+                font-size: 1.3rem;
+                min-width: 300px;
+            }
+        }
+
+        .cta-button:hover {
+            background: cyan;
+            color: black;
+            border-color: #ff00d4;
+            box-shadow: 0 0 50px cyan, 0 0 80px #ff00d4;
+            transform: scale(1.05);
+        }
+
+        /* ===== FEATURES RESPONSIVE ===== */
+        .features {
+            padding: 3rem 0 4rem;
+        }
+
+        @media (min-width: 768px) {
+            .features { padding: 4rem 0 6rem; }
+        }
+
+        @media (min-width: 1024px) {
+            .features { padding: 5rem 0 8rem; }
+        }
+
+        .section-title h2 {
+            font-size: clamp(2rem, 8vw, 3.5rem);
+            font-weight: 900;
+            font-family: 'Syne', sans-serif;
+            background: linear-gradient(135deg, cyan, #ffffff, #ff00d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
+            text-align: center;
+            padding: 0 15px;
+        }
+
+        .section-title p {
+            font-size: clamp(1rem, 3.5vw, 1.3rem);
+            color: #cdf0ff;
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            margin-top: 3rem;
+            padding: 0 15px;
+        }
+
+        @media (min-width: 640px) {
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.8rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .features-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 2.5rem;
+                padding: 0;
+            }
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 20px;
+            padding: 2rem 1.5rem;
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        @media (min-width: 768px) {
+            .feature-card {
+                padding: 2.5rem 2rem;
+                border-radius: 25px;
+            }
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            border-color: cyan;
+            box-shadow: 0 0 30px rgba(0,255,255,0.3);
+        }
+
+        .feature-icon i {
+            font-size: clamp(2.5rem, 8vw, 3.8rem);
+            color: cyan;
+            text-shadow: 0 0 20px cyan;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            font-size: clamp(1.3rem, 5vw, 1.8rem);
+            font-weight: 800;
+            margin-bottom: 0.8rem;
+            background: linear-gradient(45deg, cyan, #fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .feature-card p {
+            font-size: clamp(0.95rem, 3vw, 1.1rem);
+            color: #d0eaff;
+            font-weight: 500;
+            line-height: 1.5;
+        }
+
+        /* ===== SOCIAL BUTTONS ===== */
+        .social-auth-divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 20px 0;
+            color: rgba(0, 255, 255, 0.6);
+        }
+
+        .social-auth-divider::before,
+        .social-auth-divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.3);
+        }
+
+        .social-auth-divider span {
+            padding: 0 10px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .social-auth-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .social-auth-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 12px;
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: 0.3s;
+            color: white;
+            width: 100%;
+            backdrop-filter: blur(10px);
+        }
+
+        .social-auth-btn i {
+            font-size: 1.2rem;
+        }
+
+        .google-btn {
+            background: rgba(219, 68, 55, 0.2);
+            border: 1.5px solid var(--google-color);
+            box-shadow: 0 0 20px rgba(219, 68, 55, 0.3);
+        }
+
+        .google-btn:hover {
+            background: var(--google-color);
+            transform: translateY(-3px);
+            box-shadow: 0 0 30px var(--google-color);
+        }
+
+        .facebook-btn {
+            background: rgba(66, 103, 178, 0.2);
+            border: 1.5px solid var(--facebook-color);
+            box-shadow: 0 0 20px rgba(66, 103, 178, 0.3);
+        }
+
+        .facebook-btn:hover {
+            background: var(--facebook-color);
+            transform: translateY(-3px);
+            box-shadow: 0 0 30px var(--facebook-color);
+        }
+
+        @media (max-width: 768px) {
+            .social-auth-btn:active {
+                transform: scale(0.95);
+            }
+            
+            .google-btn:active {
+                background: var(--google-color);
+            }
+            
+            .facebook-btn:active {
+                background: var(--facebook-color);
+            }
+        }
+
+        /* ===== FOOTER RESPONSIVE ===== */
+        footer {
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(25px);
+            border-top: 2px solid rgba(0,255,255,0.4);
+            padding: 2.5rem 0 1.5rem;
+            position: relative;
+            z-index: 20;
+            width: 100%;
+        }
+
+        @media (min-width: 768px) {
+            footer { padding: 4rem 0 2rem; }
+        }
+
+        .footer-logo {
+            font-size: clamp(1.6rem, 6vw, 2.2rem);
+            font-weight: 900;
+            font-family: 'Syne', sans-serif;
+            color: white;
+            text-shadow: 0 0 20px cyan;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px 25px;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-links a {
+            color: #bbf0ff;
+            text-decoration: none;
+            font-size: clamp(0.9rem, 3vw, 1.1rem);
+            font-weight: 600;
+            transition: 0.2s;
+            padding: 5px 10px;
+        }
+
+        .footer-links a:hover {
+            color: cyan;
+            text-shadow: 0 0 15px cyan;
+        }
+
+        .social-icons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .social-icons a {
+            color: white;
+            font-size: clamp(1.4rem, 5vw, 2rem);
+            width: clamp(45px, 10vw, 60px);
+            height: clamp(45px, 10vw, 60px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(0,255,255,0.08);
+            border: 1px solid rgba(0,255,255,0.5);
+            transition: 0.3s;
+        }
+
+        .social-icons a:hover {
+            background: cyan;
+            color: black;
+            border-color: #ff00d4;
+            box-shadow: 0 0 30px cyan;
+            transform: translateY(-5px);
+        }
+
+        .copyright {
+            color: rgba(200, 240, 255, 0.7);
+            font-size: clamp(0.8rem, 3vw, 0.95rem);
+            text-align: center;
+            margin-top: 2rem;
+            padding: 0 20px;
+        }
+
+        /* ===== MODAL RESPONSIVE ===== */
+        .auth-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.95);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+        }
+
+        .auth-container {
+            background: rgba(5, 8, 15, 0.95);
+            backdrop-filter: blur(30px);
+            border: 2px solid cyan;
+            border-radius: 30px;
+            width: 100%;
+            max-width: 500px;
+            padding: 2rem 1.5rem;
+            box-shadow: 0 0 50px cyan;
+            animation: modalGlitch 0.4s;
+            margin: 0 auto;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        @media (min-width: 480px) {
+            .auth-container { padding: 2.5rem; }
+        }
+
+        @keyframes modalGlitch {
+            0% { transform: scale(0.9); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .auth-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-bottom: 1.8rem;
         }
-        
-        .registro-card p {
-            margin-bottom: 8px;
+
+        .auth-header h2 {
+            font-size: clamp(1.6rem, 6vw, 2.2rem);
+            font-weight: 900;
+            background: linear-gradient(45deg, cyan, #ff00d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 2px;
+        }
+
+        .close-auth {
+            background: none;
+            border: none;
+            color: cyan;
+            font-size: clamp(2rem, 7vw, 2.8rem);
+            cursor: pointer;
+            transition: 0.3s;
+            line-height: 1;
+        }
+
+        .close-auth:hover {
+            color: #ff00d4;
+            transform: rotate(180deg);
+        }
+
+        .auth-form {
             display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
         }
-        
-        .registro-card .label {
-            font-weight: bold;
-            min-width: 100px;
-            color: var(--primary-color);
+
+        .auth-form input {
+            padding: 14px 18px;
+            background: rgba(0, 255, 255, 0.05);
+            border: 1.5px solid rgba(0,255,255,0.4);
+            border-radius: 50px;
+            font-size: 1rem;
+            color: white;
+            font-weight: 500;
+            transition: 0.3s;
+            width: 100%;
         }
-        
-        .registro-actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            margin-top: 15px;
+
+        @media (min-width: 480px) {
+            .auth-form input {
+                padding: 16px 22px;
+                font-size: 1.1rem;
+            }
         }
-        
-        .edit-mode .card-input {
-            background: rgba(255, 255, 255, 0.1);
+
+        .auth-form input:focus {
+            border-color: #ff00d4;
+            background: rgba(0,0,0,0.5);
+            box-shadow: 0 0 25px rgba(255,0,212,0.5);
+            outline: none;
+        }
+
+        .auth-submit {
+            padding: 14px;
+            background: linear-gradient(145deg, cyan, #0099ff);
+            border: none;
+            border-radius: 50px;
+            font-weight: 900;
+            font-size: clamp(1.1rem, 4vw, 1.3rem);
+            color: black;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 0 25px cyan;
+            margin-top: 0.5rem;
+        }
+
+        .auth-submit:hover {
+            background: linear-gradient(145deg, #ff00d4, #7700ff);
+            color: white;
+            box-shadow: 0 0 45px #ff00d4;
+        }
+
+        .auth-toggle {
+            margin-top: 1.8rem;
+            color: #bbf0ff;
+            font-size: clamp(0.95rem, 3.5vw, 1.1rem);
+            text-align: center;
+        }
+
+        .auth-toggle span {
+            color: cyan;
+            font-weight: 800;
+            cursor: pointer;
+            border-bottom: 1px solid cyan;
+            padding-bottom: 2px;
+            transition: 0.2s;
+        }
+
+        .auth-toggle span:hover {
+            color: #ff00d4;
+            border-bottom-color: #ff00d4;
+        }
+
+        .auth-error {
+            color: #ff7b9c;
+            font-weight: 700;
+            font-size: 0.95rem;
+            text-align: center;
+            text-shadow: 0 0 10px rgba(255,0,0,0.5);
+            margin-bottom: 0.5rem;
+        }
+
+        /* ===== UTILIDADES RESPONSIVE ===== */
+        .mobile-menu-btn {
+            display: block;
+            font-size: 1.8rem;
+            color: cyan;
+            cursor: pointer;
+        }
+
+        @media (min-width: 768px) {
+            .mobile-menu-btn {
+                display: none;
+            }
+        }
+
+        /* ===== AJUSTES TÁCTILES PARA MÓVIL ===== */
+        @media (max-width: 768px) {
+            .feature-card:hover {
+                transform: translateY(-5px);
+            }
+            
+            .cta-button:active {
+                background: cyan;
+                color: black;
+                transform: scale(0.98);
+            }
+            
+            .auth-buttons button:active {
+                transform: scale(0.95);
+            }
+            
+            .social-icons a:active {
+                background: cyan;
+                color: black;
+                transform: scale(0.9);
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <div class="logo">
-                <i class="fas fa-piggy-bank"></i>
-                <span>Registro de Cerdos</span>
-            </div>
-            <div class="controls">
-                <button class="btn" id="newProjectBtn">
-                    <i class="fas fa-plus"></i> <span class="btn-text">Nuevo</span>
-                </button>
-                <button class="btn" id="saveProjectBtn">
-                    <i class="fas fa-save"></i> <span class="btn-text">Guardar</span>
-                </button>
-                <button class="btn" id="loadProjectBtn">
-                    <i class="fas fa-folder-open"></i> <span class="btn-text">Cargar</span>
-                </button>
-                <button class="btn" id="viewDataBtn">
-                    <i class="fas fa-eye"></i> <span class="btn-text">Ver Datos</span>
-                </button>
-                <button class="btn" id="printBtn">
-                    <i class="fas fa-print"></i> <span class="btn-text">Imprimir</span>
-                </button>
-            </div>
-        </header>
-        
-        <div class="main-content">
-            <div class="camera-section">
-                <h2 class="camera-title"><i class="fas fa-video"></i> Cámara de Registro</h2>
-                <div class="camera-preview">
-                    <video id="videoElement" autoplay muted></video>
+    <!-- PARTICLES -->
+    <div id="particles-js"></div>
+    <div class="grid-overlay"></div>
+
+    <!-- LOADER -->
+    <div class="loader-container" id="loader">
+        <div class="loader-logo">
+            <i class="fas fa-chart-line"></i>
+            <span>HEYDIN KAYSER</span>
+        </div>
+        <div class="loader"></div>
+        <div class="loader-text">Desbloqueando terminal VIP</div>
+        <div class="loader-dots">
+            <div class="loader-dot"></div>
+            <div class="loader-dot"></div>
+            <div class="loader-dot"></div>
+        </div>
+    </div>
+
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <i class="fas fa-crown"></i>
+                    <span>HEYDIN KAYSER</span>
                 </div>
-                <div class="camera-controls">
-                    <button class="camera-btn" id="startCameraBtn">
-                        <i class="fas fa-play"></i>
-                    </button>
-                    <button class="camera-btn record-btn" id="recordBtn">
-                        <i class="fas fa-dot-circle"></i>
-                    </button>
-                    <button class="camera-btn" id="stopCameraBtn">
-                        <i class="fas fa-stop"></i>
-                    </button>
+                <div class="nav-links">
+                    <a href="beneficio.html">VENTAJAS</a>
+                    <a href="contacto.html">ÉLITE</a>
                 </div>
+                <div class="auth-buttons">
+                    <button class="login-btn" id="openLogin"><i class="fas fa-arrow-right-to-bracket"></i> <span class="btn-text">ACCESO</span></button>
+                    <button class="register-btn" id="openRegister"><i class="fas fa-user-plus"></i> <span class="btn-text">VIP</span></button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>HEYDIN KAYSER</h1>
+            <p><i class="fas fa-bolt" style="color:cyan;"></i> Trading cuántico · Señales láser · Élite financiera <i class="fas fa-bolt" style="color:#ff00d4;"></i></p>
+            <button class="cta-button" id="heroCta">ACTIVAR MODO VIP</button>
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-title">
+                <h2>ARMA SECRETA DEL TRADER</h2>
+                <p>Solo para los que exigen máximos beneficios. Entorno hiper-futurista, señales en tiempo real.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-satellite-dish"></i></div>
+                    <h3>SEÑALES NEÓN</h3>
+                    <p>Alertas instantáneas con IA. Entradas, salidas y stops de alta precisión.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-robot"></i></div>
+                    <h3>BOT CUÁNTICO</h3>
+                    <p>Estrategias automatizadas con backtesting para mercados volátiles.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-shield-halos"></i></div>
+                    <h3>SOPORTE VIP</h3>
+                    <p>Atención 1 a 1, análisis de cartera y asesoría con expertos.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-logo">
+                <i class="fas fa-crown"></i> HEYDIN KAYSER
+            </div>
+            <div class="footer-links">
+                <a href="beneficio.html">TÉRMINOS</a>
+                <a href="contacto.html">SOPORTE</a>
+            </div>
+            <div class="social-icons">
+                <a href="https://www.facebook.com/profile.php?id=61579696913394" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://www.tiktok.com/@beaver_trading_oficial" target="_blank"><i class="fab fa-tiktok"></i></a>
+                <a href="https://www.youtube.com/@beavertrading2025" target="_blank"><i class="fab fa-youtube"></i></a>
+                <a href="https://www.instagram.com/weldingmiguel/" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="https://wa.me/593986122265" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://t.me/+x8P5ya17Dek4YjBh" target="_blank"><i class="fab fa-telegram-plane"></i></a>
+            </div>
+            <div class="copyright">
+                © 2025 HEYDIN KAYSER TRADING. TERMINAL CUÁNTICA.
+            </div>
+        </div>
+    </footer>
+
+    <!-- MODAL AUTH -->
+    <div class="auth-modal" id="authModal">
+        <div class="auth-container">
+            <div class="auth-header">
+                <h2 id="authModalTitle">ACCESO VIP</h2>
+                <button class="close-auth" id="closeAuth">&times;</button>
             </div>
             
-            <div class="voice-section">
-                <h2 class="voice-title"><i class="fas fa-microphone"></i> Registro por Voz</h2>
-                
-                <div class="step-indicator">
-                    <div class="step active" id="step1">1</div>
-                    <div class="step" id="step2">2</div>
-                    <div class="step" id="step3">3</div>
-                    <div class="step" id="step4">4</div>
-                    <div class="step" id="step5">5</div>
-                </div>
-                
-                <div class="voice-control">
-                    <button class="voice-btn" id="voiceBtn">
-                        <i class="fas fa-microphone"></i>
-                    </button>
-                </div>
-                
-                <div class="voice-status" id="voiceStatus">
-                    Presiona el micrófono y di "Número" para comenzar
-                </div>
-                
-                <div class="data-cards">
-                    <div class="data-card" id="card-number" data-field="number">
-                        <h3>Número</h3>
-                        <p id="value-number">-</p>
-                        <div class="card-actions">
-                            <button class="card-btn edit" data-field="number"><i class="fas fa-edit"></i></button>
-                        </div>
-                    </div>
-                    <div class="data-card" id="card-earring" data-field="earring">
-                        <h3>N° de Arete</h3>
-                        <p id="value-earring">-</p>
-                        <div class="card-actions">
-                            <button class="card-btn edit" data-field="earring"><i class="fas fa-edit"></i></button>
-                        </div>
-                    </div>
-                    <div class="data-card" id="card-liveWeight" data-field="liveWeight">
-                        <h3>Peso Vivo (kg/lb)</h3>
-                        <p id="value-liveWeight">-</p>
-                        <div class="card-actions">
-                            <button class="card-btn edit" data-field="liveWeight"><i class="fas fa-edit"></i></button>
-                        </div>
-                    </div>
-                    <div class="data-card" id="card-deliveredBy" data-field="deliveredBy">
-                        <h3>Entregado por</h3>
-                        <p id="value-deliveredBy">-</p>
-                        <div class="card-actions">
-                            <button class="card-btn edit" data-field="deliveredBy"><i class="fas fa-edit"></i></button>
-                        </div>
-                    </div>
-                    <div class="data-card" id="card-deadWeight" data-field="deadWeight">
-                        <h3>Peso Faenado</h3>
-                        <p id="value-deadWeight">-</p>
-                        <div class="card-actions">
-                            <button class="card-btn edit" data-field="deadWeight"><i class="fas fa-edit"></i></button>
-                            <button class="card-btn sacado" data-field="deadWeight"><i class="fas fa-check-circle"></i></button>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="save-registro-btn">
-                    <button class="btn" id="savePigBtn">
-                        <i class="fas fa-save"></i> Guardar Registro
-                    </button>
-                </div>
+            <!-- Social Login Buttons -->
+            <div class="social-auth-buttons">
+                <button class="social-auth-btn google-btn" id="googleLogin">
+                    <i class="fab fa-google"></i>
+                    <span>CONTINUAR CON GOOGLE</span>
+                </button>
+                <button class="social-auth-btn facebook-btn" id="facebookLogin">
+                    <i class="fab fa-facebook-f"></i>
+                    <span>CONTINUAR CON FACEBOOK</span>
+                </button>
             </div>
-        </div>
-        
-        <h2 class="section-title"><i class="fas fa-list"></i> Registros Guardados</h2>
-        <div class="registros-container" id="pigsContainer">
-            <!-- Los registros se insertarán aquí dinámicamente -->
-        </div>
-        
-        <h2 class="section-title"><i class="fas fa-video"></i> Videos Grabados</h2>
-        <div class="videos-container" id="videosContainer">
-            <!-- Los videos se insertarán aquí dinámicamente -->
-        </div>
-        
-        <div class="projects-section">
-            <div class="projects-header">
-                <h2 class="section-title"><i class="fas fa-folder"></i> Proyectos Guardados</h2>
+            
+            <div class="social-auth-divider">
+                <span>O CONTINÚA CON EMAIL</span>
             </div>
-            <div class="projects-grid" id="projectsContainer">
-                <!-- Los proyectos se insertarán aquí dinámicamente -->
+            
+            <form class="auth-form" id="loginForm">
+                <div id="authError" class="auth-error"></div>
+                <input type="email" id="loginEmail" placeholder="Correo electrónico" required>
+                <input type="password" id="loginPassword" placeholder="Contraseña" required>
+                <button type="submit" class="auth-submit">INGRESAR</button>
+            </form>
+            
+            <form class="auth-form" id="registerForm" style="display: none;">
+                <div id="registerError" class="auth-error"></div>
+                <input type="text" id="registerName" placeholder="Nombre completo" required>
+                <input type="email" id="registerEmail" placeholder="Correo electrónico" required>
+                <input type="password" id="registerPassword" placeholder="Contraseña" required>
+                <input type="password" id="registerConfirmPassword" placeholder="Confirmar contraseña" required>
+                <button type="submit" class="auth-submit">ACTIVAR VIP</button>
+            </form>
+            
+            <div class="auth-toggle">
+                <span id="toggleAuthForm">¿Sin membresía? Activa VIP ahora</span>
             </div>
         </div>
     </div>
 
-    <!-- Modal para observar datos -->
-    <div class="modal" id="dataModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Datos para Imprimir</h2>
-                <button class="close-modal" id="closeDataModal">&times;</button>
-            </div>
-            <div class="print-layout">
-                <div class="print-header">
-                    <h1>Registro de Cerdos</h1>
-                    <p>Fecha: <span id="printDate"></span></p>
-                </div>
-                <table class="print-table" id="printTable">
-                    <thead>
-                        <tr>
-                            <th>Número</th>
-                            <th>Arete</th>
-                            <th>Peso Vivo</th>
-                            <th>Entregado por</th>
-                            <th>Peso Faenado</th>
-                            <th>Estado</th>
-                        </tr>
-                    </thead>
-                    <tbody id="printTableBody">
-                        <!-- Los datos para imprimir se insertarán aquí -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal para proyectos -->
-    <div class="modal" id="projectsModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Seleccionar Proyecto</h2>
-                <button class="close-modal" id="closeProjectsModal">&times;</button>
-            </div>
-            <div id="projectsList">
-                <!-- Lista de proyectos -->
-            </div>
-        </div>
-    </div>
-
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Variables globales
-            let recognition;
-            let isRecording = false;
-            let currentStep = 1;
-            let mediaRecorder;
-            let recordedChunks = [];
-            let cameraStream = null;
-            let currentProject = {
-                id: Date.now(),
-                name: 'Proyecto ' + new Date().toLocaleDateString(),
-                pigs: [],
-                videos: []
-            };
-            let projects = JSON.parse(localStorage.getItem('pigProjects')) || [];
-            let currentField = null;
-            let earringDigits = '';
-            let isEditing = false;
-            let currentEditCard = null;
+        // Firebase Config
+        const firebaseConfig = {
+            apiKey: "AIzaSyB1Cs2os3tTfrMbYSAmDeJAGnP4tTtsFdw",
+            authDomain: "beaver-trading.firebaseapp.com",
+            databaseURL: "https://beaver-trading-default-rtdb.firebaseio.com",
+            projectId: "beaver-trading",
+            storageBucket: "beaver-trading.firebasestorage.app",
+            messagingSenderId: "926610131904",
+            appId: "1:926610131904:web:c147bd337bd12b4d085625",
+            measurementId: "G-1K51WWF2ZJ"
+        };
+        
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const database = firebase.database();
+
+        // Configurar proveedores
+        const googleProvider = new firebase.auth.GoogleAuthProvider();
+        const facebookProvider = new firebase.auth.FacebookAuthProvider();
+        
+        // Configurar alcances adicionales para Facebook
+        facebookProvider.addScope('email');
+        facebookProvider.addScope('public_profile');
+
+        // Loader
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('fade-out');
+                setTimeout(() => document.getElementById('loader').style.display = 'none', 800);
+            }, 2500);
+        });
+
+        function showLoader(msg = 'PROCESANDO...') {
+            const loader = document.getElementById('loader');
+            loader.style.display = 'flex';
+            loader.classList.remove('fade-out');
+            document.querySelector('.loader-text').textContent = msg;
+        }
+
+        function hideLoader() {
+            const loader = document.getElementById('loader');
+            loader.classList.add('fade-out');
+            setTimeout(() => loader.style.display = 'none', 800);
+        }
+
+        // Función para manejar el login social
+        function handleSocialLogin(provider, providerName) {
+            showLoader(`CONECTANDO CON ${providerName}...`);
             
-            // Elementos DOM
-            const voiceBtn = document.getElementById('voiceBtn');
-            const voiceStatus = document.getElementById('voiceStatus');
-            const pigsContainer = document.getElementById('pigsContainer');
-            const videosContainer = document.getElementById('videosContainer');
-            const projectsContainer = document.getElementById('projectsContainer');
-            const startCameraBtn = document.getElementById('startCameraBtn');
-            const stopCameraBtn = document.getElementById('stopCameraBtn');
-            const recordBtn = document.getElementById('recordBtn');
-            const videoElement = document.getElementById('videoElement');
-            const newProjectBtn = document.getElementById('newProjectBtn');
-            const saveProjectBtn = document.getElementById('saveProjectBtn');
-            const loadProjectBtn = document.getElementById('loadProjectBtn');
-            const viewDataBtn = document.getElementById('viewDataBtn');
-            const printBtn = document.getElementById('printBtn');
-            const savePigBtn = document.getElementById('savePigBtn');
-            const dataModal = document.getElementById('dataModal');
-            const projectsModal = document.getElementById('projectsModal');
-            const closeDataModal = document.getElementById('closeDataModal');
-            const closeProjectsModal = document.getElementById('closeProjectsModal');
-            const printDate = document.getElementById('printDate');
-            const printTableBody = document.getElementById('printTableBody');
-            const projectsList = document.getElementById('projectsList');
-            
-            const steps = [
-                document.getElementById('step1'),
-                document.getElementById('step2'),
-                document.getElementById('step3'),
-                document.getElementById('step4'),
-                document.getElementById('step5')
-            ];
-            
-            const fieldIds = ['number', 'earring', 'liveWeight', 'deliveredBy', 'deadWeight'];
-            const fieldNames = ['número', 'arete', 'peso', 'entregado', 'faenado'];
-            
-            // Inicializar la aplicación
-            init();
-            
-            // Configurar reconocimiento de voz
-            function setupVoiceRecognition() {
-                if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
-                    recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-                    recognition.continuous = false;
-                    recognition.interimResults = true;
-                    recognition.lang = 'es-ES';
+            auth.signInWithPopup(provider)
+                .then((result) => {
+                    // El usuario ha iniciado sesión
+                    const user = result.user;
                     
-                    recognition.onstart = function() {
-                        isRecording = true;
-                        voiceBtn.classList.add('pulse');
-                        voiceStatus.textContent = 'Escuchando...';
-                    };
+                    // Verificar si es un usuario nuevo
+                    const isNewUser = result.additionalUserInfo.isNewUser;
                     
-                    recognition.onresult = function(event) {
-                        const transcript = event.results[0][0].transcript.toLowerCase().trim();
-                        processVoiceCommand(transcript);
-                    };
-                    
-                    recognition.onend = function() {
-                        isRecording = false;
-                        voiceBtn.classList.remove('pulse');
+                    if (isNewUser) {
+                        // Guardar información adicional del usuario en la base de datos
+                        const userData = {
+                            email: user.email,
+                            name: user.displayName || 'Usuario',
+                            vipAccess: true,
+                            provider: providerName,
+                            createdAt: firebase.database.ServerValue.TIMESTAMP
+                        };
                         
-                        if (isEditing && currentEditCard) {
-                            voiceStatus.textContent = 'Presiona el micrófono para editar con voz';
-                            return;
+                        // Si no hay nombre, usar el email
+                        if (!userData.name && user.email) {
+                            userData.name = user.email.split('@')[0];
                         }
                         
-                        if (currentStep <= 5 && !currentField) {
-                            voiceStatus.textContent = `Presiona el micrófono y di "${fieldNames[currentStep - 1]}"`;
-                        }
-                    };
-                    
-                    recognition.onerror = function(event) {
-                        console.error('Error en reconocimiento de voz:', event.error);
-                        voiceStatus.textContent = 'Error: ' + event.error;
-                        isRecording = false;
-                        voiceBtn.classList.remove('pulse');
-                    };
-                } else {
-                    voiceStatus.textContent = 'El reconocimiento de voz no es compatible con este navegador';
-                    voiceBtn.disabled = true;
-                }
-            }
-            
-            // Inicializar la aplicación
-            function init() {
-                setupVoiceRecognition();
-                updatePigsContainer();
-                updateVideosContainer();
-                updateProjectsContainer();
-                setupEventListeners();
-                loadLastProject();
-            }
-            
-            // Configurar event listeners
-            function setupEventListeners() {
-                voiceBtn.addEventListener('click', toggleVoiceRecognition);
-                startCameraBtn.addEventListener('click', startCamera);
-                stopCameraBtn.addEventListener('click', stopCamera);
-                recordBtn.addEventListener('click', toggleRecording);
-                newProjectBtn.addEventListener('click', newProject);
-                saveProjectBtn.addEventListener('click', saveProject);
-                loadProjectBtn.addEventListener('click', showProjectsModal);
-                viewDataBtn.addEventListener('click', viewData);
-                printBtn.addEventListener('click', printData);
-                savePigBtn.addEventListener('click', savePigData);
-                closeDataModal.addEventListener('click', () => dataModal.style.display = 'none');
-                closeProjectsModal.addEventListener('click', () => projectsModal.style.display = 'none');
-                
-                // Event listeners para las tarjetas de datos
-                document.querySelectorAll('.data-card').forEach(card => {
-                    card.addEventListener('click', function(e) {
-                        // Si ya estamos en modo edición, no hacer nada
-                        if (isEditing) return;
-                        
-                        // Si se hizo clic en un botón de acción, no hacer nada
-                        if (e.target.closest('.card-actions')) return;
-                        
-                        document.querySelectorAll('.data-card').forEach(c => c.classList.remove('active'));
-                        this.classList.add('active');
-                    });
-                });
-                
-                // Event listeners para los botones de edición
-                document.querySelectorAll('.card-btn.edit').forEach(btn => {
-                    btn.addEventListener('click', function(e) {
-                        e.stopPropagation();
-                        const field = this.getAttribute('data-field');
-                        startEditField(field);
-                    });
-                });
-                
-                // Event listeners para los botones de sacado
-                document.querySelectorAll('.card-btn.sacado').forEach(btn => {
-                    btn.addEventListener('click', function(e) {
-                        e.stopPropagation();
-                        const field = this.getAttribute('data-field');
-                        document.getElementById(`value-${field}`).textContent = 'SACADO';
-                        voiceStatus.textContent = 'Marcado como SACADO';
-                    });
-                });
-                
-                // Cerrar modales al hacer clic fuera de ellos
-                window.addEventListener('click', function(e) {
-                    if (e.target === dataModal) {
-                        dataModal.style.display = 'none';
-                    }
-                    if (e.target === projectsModal) {
-                        projectsModal.style.display = 'none';
-                    }
-                });
-            }
-            
-            // Funciones de voz
-            function toggleVoiceRecognition() {
-                if (isEditing && currentEditCard) {
-                    // Estamos editando un campo específico
-                    if (isRecording) {
-                        recognition.stop();
+                        database.ref('users/' + user.uid).set(userData)
+                            .then(() => {
+                                document.querySelector('.loader-text').textContent = '¡BIENVENIDO A LA ÉLITE!';
+                                setTimeout(() => { window.location.href = 'home.html'; }, 1500);
+                            })
+                            .catch(error => {
+                                console.error('Error guardando usuario:', error);
+                                document.querySelector('.loader-text').textContent = 'REDIRIGIENDO...';
+                                setTimeout(() => { window.location.href = 'home.html'; }, 1500);
+                            });
                     } else {
-                        voiceStatus.textContent = 'Habla ahora para editar';
-                        recognition.start();
+                        // Usuario existente
+                        document.querySelector('.loader-text').textContent = 'ACCESO CONCEDIDO';
+                        setTimeout(() => { window.location.href = 'home.html'; }, 1500);
                     }
-                    return;
-                }
-                
-                if (isRecording) {
-                    recognition.stop();
-                } else {
-                    recognition.start();
-                }
-            }
-            
-            function processVoiceCommand(transcript) {
-                if (isEditing && currentEditCard) {
-                    // Estamos editando un campo específico
-                    const field = currentEditCard.getAttribute('data-field');
-                    document.getElementById(`value-${field}`).textContent = transcript;
-                    exitEditMode();
-                    voiceStatus.textContent = 'Campo actualizado. Puedes continuar.';
-                    return;
-                }
-                
-                // Verificar si el comando coincide con el paso actual
-                if (transcript.includes(fieldNames[currentStep - 1])) {
-                    // Extraer el valor (todo después de la palabra clave)
-                    let value = transcript.split(fieldNames[currentStep - 1])[1].trim();
+                })
+                .catch((error) => {
+                    hideLoader();
                     
-                    if (value) {
-                        // Procesamiento especial para arete (número de 9 dígitos)
-                        if (currentStep === 2) { // Paso de arete
-                            earringDigits += value.replace(/\D/g, '');
-                            voiceStatus.textContent = `Dígitos capturados: ${earringDigits}`;
-                            
-                            if (earringDigits.length >= 9) {
-                                value = earringDigits.substring(0, 9);
-                                document.getElementById(`value-${fieldIds[currentStep - 1]}`).textContent = value;
-                                completeCurrentStep();
-                                earringDigits = '';
-                            } else {
-                                // Continuar capturando dígitos
-                                recognition.start();
-                                return;
-                            }
-                        } else {
-                            document.getElementById(`value-${fieldIds[currentStep - 1]}`).textContent = value;
-                            completeCurrentStep();
-                        }
-                    }
-                } else {
-                    voiceStatus.textContent = `Por favor, di "${fieldNames[currentStep - 1]}"`;
-                    recognition.start();
-                }
-            }
-            
-            function completeCurrentStep() {
-                steps[currentStep - 1].classList.remove('active');
-                steps[currentStep - 1].classList.add('completed');
-                
-                if (currentStep < 5) {
-                    currentStep++;
-                    steps[currentStep - 1].classList.add('active');
-                    voiceStatus.textContent = `Ahora di "${fieldNames[currentStep - 1]}"`;
-                } else {
-                    voiceStatus.textContent = 'Todos los datos completados. Guarda el registro.';
-                }
-            }
-            
-            function startEditField(field) {
-                isEditing = true;
-                currentEditCard = document.getElementById(`card-${field}`);
-                
-                // Activar modo edición visual
-                currentEditCard.classList.add('editing');
-                
-                // Reemplazar texto con input
-                const valueElement = document.getElementById(`value-${field}`);
-                const currentValue = valueElement.textContent;
-                
-                const input = document.createElement('input');
-                input.type = 'text';
-                input.value = currentValue !== '-' ? currentValue : '';
-                input.className = 'card-input';
-                input.addEventListener('blur', function() {
-                    valueElement.textContent = this.value || '-';
-                    exitEditMode();
-                });
-                input.addEventListener('keypress', function(e) {
-                    if (e.key === 'Enter') {
-                        this.blur();
-                    }
-                });
-                
-                valueElement.textContent = '';
-                valueElement.appendChild(input);
-                input.focus();
-                
-                voiceStatus.textContent = 'Editando campo. Escribe el nuevo valor o usa el micrófono.';
-            }
-            
-            function exitEditMode() {
-                if (currentEditCard) {
-                    currentEditCard.classList.remove('editing');
-                    currentEditCard = null;
-                }
-                isEditing = false;
-            }
-            
-            function resetVoiceSteps() {
-                currentStep = 1;
-                earringDigits = '';
-                steps.forEach((step, index) => {
-                    step.classList.remove('active', 'completed');
-                    if (index === 0) {
-                        step.classList.add('active');
-                    }
-                });
-                voiceStatus.textContent = 'Presiona el micrófono y di "Número" para comenzar';
-                
-                // Limpiar los valores de las tarjetas
-                fieldIds.forEach(field => {
-                    document.getElementById(`value-${field}`).textContent = '-';
-                });
-            }
-            
-            // Funciones de cámara
-            async function startCamera() {
-                try {
-                    cameraStream = await navigator.mediaDevices.getUserMedia({ 
-                        video: { 
-                            facingMode: 'environment'
-                        }, 
-                        audio: false 
-                    });
-                    videoElement.srcObject = cameraStream;
-                    recordBtn.disabled = false;
-                } catch (err) {
-                    console.error('Error al acceder a la cámara:', err);
-                    voiceStatus.textContent = 'Error al acceder a la cámara';
-                }
-            }
-            
-            function stopCamera() {
-                if (mediaRecorder && mediaRecorder.state === 'recording') {
-                    mediaRecorder.stop();
-                }
-                
-                if (cameraStream) {
-                    cameraStream.getTracks().forEach(track => track.stop());
-                    videoElement.srcObject = null;
-                    recordBtn.disabled = true;
-                }
-            }
-            
-            function toggleRecording() {
-                if (mediaRecorder && mediaRecorder.state === 'recording') {
-                    mediaRecorder.stop();
-                    recordBtn.classList.remove('recording');
-                    recordBtn.innerHTML = '<i class="fas fa-dot-circle"></i>';
-                } else {
-                    startRecording();
-                }
-            }
-            
-            function startRecording() {
-                if (!cameraStream) {
-                    voiceStatus.textContent = 'Primero inicia la cámara';
-                    return;
-                }
-                
-                recordedChunks = [];
-                
-                try {
-                    mediaRecorder = new MediaRecorder(cameraStream, {
-                        mimeType: 'video/webm; codecs=vp9'
-                    });
+                    let errorMessage = 'ERROR DE AUTENTICACIÓN';
                     
-                    mediaRecorder.ondataavailable = function(event) {
-                        if (event.data.size > 0) {
-                            recordedChunks.push(event.data);
-                        }
-                    };
+                    switch(error.code) {
+                        case 'auth/popup-closed-by-user':
+                            errorMessage = 'VENTANA CERRADA';
+                            break;
+                        case 'auth/cancelled-popup-request':
+                            errorMessage = 'OPERACIÓN CANCELADA';
+                            break;
+                        case 'auth/popup-blocked':
+                            errorMessage = 'POP-UP BLOQUEADO';
+                            break;
+                        case 'auth/account-exists-with-different-credential':
+                            errorMessage = 'ESTE CORREO YA ESTÁ REGISTRADO CON OTRO MÉTODO';
+                            break;
+                        default:
+                            errorMessage = 'ERROR: ' + error.message;
+                    }
                     
-                    mediaRecorder.onstop = function() {
-                        const blob = new Blob(recordedChunks, {
-                            type: 'video/webm'
+                    // Mostrar error en el modal según qué formulario esté activo
+                    if (loginForm.style.display === 'flex') {
+                        authError.textContent = errorMessage;
+                    } else {
+                        registerError.textContent = errorMessage;
+                    }
+                });
+        }
+
+        // Particles
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 80, density: { enable: true, value_area: 800 } },
+                color: { value: "#00ffff" },
+                shape: { type: "circle" },
+                opacity: { value: 0.4, random: true },
+                size: { value: 2.5, random: true },
+                line_linked: { enable: true, distance: 130, color: "#00ffff", opacity: 0.2, width: 1 },
+                move: { enable: true, speed: 1, direction: "none", random: true, out_mode: "out" }
+            },
+            interactivity: {
+                events: { onhover: { enable: true, mode: "repulse" }, onclick: { enable: true, mode: "push" } }
+            },
+            retina_detect: true
+        });
+
+        // Modal
+        const modal = document.getElementById('authModal');
+        const openLogin = document.getElementById('openLogin');
+        const openRegister = document.getElementById('openRegister');
+        const closeBtn = document.getElementById('closeAuth');
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const modalTitle = document.getElementById('authModalTitle');
+        const toggleSpan = document.getElementById('toggleAuthForm');
+        const authError = document.getElementById('authError');
+        const registerError = document.getElementById('registerError');
+        
+        // Botones sociales
+        const googleBtn = document.getElementById('googleLogin');
+        const facebookBtn = document.getElementById('facebookLogin');
+
+        openLogin.addEventListener('click', () => {
+            modal.style.display = 'flex';
+            loginForm.style.display = 'flex';
+            registerForm.style.display = 'none';
+            modalTitle.innerText = 'ACCESO VIP';
+            toggleSpan.innerText = '¿Sin membresía? Activa VIP ahora';
+            authError.innerText = '';
+            document.body.style.overflow = 'hidden';
+        });
+
+        openRegister.addEventListener('click', () => {
+            modal.style.display = 'flex';
+            loginForm.style.display = 'none';
+            registerForm.style.display = 'flex';
+            modalTitle.innerText = 'ACTIVAR VIP';
+            toggleSpan.innerText = '¿Ya eres VIP? Inicia sesión';
+            registerError.innerText = '';
+            document.body.style.overflow = 'hidden';
+        });
+
+        closeBtn.addEventListener('click', () => {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        });
+
+        modal.addEventListener('click', (e) => { 
+            if(e.target === modal) {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        toggleSpan.addEventListener('click', () => {
+            if (loginForm.style.display === 'none') {
+                loginForm.style.display = 'flex';
+                registerForm.style.display = 'none';
+                modalTitle.innerText = 'ACCESO VIP';
+                toggleSpan.innerText = '¿Sin membresía? Activa VIP ahora';
+                registerError.innerText = '';
+            } else {
+                loginForm.style.display = 'none';
+                registerForm.style.display = 'flex';
+                modalTitle.innerText = 'ACTIVAR VIP';
+                toggleSpan.innerText = '¿Ya eres VIP? Inicia sesión';
+                authError.innerText = '';
+            }
+        });
+
+        // Eventos para login social
+        googleBtn.addEventListener('click', () => {
+            handleSocialLogin(googleProvider, 'GOOGLE');
+        });
+
+        facebookBtn.addEventListener('click', () => {
+            handleSocialLogin(facebookProvider, 'FACEBOOK');
+        });
+
+        // Login
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            showLoader('VERIFICANDO CREDENCIALES');
+            
+            auth.signInWithEmailAndPassword(email, password)
+                .then(() => {
+                    document.querySelector('.loader-text').textContent = 'REDIRIGIENDO...';
+                    setTimeout(() => { window.location.href = 'home.html'; }, 1500);
+                })
+                .catch(error => {
+                    hideLoader();
+                    authError.textContent = 'ERROR: ' + error.message;
+                });
+        });
+
+        // Registro
+        registerForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const pass = document.getElementById('registerPassword').value;
+            const confirm = document.getElementById('registerConfirmPassword').value;
+            
+            if (pass !== confirm) {
+                registerError.textContent = 'LAS CONTRASEÑAS NO COINCIDEN';
+                return;
+            }
+            if (pass.length < 6) {
+                registerError.textContent = 'MÍNIMO 6 CARACTERES';
+                return;
+            }
+            
+            showLoader('CREANDO ACCESO VIP');
+            
+            auth.createUserWithEmailAndPassword(email, pass)
+                .then((userCred) => {
+                    const user = userCred.user;
+                    
+                    // Actualizar el perfil con el nombre
+                    return user.updateProfile({
+                        displayName: name
+                    }).then(() => {
+                        return database.ref('users/' + user.uid).set({
+                            name: name,
+                            email: email,
+                            vipAccess: true,
+                            provider: 'EMAIL',
+                            createdAt: firebase.database.ServerValue.TIMESTAMP
                         });
-                        
-                        const videoUrl = URL.createObjectURL(blob);
-                        saveVideo(videoUrl);
-                    };
-                    
-                    mediaRecorder.start();
-                    recordBtn.classList.add('recording');
-                    recordBtn.innerHTML = '<i class="fas fa-square"></i>';
-                    
-                    // Detener automáticamente después de 10 segundos
-                    setTimeout(() => {
-                        if (mediaRecorder && mediaRecorder.state === 'recording') {
-                            mediaRecorder.stop();
-                            recordBtn.classList.remove('recording');
-                            recordBtn.innerHTML = '<i class="fas fa-dot-circle"></i>';
-                        }
-                    }, 10000);
-                    
-                } catch (err) {
-                    console.error('Error al grabar:', err);
-                    voiceStatus.textContent = 'Error al iniciar la grabación';
-                }
-            }
-            
-            function saveVideo(videoUrl) {
-                const videoData = {
-                    id: Date.now(),
-                    url: videoUrl,
-                    timestamp: new Date().toLocaleString()
-                };
-                
-                currentProject.videos.push(videoData);
-                updateVideosContainer();
-                voiceStatus.textContent = 'Video guardado correctamente';
-                
-                // Guardar automáticamente el proyecto
-                saveCurrentProject();
-            }
-            
-            // Funciones de datos
-            function savePigData() {
-                const pigData = {
-                    id: Date.now(),
-                    number: document.getElementById('value-number').textContent,
-                    earring: document.getElementById('value-earring').textContent,
-                    liveWeight: document.getElementById('value-liveWeight').textContent,
-                    deliveredBy: document.getElementById('value-deliveredBy').textContent,
-                    deadWeight: document.getElementById('value-deadWeight').textContent,
-                    timestamp: new Date().toLocaleString()
-                };
-                
-                // Validar que todos los campos tengan valores
-                if (pigData.number === '-' || pigData.earring === '-' || 
-                    pigData.liveWeight === '-' || pigData.deliveredBy === '-' || 
-                    pigData.deadWeight === '-') {
-                    voiceStatus.textContent = 'Completa todos los campos antes de guardar';
-                    return;
-                }
-                
-                currentProject.pigs.push(pigData);
-                updatePigsContainer();
-                resetVoiceSteps();
-                
-                voiceStatus.textContent = '¡Cerdo registrado exitosamente!';
-                
-                // Guardar automáticamente el proyecto
-                saveCurrentProject();
-            }
-            
-            function updatePigsContainer() {
-                pigsContainer.innerHTML = '';
-                
-                currentProject.pigs.forEach(pig => {
-                    const pigCard = document.createElement('div');
-                    pigCard.className = 'registro-card';
-                    pigCard.setAttribute('data-id', pig.id);
-                    
-                    pigCard.innerHTML = `
-                        <h3>Cerdo #${pig.number} <span class="fecha">${pig.timestamp}</span></h3>
-                        <p><span class="label">Arete:</span> ${pig.earring}</p>
-                        <p><span class="label">Peso vivo:</span> ${pig.liveWeight}</p>
-                        <p><span class="label">Entregado por:</span> ${pig.deliveredBy}</p>
-                        <p><span class="label">Peso faenado:</span> ${pig.deadWeight}</p>
-                        <div class="registro-actions">
-                            <button class="card-btn edit" data-id="${pig.id}"><i class="fas fa-edit"></i></button>
-                            <button class="card-btn delete" data-id="${pig.id}"><i class="fas fa-trash"></i></button>
-                            <button class="card-btn sacado" data-id="${pig.id}"><i class="fas fa-check-circle"></i></button>
-                        </div>
-                    `;
-                    
-                    pigsContainer.appendChild(pigCard);
-                });
-                
-                // Agregar event listeners a los botones
-                document.querySelectorAll('.registro-card .card-btn.edit').forEach(btn => {
-                    btn.addEventListener('click', function(e) {
-                        e.stopPropagation();
-                        const id = this.getAttribute('data-id');
-                        editPigData(id);
                     });
+                })
+                .then(() => {
+                    document.querySelector('.loader-text').textContent = 'BIENVENIDO A LA ÉLITE';
+                    setTimeout(() => { window.location.href = 'home.html'; }, 1500);
+                })
+                .catch(error => {
+                    hideLoader();
+                    registerError.textContent = 'ERROR: ' + error.message;
                 });
-                
-                document.querySelectorAll('.registro-card .card-btn.delete').forEach(btn => {
-                    btn.addEventListener('click', function(e) {
-                        e.stopPropagation();
-                        const id = this.getAttribute('data-id');
-                        deletePigData(id);
-                    });
-                });
-                
-                document.querySelectorAll('.registro-card .card-btn.sacado').forEach(btn => {
-                    btn.addEventListener('click', function(e) {
-                        e.stopPropagation();
-                        const id = this.getAttribute('data-id');
-                        markAsSacado(id);
-                    });
-                });
-            }
-            
-            function updateVideosContainer() {
-                videosContainer.innerHTML = '';
-                
-                currentProject.videos.forEach(video => {
-                    const videoItem = document.createElement('div');
-                    videoItem.className = 'video-item';
-                    
-                    videoItem.innerHTML = `
-                        <video controls src="${video.url}"></video>
-                        <div class="video-info">
-                            <p>Grabado: ${video.timestamp}</p>
-                            <button class="card-btn delete-video" data-id="${video.id}">
-                                <i class="fas fa-trash"></i> Eliminar
-                            </button>
-                        </div>
-                    `;
-                    
-                    videosContainer.appendChild(videoItem);
-                });
-                
-                // Agregar event listeners a los botones de eliminar video
-                document.querySelectorAll('.delete-video').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const id = this.getAttribute('data-id');
-                        deleteVideo(id);
-                    });
-                });
-            }
-            
-            function editPigData(id) {
-                const pig = currentProject.pigs.find(p => p.id == id);
-                
-                if (pig) {
-                    // Llenar el formulario con los datos del cerdo
-                    document.getElementById('value-number').textContent = pig.number;
-                    document.getElementById('value-earring').textContent = pig.earring;
-                    document.getElementById('value-liveWeight').textContent = pig.liveWeight;
-                    document.getElementById('value-deliveredBy').textContent = pig.deliveredBy;
-                    document.getElementById('value-deadWeight').textContent = pig.deadWeight;
-                    
-                    // Eliminar el registro antiguo
-                    deletePigData(id, false);
-                    
-                    voiceStatus.textContent = 'Editando registro. Actualiza los datos y guarda.';
+        });
+
+        // CTA
+        document.getElementById('heroCta').addEventListener('click', () => openRegister.click());
+
+        // Auth state
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                // Si está logueado y está en index, redirigir a home
+                if (window.location.pathname.includes('index') || window.location.pathname === '/' || window.location.pathname.endsWith('.html') === false) {
+                    window.location.href = 'home.html';
                 }
-            }
-            
-            function deletePigData(id, showMessage = true) {
-                currentProject.pigs = currentProject.pigs.filter(pig => pig.id != id);
-                updatePigsContainer();
-                
-                if (showMessage) {
-                    voiceStatus.textContent = 'Registro eliminado';
-                }
-                
-                // Guardar automáticamente el proyecto
-                saveCurrentProject();
-            }
-            
-            function markAsSacado(id) {
-                const pig = currentProject.pigs.find(p => p.id == id);
-                if (pig) {
-                    pig.deadWeight = 'SACADO';
-                    updatePigsContainer();
-                    voiceStatus.textContent = 'Marcado como SACADO';
-                    
-                    // Guardar automáticamente el proyecto
-                    saveCurrentProject();
-                }
-            }
-            
-            function deleteVideo(id) {
-                currentProject.videos = currentProject.videos.filter(video => video.id != id);
-                updateVideosContainer();
-                
-                // Guardar automáticamente el proyecto
-                saveCurrentProject();
-            }
-            
-            // Funciones de proyectos
-            function newProject() {
-                if (confirm('¿Estás seguro de que quieres crear un nuevo proyecto? Se borrarán todos los datos actuales.')) {
-                    // Guardar el proyecto actual si tiene datos
-                    if (currentProject.pigs.length > 0 || currentProject.videos.length > 0) {
-                        saveCurrentProject();
-                    }
-                    
-                    currentProject = {
-                        id: Date.now(),
-                        name: 'Proyecto ' + new Date().toLocaleDateString(),
-                        pigs: [],
-                        videos: []
-                    };
-                    
-                    updatePigsContainer();
-                    updateVideosContainer();
-                    resetVoiceSteps();
-                    voiceStatus.textContent = 'Nuevo proyecto creado. Comienza a registrar cerdos.';
-                }
-            }
-            
-            function saveProject() {
-                saveCurrentProject();
-                voiceStatus.textContent = 'Proyecto guardado correctamente';
-            }
-            
-            function saveCurrentProject() {
-                // Buscar si ya existe el proyecto
-                const index = projects.findIndex(p => p.id === currentProject.id);
-                
-                if (index !== -1) {
-                    // Actualizar proyecto existente
-                    projects[index] = currentProject;
-                } else {
-                    // Agregar nuevo proyecto
-                    projects.push(currentProject);
-                }
-                
-                localStorage.setItem('pigProjects', JSON.stringify(projects));
-                updateProjectsContainer();
-            }
-            
-            function loadProject(projectId) {
-                const project = projects.find(p => p.id === projectId);
-                
-                if (project) {
-                    currentProject = project;
-                    updatePigsContainer();
-                    updateVideosContainer();
-                    resetVoiceSteps();
-                    projectsModal.style.display = 'none';
-                    voiceStatus.textContent = `Proyecto "${project.name}" cargado correctamente`;
-                }
-            }
-            
-            function loadLastProject() {
-                if (projects.length > 0) {
-                    currentProject = projects[projects.length - 1];
-                    updatePigsContainer();
-                    updateVideosContainer();
-                    voiceStatus.textContent = `Proyecto "${currentProject.name}" cargado`;
-                }
-            }
-            
-            function updateProjectsContainer() {
-                projectsContainer.innerHTML = '';
-                
-                projects.forEach(project => {
-                    const projectCard = document.createElement('div');
-                    projectCard.className = 'project-card';
-                    projectCard.addEventListener('click', () => loadProject(project.id));
-                    
-                    projectCard.innerHTML = `
-                        <h3>${project.name}</h3>
-                        <p>${project.pigs.length} cerdos registrados</p>
-                        <p>${project.videos.length} videos</p>
-                        <p>Creado: ${new Date(project.id).toLocaleDateString()}</p>
-                    `;
-                    
-                    projectsContainer.appendChild(projectCard);
-                });
-            }
-            
-            function showProjectsModal() {
-                projectsList.innerHTML = '';
-                
-                if (projects.length === 0) {
-                    projectsList.innerHTML = '<p>No hay proyectos guardados</p>';
-                } else {
-                    projects.forEach(project => {
-                        const projectItem = document.createElement('div');
-                        projectItem.className = 'project-card';
-                        projectItem.style.marginBottom = '10px';
-                        projectItem.addEventListener('click', () => loadProject(project.id));
-                        
-                        projectItem.innerHTML = `
-                            <h3>${project.name}</h3>
-                            <p>${project.pigs.length} cerdos registrados</p>
-                            <p>${project.videos.length} videos</p>
-                        `;
-                        
-                        projectsList.appendChild(projectItem);
-                    });
-                }
-                
-                projectsModal.style.display = 'flex';
-            }
-            
-            function viewData() {
-                printDate.textContent = new Date().toLocaleDateString();
-                printTableBody.innerHTML = '';
-                
-                currentProject.pigs.forEach(pig => {
-                    const row = document.createElement('tr');
-                    
-                    row.innerHTML = `
-                        <td>${pig.number}</td>
-                        <td>${pig.earring}</td>
-                        <td>${pig.liveWeight}</td>
-                        <td>${pig.deliveredBy}</td>
-                        <td>${pig.deadWeight}</td>
-                        <td>${pig.deadWeight === 'SACADO' ? 'SACADO' : 'PENDIENTE'}</td>
-                    `;
-                    
-                    printTableBody.appendChild(row);
-                });
-                
-                dataModal.style.display = 'flex';
-            }
-            
-            function printData() {
-                viewData();
-                setTimeout(() => {
-                    window.print();
-                }, 500);
             }
         });
     </script>
