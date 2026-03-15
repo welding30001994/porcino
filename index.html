@@ -772,6 +772,44 @@
             color: #ff4444;
         }
 
+        /* Error Banner */
+        .error-banner {
+            background: rgba(255, 0, 0, 0.2);
+            border: 1px solid #ff0000;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+            animation: pulse-error 2s infinite;
+        }
+
+        @keyframes pulse-error {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 0, 0, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(255, 0, 0, 0.5); }
+        }
+
+        .error-banner h3 {
+            color: #ff0000;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .error-banner p {
+            color: #fff;
+            margin-bottom: 20px;
+        }
+
+        .error-banner pre {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            border-radius: 5px;
+            text-align: left;
+            color: #00ff00;
+            font-family: monospace;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
         /* Estadísticas */
         .stats-grid {
             display: grid;
@@ -1013,6 +1051,30 @@
 
     <!-- Contenido principal -->
     <main class="main-content">
+        <!-- Error Banner -->
+        <div id="errorBanner" class="error-banner" style="display: none;">
+            <h3><i class="fas fa-exclamation-triangle"></i> ERROR DE PERMISOS EN FIREBASE</h3>
+            <p>Necesitas configurar las reglas de seguridad en Firebase Console</p>
+            <pre id="errorRules">
+{
+  "rules": {
+    ".read": true,
+    ".write": true,
+    "signals": { ".read": true, ".write": true },
+    "chat": { ".read": true, ".write": true },
+    "posts": { ".read": true, ".write": true },
+    "users": { ".read": true, ".write": true }
+  }
+}
+            </pre>
+            <button class="btn-glow small" onclick="copyRules()">
+                <i class="fas fa-copy"></i> COPIAR REGLAS
+            </button>
+            <p style="margin-top: 15px; font-size: 0.9rem;">
+                Ve a <strong>Firebase Console > Realtime Database > Reglas</strong> y pega estas reglas
+            </p>
+        </div>
+
         <!-- Sección de inicio -->
         <section id="inicio" class="section active">
             <div class="section-header">
@@ -1263,13 +1325,46 @@
             joinDate: new Date().toISOString()
         };
 
-        // Guardar usuario en Firebase
+        // Variable para controlar errores de permiso
+        let hasPermissionError = false;
+
+        // Guardar usuario en Firebase con manejo de errores
         function saveUserToFirebase() {
             usersRef.child(currentUser.id).set({
                 name: currentUser.name,
                 avatar: currentUser.avatar,
                 joinDate: currentUser.joinDate,
                 lastSeen: firebase.database.ServerValue.TIMESTAMP
+            }).catch(error => {
+                if (error.code === 'PERMISSION_DENIED') {
+                    showPermissionError();
+                }
+            });
+        }
+
+        // Mostrar error de permisos
+        function showPermissionError() {
+            hasPermissionError = true;
+            document.getElementById('errorBanner').style.display = 'block';
+            showNotification('⚠️ Error de permisos en Firebase. Configura las reglas.', 'error');
+        }
+
+        // Copiar reglas al portapapeles
+        function copyRules() {
+            const rules = `{
+  "rules": {
+    ".read": true,
+    ".write": true,
+    "signals": { ".read": true, ".write": true },
+    "chat": { ".read": true, ".write": true },
+    "posts": { ".read": true, ".write": true },
+    "users": { ".read": true, ".write": true }
+  }
+}`;
+            navigator.clipboard.writeText(rules).then(() => {
+                showNotification('✅ Reglas copiadas al portapapeles', 'success');
+            }).catch(() => {
+                showNotification('❌ Error al copiar', 'error');
             });
         }
 
@@ -1353,6 +1448,10 @@
                     document.getElementById('modalName').textContent = userData.name || 'Usuario';
                     document.getElementById('profileNameInput').value = userData.name || '';
                 }
+            }).catch(error => {
+                if (error.code === 'PERMISSION_DENIED') {
+                    showPermissionError();
+                }
             });
 
             // Cargar estadísticas del usuario
@@ -1362,7 +1461,7 @@
                     const userSignals = Object.values(signals).filter(s => s.authorId === userId).length;
                     document.getElementById('modalSignals').textContent = userSignals;
                 }
-            });
+            }).catch(() => {});
 
             postsRef.once('value', (snapshot) => {
                 const posts = snapshot.val();
@@ -1370,7 +1469,7 @@
                     const userPosts = Object.values(posts).filter(p => p.authorId === userId).length;
                     document.getElementById('modalPosts').textContent = userPosts;
                 }
-            });
+            }).catch(() => {});
 
             chatRef.once('value', (snapshot) => {
                 const messages = snapshot.val();
@@ -1378,7 +1477,7 @@
                     const userMessages = Object.values(messages).filter(m => m.authorId === userId).length;
                     document.getElementById('modalMessages').textContent = userMessages;
                 }
-            });
+            }).catch(() => {});
 
             // Calcular días desde que se unió
             const joinDate = new Date(currentUser.joinDate);
@@ -1444,16 +1543,24 @@
                 saveUserToFirebase();
             } catch (error) {
                 console.error('Error al publicar señal:', error);
-                showNotification('❌ Error al publicar la señal', 'error');
+                if (error.code === 'PERMISSION_DENIED') {
+                    showPermissionError();
+                } else {
+                    showNotification('❌ Error al publicar la señal', 'error');
+                }
             }
         });
 
-        // Escuchar nuevas señales
+        // Escuchar nuevas señales con manejo de errores
         signalsRef.on('child_added', (snapshot) => {
             const signal = snapshot.val();
             signal.id = snapshot.key;
             displaySignal(signal);
             updateStats();
+        }, (error) => {
+            if (error.code === 'PERMISSION_DENIED') {
+                showPermissionError();
+            }
         });
 
         // Mostrar señal en la UI
@@ -1543,7 +1650,11 @@
                     updateStats();
                 } catch (error) {
                     console.error('Error al enviar mensaje:', error);
-                    showNotification('❌ Error al enviar mensaje', 'error');
+                    if (error.code === 'PERMISSION_DENIED') {
+                        showPermissionError();
+                    } else {
+                        showNotification('❌ Error al enviar mensaje', 'error');
+                    }
                 }
             }
         }
@@ -1552,6 +1663,10 @@
         chatRef.on('child_added', (snapshot) => {
             const message = snapshot.val();
             displayChatMessage(message);
+        }, (error) => {
+            if (error.code === 'PERMISSION_DENIED') {
+                showPermissionError();
+            }
         });
 
         function displayChatMessage(message) {
@@ -1574,7 +1689,7 @@
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
-        // Formulario de publicaciones - CORREGIDO
+        // Formulario de publicaciones
         document.getElementById('postForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
@@ -1604,7 +1719,11 @@
                 updateStats();
             } catch (error) {
                 console.error('Error al crear publicación:', error);
-                showNotification('❌ Error al crear publicación', 'error');
+                if (error.code === 'PERMISSION_DENIED') {
+                    showPermissionError();
+                } else {
+                    showNotification('❌ Error al crear publicación', 'error');
+                }
             }
         });
 
@@ -1614,6 +1733,10 @@
             post.id = snapshot.key;
             displayPost(post);
             updateStats();
+        }, (error) => {
+            if (error.code === 'PERMISSION_DENIED') {
+                showPermissionError();
+            }
         });
 
         // Escuchar cambios en publicaciones (para likes)
@@ -1621,6 +1744,10 @@
             const post = snapshot.val();
             post.id = snapshot.key;
             updatePostLikes(post);
+        }, (error) => {
+            if (error.code === 'PERMISSION_DENIED') {
+                showPermissionError();
+            }
         });
 
         function displayPost(post) {
@@ -1678,6 +1805,11 @@
 
         // Función para dar like
         async function likePost(postId) {
+            if (hasPermissionError) {
+                showPermissionError();
+                return;
+            }
+
             try {
                 const postRef = postsRef.child(postId);
                 const snapshot = await postRef.once('value');
@@ -1702,6 +1834,9 @@
                 
             } catch (error) {
                 console.error('Error al dar like:', error);
+                if (error.code === 'PERMISSION_DENIED') {
+                    showPermissionError();
+                }
             }
         }
 
@@ -1714,6 +1849,8 @@
 
         // Actualizar estadísticas
         function updateStats() {
+            if (hasPermissionError) return;
+
             signalsRef.once('value', (snapshot) => {
                 const signals = snapshot.val();
                 if (signals) {
@@ -1726,28 +1863,28 @@
                     document.getElementById('buySignals').textContent = buySignals;
                     document.getElementById('sellSignals').textContent = sellSignals;
                 }
-            });
+            }).catch(() => {});
             
             chatRef.once('value', (snapshot) => {
                 const messages = snapshot.val();
                 if (messages) {
                     document.getElementById('totalMessages').textContent = Object.keys(messages).length;
                 }
-            });
+            }).catch(() => {});
 
             postsRef.once('value', (snapshot) => {
                 const posts = snapshot.val();
                 if (posts) {
                     document.getElementById('totalPosts').textContent = Object.keys(posts).length;
                 }
-            });
+            }).catch(() => {});
 
             usersRef.once('value', (snapshot) => {
                 const users = snapshot.val();
                 if (users) {
                     document.getElementById('activeTraders').textContent = Object.keys(users).length;
                 }
-            });
+            }).catch(() => {});
         }
 
         // Sistema de notificaciones
@@ -1765,15 +1902,15 @@
                 top: 100px;
                 right: 20px;
                 padding: 15px 25px;
-                background: ${type === 'success' ? 'rgba(0, 255, 0, 0.2)' : 'rgba(255, 0, 0, 0.2)'};
-                border: 1px solid ${type === 'success' ? '#00ff00' : '#ff0000'};
+                background: ${type === 'success' ? 'rgba(0, 255, 0, 0.2)' : type === 'error' ? 'rgba(255, 0, 0, 0.2)' : 'rgba(255, 255, 0, 0.2)'};
+                border: 1px solid ${type === 'success' ? '#00ff00' : type === 'error' ? '#ff0000' : '#ffff00'};
                 border-radius: 10px;
                 color: #fff;
                 font-weight: 600;
                 backdrop-filter: blur(10px);
                 z-index: 9999;
                 animation: slideInRight 0.3s ease;
-                box-shadow: 0 0 20px ${type === 'success' ? 'rgba(0, 255, 0, 0.3)' : 'rgba(255, 0, 0, 0.3)'};
+                box-shadow: 0 0 20px ${type === 'success' ? 'rgba(0, 255, 0, 0.3)' : type === 'error' ? 'rgba(255, 0, 0, 0.3)' : 'rgba(255, 255, 0, 0.3)'};
             `;
             
             document.body.appendChild(notification);
@@ -1798,6 +1935,8 @@
         // Inicializar
         setCurrentDateTime();
         updateStats();
+        
+        // Intentar guardar usuario
         saveUserToFirebase();
 
         // Cargar señales existentes al inicio
@@ -1810,6 +1949,10 @@
                     displaySignal(signal);
                 });
             }
+        }).catch((error) => {
+            if (error.code === 'PERMISSION_DENIED') {
+                showPermissionError();
+            }
         });
 
         // Cargar mensajes existentes
@@ -1820,6 +1963,10 @@
                 messagesArray.forEach(message => {
                     displayChatMessage(message);
                 });
+            }
+        }).catch((error) => {
+            if (error.code === 'PERMISSION_DENIED') {
+                showPermissionError();
             }
         });
 
@@ -1833,13 +1980,19 @@
                     displayPost(post);
                 });
             }
+        }).catch((error) => {
+            if (error.code === 'PERMISSION_DENIED') {
+                showPermissionError();
+            }
         });
 
         // Actualizar último visto
         setInterval(() => {
-            usersRef.child(currentUser.id).update({
-                lastSeen: firebase.database.ServerValue.TIMESTAMP
-            });
+            if (!hasPermissionError) {
+                usersRef.child(currentUser.id).update({
+                    lastSeen: firebase.database.ServerValue.TIMESTAMP
+                }).catch(() => {});
+            }
         }, 60000); // Cada minuto
     </script>
 </body>
