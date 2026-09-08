@@ -1,2030 +1,562 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HEYDIN KAYSER TRADING - Comunidad Elite</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contrato + Formulario · Upcomer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --primary: #00ffff;
-            --secondary: #ff00ff;
-            --accent: #ffff00;
-            --dark: #0a0a0f;
-            --darker: #050508;
-            --glass: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(0, 255, 255, 0.2);
-            --success: #00ff88;
-            --danger: #ff4466;
-            --warning: #ffaa00;
-            --info: #00ccff;
-        }
-
-        body {
-            font-family: 'Rajdhani', sans-serif;
-            background: linear-gradient(135deg, var(--darker) 0%, #1a1a2e 100%);
-            color: #fff;
-            min-height: 100vh;
-            position: relative;
-        }
-
-        /* Partículas */
-        #particles-js {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        /* Scrollbar */
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.3); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb { background: linear-gradient(45deg, var(--primary), var(--secondary)); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: linear-gradient(45deg, var(--secondary), var(--primary)); }
-
-        /* Modal Autenticación */
-        .auth-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            backdrop-filter: blur(20px);
-            z-index: 3000;
-            justify-content: center;
-            align-items: center;
-        }
-        .auth-modal.active { display: flex; }
-
-        .auth-container {
-            background: linear-gradient(135deg, rgba(20, 30, 40, 0.95), rgba(10, 20, 30, 0.95));
-            border: 2px solid var(--primary);
-            border-radius: 30px;
-            padding: 40px;
-            max-width: 450px;
-            width: 90%;
-            position: relative;
-            box-shadow: 0 0 70px rgba(0, 255, 255, 0.4);
-            animation: modalGlow 3s infinite;
-        }
-
-        @keyframes modalGlow {
-            0%, 100% { box-shadow: 0 0 50px rgba(0, 255, 255, 0.4); }
-            50% { box-shadow: 0 0 80px rgba(255, 0, 255, 0.4); }
-        }
-
-        .auth-tabs {
-            display: flex;
-            margin-bottom: 30px;
-            border-bottom: 2px solid rgba(0, 255, 255, 0.3);
-        }
-        .auth-tab {
-            flex: 1;
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', 'Segoe UI', sans-serif; }
+        body { background: #f0f4fb; display: flex; justify-content: center; padding: 2rem 1rem; min-height: 100vh; }
+        .app-wrapper { max-width: 1100px; width: 100%; background: white; border-radius: 32px; box-shadow: 0 20px 40px -12px rgba(0,0,0,0.15); padding: 2.5rem 2.8rem; border: 1px solid #e6edf6; }
+        .app-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #e9edf4; padding-bottom: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
+        .app-header h1 { font-weight: 700; font-size: 2rem; letter-spacing: -0.5px; color: #0b1a33; }
+        .app-header h1 span { color: #1e6f9f; font-weight: 300; }
+        .app-badge { background: #0b1a33; color: white; font-size: 0.7rem; font-weight: 600; padding: 0.4rem 1.4rem; border-radius: 40px; letter-spacing: 0.4px; text-transform: uppercase; }
+        .grid-panel { display: grid; grid-template-columns: 1fr 1.8fr; gap: 2rem; align-items: start; }
+        @media (max-width: 860px) { .grid-panel { grid-template-columns: 1fr; gap: 2.5rem; } }
+        .form-panel { background: #f7faff; border-radius: 24px; padding: 1.8rem 1.5rem; border: 1px solid #dee8f2; }
+        .form-panel h2 { font-size: 1.1rem; font-weight: 600; color: #0b1a33; margin-bottom: 1.2rem; display: flex; align-items: center; gap: 8px; }
+        .form-grupo { margin-bottom: 1.2rem; }
+        .form-grupo label { font-weight: 500; font-size: 0.82rem; color: #1f2a3f; display: flex; align-items: center; gap: 6px; margin-bottom: 0.3rem; }
+        .form-grupo label i { color: #b91c1c; font-style: normal; font-weight: 600; }
+        .form-grupo input, .form-grupo select { width: 100%; padding: 0.7rem 1rem; border: 1px solid #d6dee9; border-radius: 14px; font-size: 0.95rem; background: white; transition: 0.2s; }
+        .form-grupo input:focus, .form-grupo select:focus { outline: none; border-color: #1e6f9f; box-shadow: 0 0 0 3px rgba(30,111,159,0.10); }
+        .form-grupo .hint { font-size: 0.7rem; color: #5a6f8a; margin-top: 0.2rem; }
+        .plan-options { display: flex; gap: 0.8rem; flex-wrap: wrap; margin-top: 0.3rem; }
+        .plan-option { flex: 1 1 100px; background: white; border: 2px solid #d6dee9; border-radius: 16px; padding: 0.6rem 0.4rem; text-align: center; cursor: pointer; transition: all 0.15s; }
+        .plan-option:hover { border-color: #8bb3d0; }
+        .plan-option input[type="radio"] { display: none; }
+        .plan-option .plan-nombre { font-weight: 600; font-size: 0.9rem; color: #0b1a33; }
+        .plan-option .plan-precio { font-weight: 700; font-size: 1.1rem; color: #1e6f9f; }
+        .plan-option .plan-dias { font-size: 0.65rem; color: #3a4a62; background: #e9eff6; padding: 0.1rem 0.6rem; border-radius: 40px; display: inline-block; margin-top: 2px; }
+        .plan-option.seleccionado { border-color: #1e6f9f; background: #e6f0fa; box-shadow: 0 4px 10px rgba(30,111,159,0.08); }
+        .acciones { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1.5rem; }
+        .btn { padding: 0.7rem 2rem; border-radius: 60px; font-weight: 600; font-size: 0.9rem; border: none; cursor: pointer; transition: all 0.2s; letter-spacing: 0.3px; }
+        .btn-primario { background: #0b1a33; color: white; box-shadow: 0 6px 14px rgba(11,26,51,0.15); }
+        .btn-primario:hover { background: #1e2f4a; transform: scale(1.02); }
+        .btn-secundario { background: transparent; border: 1px solid #b4c4db; color: #2a3b55; }
+        .btn-secundario:hover { background: #f0f5fe; }
+        .btn-pdf-header { background: #1e6f9f; color: white; border: none; padding: 0.4rem 1.2rem; border-radius: 40px; font-size: 0.75rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .btn-pdf-header:hover { background: #0b3b5a; transform: scale(1.02); }
+        .loader-pdf { display: inline-block; width: 18px; height: 18px; border: 3px solid rgba(255,255,255,0.15); border-radius: 50%; border-top-color: #1e6f9f; animation: spin 0.8s linear infinite; margin-right: 8px; vertical-align: middle; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .contrato-panel { background: #fcfcfc; border-radius: 24px; padding: 1.8rem 2rem; border: 1px solid #dee8f2; }
+        .contrato-panel .header-con-boton { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem; flex-wrap: wrap; gap: 0.8rem; }
+        .contrato-panel .header-con-boton h2 { font-size: 1.1rem; font-weight: 600; color: #0b1a33; margin: 0; }
+        .contrato-preview { background: white; padding: 1.8rem 2rem; border-radius: 18px; border: 1px solid #e6edf6; font-size: 0.9rem; line-height: 1.7; color: #1f2a3f; max-height: 600px; overflow-y: auto; }
+        .contrato-preview strong { color: #0b1a33; }
+        .contrato-preview .clausula { margin-bottom: 1.4rem; }
+        .contrato-preview .clausula h3 { font-size: 1rem; font-weight: 700; color: #0b1a33; margin-bottom: 0.2rem; border-left: 4px solid #1e6f9f; padding-left: 0.8rem; }
+        .contrato-preview .clausula ul { padding-left: 2rem; list-style: none; margin-top: 0.2rem; }
+        .contrato-preview .clausula ul li::before { content: "—"; color: #1e6f9f; margin-right: 0.5rem; }
+        .contrato-preview .advertencia { background: #f7f1ea; border-left: 6px solid #b8863a; padding: 1rem 1.5rem; margin: 1rem 0 1.2rem 0; border-radius: 0 8px 8px 0; }
+        .contrato-preview .advertencia .monto { font-weight: 700; font-size: 1.4rem; color: #a0672b; }
+        .contrato-preview .firma-line { display: flex; justify-content: space-between; margin-top: 1.5rem; border-top: 2px solid #e6edf6; padding-top: 1.5rem; flex-wrap: wrap; gap: 1rem; }
+        .contrato-preview .firma-bloco { flex: 1 1 180px; }
+        .contrato-preview .firma-bloco .linea { border-bottom: 1.5px solid #b3a18e; width: 100%; height: 1.2rem; margin: 0.3rem 0 0.1rem; }
+        .contrato-preview .firma-bloco .label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1.5px; color: #8a7a6a; }
+        .contrato-preview .monedero-box { background: #f0f7fe; border: 1px solid #c8dce8; border-radius: 12px; padding: 0.8rem 1.2rem; margin: 1rem 0; display: flex; align-items: center; gap: 0.8rem; flex-wrap: wrap; }
+        .contrato-preview .monedero-box .label { font-weight: 600; color: #0b1a33; }
+        .contrato-preview .monedero-box .direccion { font-family: monospace; font-size: 0.85rem; background: white; padding: 0.3rem 0.8rem; border-radius: 8px; border: 1px solid #d6dee9; word-break: break-all; }
+        .nota-legal { margin-top: 1.2rem; font-size: 0.75rem; color: #7a6b5d; background: #f4efea; padding: 0.6rem 1.2rem; border-radius: 40px; text-align: center; border: 1px solid #e1d5c9; }
+        /* --- Estilos para el PDF (separador de página) --- */
+        .page-break { 
+            page-break-after: always; 
+            border-bottom: 2px dashed #d0dcec; 
+            margin: 1.5rem 0; 
+            padding-bottom: 1rem;
             text-align: center;
-            padding: 15px;
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: #888;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-        .auth-tab.active {
-            color: var(--primary);
-            border-bottom: 3px solid var(--primary);
-            text-shadow: 0 0 10px var(--primary);
-        }
-        .auth-form { display: none; }
-        .auth-form.active { display: block; }
-        .auth-form h2 { text-align: center; margin-bottom: 30px; color: var(--primary); font-size: 2rem; }
-
-        .auth-input-group {
-            margin-bottom: 20px;
-            position: relative;
-        }
-        .auth-input-group i {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--primary);
-            font-size: 1.2rem;
-        }
-        .auth-input-group input {
-            width: 100%;
-            padding: 15px 15px 15px 45px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(0, 255, 255, 0.3);
-            border-radius: 10px;
-            color: #fff;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-        .auth-input-group input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
-        }
-
-        .auth-btn {
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(45deg, var(--primary), var(--secondary));
-            border: none;
-            border-radius: 10px;
-            color: #000;
-            font-weight: 700;
-            font-size: 1.1rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 20px;
-        }
-        .auth-btn:hover {
-            transform: scale(1.02);
-            box-shadow: 0 0 30px var(--primary);
-        }
-        .auth-message { text-align: center; margin-top: 20px; color: #ff4444; min-height: 20px; }
-
-        /* Modal Perfil */
-        .profile-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
-            z-index: 2000;
-            justify-content: center;
-            align-items: center;
-        }
-        .profile-modal.active { display: flex; }
-
-        .modal-content {
-            background: linear-gradient(135deg, rgba(10, 10, 15, 0.95), rgba(5, 5, 8, 0.95));
-            border: 2px solid var(--primary);
-            border-radius: 30px;
-            padding: 40px;
-            max-width: 600px;
-            width: 90%;
-            position: relative;
-            box-shadow: 0 0 50px rgba(0, 255, 255, 0.3);
-            animation: modalAppear 0.5s ease;
-        }
-
-        @keyframes modalAppear {
-            from { transform: scale(0.8); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
-
-        .close-modal {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            font-size: 2rem;
-            color: var(--primary);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .close-modal:hover {
-            color: var(--secondary);
-            transform: rotate(90deg);
-        }
-
-        .profile-avatar {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            border: 3px solid var(--primary);
-            margin: 0 auto 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 4rem;
-            background: linear-gradient(45deg, var(--primary), var(--secondary));
-            color: #000;
-            box-shadow: 0 0 30px var(--primary);
-        }
-
-        .profile-stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin: 20px 0;
-        }
-        .profile-stat {
-            background: rgba(0, 255, 255, 0.1);
-            border-radius: 10px;
-            padding: 15px;
-            text-align: center;
-        }
-        .profile-stat-value {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--primary);
-        }
-        .profile-stat-label { font-size: 0.8rem; color: #888; }
-
-        .profile-form {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            margin-top: 20px;
-        }
-        .profile-form input {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid var(--glass-border);
-            border-radius: 10px;
-            padding: 15px;
-            color: #fff;
-        }
-        .profile-form input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
-        }
-
-        .logout-btn {
-            background: linear-gradient(45deg, #ff4444, #ff8844);
-            color: #000;
-            border: none;
-            border-radius: 10px;
-            padding: 12px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 10px;
-            width: 100%;
-        }
-        .logout-btn:hover {
-            transform: scale(1.02);
-            box-shadow: 0 0 20px #ff4444;
-        }
-
-        /* Navbar */
-        .navbar {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90%;
-            max-width: 1400px;
-            background: rgba(10, 10, 15, 0.8);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border);
-            border-radius: 50px;
-            padding: 10px 30px;
-            z-index: 1000;
-            box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
-            animation: float 3s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateX(-50%) translateY(0); }
-            50% { transform: translateX(-50%) translateY(-5px); }
-        }
-
-        .nav-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.8rem;
-            font-weight: 900;
-            background: linear-gradient(45deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            cursor: pointer;
-        }
-        .logo .glow { animation: pulse 2s infinite; }
-        @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.7; } }
-
-        .nav-menu {
-            display: flex;
-            list-style: none;
-            gap: 25px;
-            margin: 0;
-            padding: 0;
-        }
-
-        .nav-menu li a {
-            color: #fff;
-            text-decoration: none;
-            padding: 12px 20px;
-            border-radius: 30px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-        .nav-menu li a:hover,
-        .nav-menu li a.active {
-            background: rgba(0, 255, 255, 0.1);
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
-            color: var(--primary);
-        }
-
-        .profile-item { position: relative; }
-        .online-indicator {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            width: 12px;
-            height: 12px;
-            background: #00ff00;
-            border-radius: 50%;
-            animation: onlinePulse 2s infinite;
-        }
-        @keyframes onlinePulse { 0%,100% { box-shadow: 0 0 10px #00ff00; } 50% { box-shadow: 0 0 20px #00ff00; } }
-
-        .menu-toggle { display: none; cursor: pointer; }
-        .hamburger span {
-            display: block;
-            width: 25px;
-            height: 3px;
-            background: #fff;
-            margin: 5px 0;
-            transition: all 0.3s ease;
-        }
-
-        /* Main Content */
-        .main-content {
-            position: relative;
-            z-index: 1;
-            padding: 120px 20px 40px;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .section {
-            display: none;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.5s ease;
-        }
-        .section.active {
-            display: block;
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 50px;
-            position: relative;
-        }
-
-        .glitch-text {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 3.5rem;
-            font-weight: 900;
-            text-transform: uppercase;
-            position: relative;
-            color: #fff;
-            text-shadow: 0.05em 0 0 var(--primary), -0.05em -0.05em 0 var(--secondary);
-            animation: glitch 1s infinite;
-            letter-spacing: 5px;
-        }
-
-        @keyframes glitch {
-            0%,100% { text-shadow: 0.05em 0 0 var(--primary), -0.05em -0.05em 0 var(--secondary); }
-            25% { text-shadow: -0.05em -0.025em 0 var(--primary), 0.025em 0.05em 0 var(--secondary); }
-            50% { text-shadow: 0.025em 0.05em 0 var(--primary), -0.05em -0.025em 0 var(--secondary); }
-            75% { text-shadow: -0.025em -0.05em 0 var(--primary), 0.05em 0.025em 0 var(--secondary); }
-        }
-
-        /* Cards con estilo elegante */
-        .card {
-            background: linear-gradient(135deg, rgba(20, 30, 40, 0.6), rgba(10, 20, 30, 0.6));
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(0, 255, 255, 0.2);
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 0 30px rgba(0, 255, 255, 0.1);
-            transition: all 0.3s ease;
-        }
-        .card:hover {
-            border-color: rgba(0, 255, 255, 0.5);
-            box-shadow: 0 0 50px rgba(0, 255, 255, 0.2);
-        }
-        .card h3 {
-            font-size: 1.8rem;
-            margin-bottom: 25px;
-            color: var(--primary);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 700;
-        }
-
-        /* Feed de inicio */
-        .feed-container {
-            display: grid;
-            gap: 30px;
-            margin-top: 30px;
-        }
-
-        .feed-item {
-            background: linear-gradient(135deg, rgba(30, 40, 50, 0.7), rgba(20, 30, 40, 0.7));
-            border: 1px solid rgba(0, 255, 255, 0.15);
-            border-radius: 20px;
-            padding: 25px;
-            transition: all 0.3s ease;
-            animation: fadeIn 0.5s ease;
-        }
-        .feed-item:hover {
-            border-color: var(--primary);
-            box-shadow: 0 0 40px rgba(0, 255, 255, 0.15);
-            transform: translateY(-5px);
-        }
-
-        .feed-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .feed-avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, var(--primary), var(--secondary));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            color: #000;
-        }
-
-        .feed-user-info h4 {
-            font-size: 1.2rem;
-            color: var(--primary);
-            cursor: pointer;
-        }
-        .feed-user-info h4:hover { text-decoration: underline; }
-        .feed-user-info p { font-size: 0.8rem; color: #888; }
-
-        .feed-badge {
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            margin-left: auto;
-        }
-        .badge-signal { background: rgba(0, 255, 0, 0.2); color: #00ff00; }
-        .badge-post { background: rgba(0, 255, 255, 0.2); color: var(--primary); }
-
-        .feed-content { margin-bottom: 20px; }
-
-        .signal-details-elegant {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 15px;
-            padding: 20px;
-            margin: 15px 0;
-        }
-        .detail-item {
-            text-align: center;
-            padding: 10px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-        }
-        .detail-label { font-size: 0.8rem; color: #888; text-transform: uppercase; }
-        .detail-value { font-size: 1.2rem; font-weight: 700; color: #fff; }
-
-        /* Señales elegantes */
-        .signals-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 25px;
-        }
-
-        .signal-card {
-            background: linear-gradient(135deg, rgba(30, 40, 50, 0.7), rgba(20, 30, 40, 0.7));
-            border: 1px solid rgba(0, 255, 255, 0.15);
-            border-radius: 20px;
-            padding: 25px;
-            transition: all 0.3s ease;
-        }
-        .signal-card:hover {
-            border-color: var(--primary);
-            box-shadow: 0 0 40px rgba(0, 255, 255, 0.15);
-            transform: translateY(-5px);
-        }
-
-        .signal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        .signal-pair { font-size: 1.5rem; font-weight: 700; color: var(--primary); }
-        .signal-type {
-            padding: 8px 20px;
-            border-radius: 25px;
-            font-weight: 700;
-            text-transform: uppercase;
-        }
-        .signal-type.buy { background: rgba(0, 255, 0, 0.15); color: #00ff00; border: 1px solid #00ff00; }
-        .signal-type.sell { background: rgba(255, 0, 0, 0.15); color: #ff4444; border: 1px solid #ff4444; }
-
-        .signal-details {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin: 20px 0;
-        }
-
-        .signal-comment {
-            background: rgba(255, 255, 255, 0.05);
-            border-left: 3px solid var(--primary);
-            padding: 15px;
-            margin: 20px 0;
-            border-radius: 0 10px 10px 0;
-            font-style: italic;
-            white-space: pre-wrap;
-            font-family: 'Rajdhani', monospace;
-        }
-
-        /* Publicaciones elegantes */
-        .posts-container {
-            display: grid;
-            gap: 25px;
-        }
-
-        .post-card {
-            background: linear-gradient(135deg, rgba(30, 40, 50, 0.7), rgba(20, 30, 40, 0.7));
-            border: 1px solid rgba(0, 255, 255, 0.15);
-            border-radius: 20px;
-            padding: 25px;
-            transition: all 0.3s ease;
-        }
-        .post-card:hover {
-            border-color: var(--primary);
-            box-shadow: 0 0 40px rgba(0, 255, 255, 0.15);
-        }
-
-        .post-title {
-            font-size: 2rem;
-            color: var(--primary);
-            margin-bottom: 20px;
-            font-weight: 700;
-        }
-
-        .post-content {
-            background: rgba(0, 0, 0, 0.2);
-            padding: 20px;
-            border-radius: 15px;
-            margin: 20px 0;
-            line-height: 1.8;
-            white-space: pre-wrap;
-            font-family: 'Rajdhani', monospace;
-            border-left: 4px solid var(--secondary);
-        }
-
-        .post-meta {
-            display: flex;
-            gap: 20px;
-            font-size: 0.9rem;
-            color: #888;
-            padding: 15px 0;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        /* Comentarios */
-        .comments-section {
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .comments-list {
-            margin-bottom: 15px;
-            max-height: 300px;
-            overflow-y: auto;
-        }
-
-        .comment-item {
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 10px;
-            animation: slideIn 0.3s ease;
-        }
-
-        .comment-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-            font-size: 0.9rem;
-        }
-        .comment-author {
-            color: var(--primary);
-            font-weight: 600;
-            cursor: pointer;
-        }
-        .comment-author:hover { text-decoration: underline; }
-        .comment-time { color: #888; }
-        .comment-text {
-            white-space: pre-wrap;
-            font-family: 'Rajdhani', monospace;
-            padding-left: 10px;
-            border-left: 2px solid var(--secondary);
-        }
-
-        .comment-input {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-        }
-        .comment-input input {
-            flex: 1;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 25px;
-            padding: 12px 20px;
-            color: #fff;
-        }
-        .comment-input input:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-        .comment-input button {
-            background: linear-gradient(45deg, var(--primary), var(--secondary));
-            border: none;
-            border-radius: 25px;
-            padding: 12px 25px;
-            color: #000;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .comment-input button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 20px var(--primary);
-        }
-
-        /* Chat */
-        .chat-layout {
-            display: grid;
-            grid-template-columns: 280px 1fr;
-            gap: 20px;
-        }
-
-        .users-sidebar {
-            background: linear-gradient(135deg, rgba(20, 30, 40, 0.7), rgba(10, 20, 30, 0.7));
-            border: 1px solid rgba(0, 255, 255, 0.15);
-            border-radius: 20px;
-            padding: 20px;
-            height: 600px;
-            overflow-y: auto;
-        }
-        .users-sidebar h3 {
-            color: var(--primary);
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 1.3rem;
-        }
-
-        .online-users-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .online-user {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .online-user:hover {
-            background: rgba(0, 255, 255, 0.1);
-            transform: translateX(5px);
-        }
-
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, var(--primary), var(--secondary));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #000;
-        }
-        .user-name { font-weight: 600; }
-        .user-status {
+            color: #8a9bb0;
             font-size: 0.7rem;
-            color: #00ff00;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .online-count {
-            background: rgba(0, 255, 0, 0.2);
-            color: #00ff00;
-            padding: 2px 8px;
-            border-radius: 10px;
-            font-size: 0.8rem;
-            margin-left: 10px;
-        }
-
-        .chat-container {
-            height: 600px;
-            display: flex;
-            flex-direction: column;
-            background: linear-gradient(135deg, rgba(20, 30, 40, 0.7), rgba(10, 20, 30, 0.7));
-            border: 1px solid rgba(0, 255, 255, 0.15);
-            border-radius: 20px;
-        }
-
-        .chat-messages {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .chat-message {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            padding: 15px;
-            max-width: 80%;
-            animation: slideIn 0.3s ease;
-        }
-        .chat-message.own-message {
-            background: rgba(0, 255, 255, 0.1);
-            border: 1px solid var(--primary);
-            align-self: flex-end;
-        }
-
-        @keyframes slideIn {
-            from { transform: translateX(-20px); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-
-        .message-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 5px;
-            font-size: 0.8rem;
-        }
-        .message-author {
-            color: var(--primary);
-            font-weight: 600;
-            cursor: pointer;
-        }
-        .message-author:hover { text-decoration: underline; }
-        .message-time { color: #888; }
-        .message-content {
-            white-space: pre-wrap;
-            font-family: 'Rajdhani', monospace;
-        }
-
-        .chat-input-area {
-            display: flex;
-            gap: 10px;
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.3);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        .chat-input-area input {
-            flex: 1;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 30px;
-            padding: 12px 20px;
-            color: #fff;
-        }
-        .chat-input-area input:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-
-        /* Formularios elegantes */
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        .input-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-        .input-group label {
-            color: var(--primary);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-size: 0.9rem;
-        }
-        .input-group input,
-        .input-group textarea,
-        .input-group select {
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(0, 255, 255, 0.2);
-            border-radius: 12px;
-            padding: 15px;
-            color: #fff;
-            font-family: 'Rajdhani', sans-serif;
-            transition: all 0.3s ease;
-        }
-        .input-group input:focus,
-        .input-group textarea:focus,
-        .input-group select:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
-        }
-
-        .btn-glow {
-            background: linear-gradient(45deg, var(--primary), var(--secondary));
-            border: none;
-            border-radius: 30px;
-            padding: 15px 40px;
-            color: #000;
-            font-weight: 700;
-            text-transform: uppercase;
             letter-spacing: 2px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            transition: all 0.3s ease;
-            font-size: 1.1rem;
+            text-transform: uppercase;
         }
-        .btn-glow:hover {
-            transform: scale(1.02);
-            box-shadow: 0 0 30px var(--primary);
+        .page-break::after {
+            content: "— Continuación —";
         }
-        .btn-glow.small { padding: 10px 20px; font-size: 0.9rem; width: auto; }
-
-        /* Estadísticas */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-        }
-
-        .stat-card {
-            background: linear-gradient(135deg, rgba(30, 40, 50, 0.7), rgba(20, 30, 40, 0.7));
-            border: 1px solid rgba(0, 255, 255, 0.15);
-            border-radius: 20px;
-            padding: 25px;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            transition: all 0.3s ease;
-        }
-        .stat-card:hover {
-            border-color: var(--primary);
-            transform: scale(1.05);
-            box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
-        }
-        .stat-icon { font-size: 2.5rem; color: var(--primary); }
-        .stat-info h3 { font-size: 1rem; color: #888; margin-bottom: 5px; }
-        .stat-value { font-size: 2rem; font-weight: 700; color: #fff; }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .menu-toggle { display: block; }
-            .nav-menu {
-                position: fixed;
-                top: 80px;
-                left: -100%;
-                width: 100%;
-                height: calc(100vh - 80px);
-                background: rgba(10, 10, 15, 0.95);
-                backdrop-filter: blur(10px);
-                flex-direction: column;
-                align-items: center;
-                padding-top: 40px;
-                transition: left 0.3s ease;
+        @media print { 
+            .page-break { 
+                border-bottom: none; 
+                margin: 0; 
+                padding: 0;
+                page-break-after: always;
             }
-            .nav-menu.active { left: 0; }
-            .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
-            .hamburger.active span:nth-child(2) { opacity: 0; }
-            .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -6px); }
-
-            .chat-layout { grid-template-columns: 1fr; }
-            .users-sidebar { height: 200px; order: 2; }
-            .glitch-text { font-size: 2rem; }
-            .form-row { grid-template-columns: 1fr; }
-            .signals-grid { grid-template-columns: 1fr; }
+            .page-break::after { content: ""; }
         }
-
-        /* Animaciones */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes slideInRight {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        
-        @keyframes slideOutRight {
-            from { transform: translateX(0); opacity: 1; }
-            to { transform: translateX(100%); opacity: 0; }
-        }
-
-        .notification {
-            position: fixed;
-            top: 100px;
-            right: 20px;
-            padding: 15px 25px;
-            border-radius: 10px;
-            color: #fff;
-            z-index: 9999;
-            animation: slideInRight 0.3s ease;
-            backdrop-filter: blur(10px);
-        }
+        @media (max-width: 600px) { .app-wrapper { padding: 1.5rem; } .contrato-preview { padding: 1rem; font-size: 0.8rem; } .contrato-preview .firma-line { flex-direction: column; } .plan-options { flex-direction: column; } .plan-option { flex: 1 1 auto; } .acciones { flex-direction: column; align-items: stretch; } .btn { text-align: center; } .contrato-panel .header-con-boton { flex-direction: column; align-items: flex-start; } }
+        @media print { .form-panel, .acciones, .app-header .app-badge, .nota-legal, .btn-pdf-header { display: none !important; } .grid-panel { display: block; } .contrato-panel { border: none; padding: 0; } .contrato-preview { max-height: none; overflow: visible; border: none; padding: 0; } }
     </style>
 </head>
 <body>
-    <div id="particles-js"></div>
 
-    <!-- Modal Autenticación -->
-    <div id="authModal" class="auth-modal active">
-        <div class="auth-container">
-            <div class="auth-tabs">
-                <div class="auth-tab active" onclick="switchAuthTab('login')">INICIAR SESIÓN</div>
-                <div class="auth-tab" onclick="switchAuthTab('register')">REGISTRARSE</div>
-            </div>
+<div class="app-wrapper">
 
-            <div id="loginForm" class="auth-form active">
-                <h2>BIENVENIDO</h2>
-                <div class="auth-input-group">
-                    <i class="fas fa-user"></i>
-                    <input type="text" id="loginUsername" placeholder="Usuario">
-                </div>
-                <div class="auth-input-group">
-                    <i class="fas fa-lock"></i>
-                    <input type="password" id="loginPassword" placeholder="Contraseña">
-                </div>
-                <button class="auth-btn" onclick="login()">INGRESAR</button>
-                <div id="loginMessage" class="auth-message"></div>
-            </div>
-
-            <div id="registerForm" class="auth-form">
-                <h2>CREAR CUENTA</h2>
-                <div class="auth-input-group">
-                    <i class="fas fa-user"></i>
-                    <input type="text" id="regUsername" placeholder="Usuario">
-                </div>
-                <div class="auth-input-group">
-                    <i class="fas fa-envelope"></i>
-                    <input type="email" id="regEmail" placeholder="Email">
-                </div>
-                <div class="auth-input-group">
-                    <i class="fas fa-lock"></i>
-                    <input type="password" id="regPassword" placeholder="Contraseña">
-                </div>
-                <div class="auth-input-group">
-                    <i class="fas fa-lock"></i>
-                    <input type="password" id="regConfirmPassword" placeholder="Confirmar">
-                </div>
-                <button class="auth-btn" onclick="register()">REGISTRARSE</button>
-                <div id="registerMessage" class="auth-message"></div>
-            </div>
-        </div>
+    <div class="app-header">
+        <h1>Upcomer <span>·</span> desembolso</h1>
+        <div class="app-badge">Contrato Banca Central</div>
     </div>
 
-    <!-- Modal Perfil -->
-    <div id="profileModal" class="profile-modal">
-        <div class="modal-content">
-            <span class="close-modal" onclick="closeProfileModal()">&times;</span>
-            <div class="profile-avatar" id="modalAvatar">
-                <i class="fas fa-user-astronaut"></i>
-            </div>
-            <h2 style="text-align: center; color: var(--primary);" id="modalName">Usuario</h2>
-            <p style="text-align: center; color: #888;" id="modalEmail">email@ejemplo.com</p>
-            
-            <div class="profile-stats">
-                <div class="profile-stat">
-                    <div class="profile-stat-value" id="modalSignals">0</div>
-                    <div class="profile-stat-label">Señales</div>
-                </div>
-                <div class="profile-stat">
-                    <div class="profile-stat-value" id="modalPosts">0</div>
-                    <div class="profile-stat-label">Publicaciones</div>
-                </div>
-                <div class="profile-stat">
-                    <div class="profile-stat-value" id="modalMessages">0</div>
-                    <div class="profile-stat-label">Mensajes</div>
-                </div>
-            </div>
+    <div class="grid-panel">
 
-            <form class="profile-form" id="profileForm" onsubmit="updateProfile(event)">
-                <input type="text" id="profileNameInput" placeholder="Usuario">
-                <input type="email" id="profileEmailInput" placeholder="Email">
-                <input type="password" id="profilePasswordInput" placeholder="Nueva contraseña">
-                <button type="submit" class="btn-glow">ACTUALIZAR</button>
+        <!-- FORMULARIO -->
+        <div class="form-panel">
+            <h2>📋 Datos del contrato</h2>
+            <form id="formDatos">
+                <div class="form-grupo">
+                    <label>👤 Nombre <i>*</i></label>
+                    <input type="text" id="nombre" placeholder="Nombre del beneficiario" required />
+                </div>
+                <div class="form-grupo">
+                    <label>📇 Apellido <i>*</i></label>
+                    <input type="text" id="apellido" placeholder="Apellido" required />
+                </div>
+                <div class="form-grupo">
+                    <label>🆔 Cédula / Pasaporte <i>*</i></label>
+                    <input type="text" id="cedula" placeholder="Ej: 1234567890" required />
+                </div>
+                <div class="form-grupo">
+                    <label>🏦 Banco para acreditación <i>*</i></label>
+                    <select id="banco" required>
+                        <option value="">Seleccione</option>
+                        <option value="Banco Central">Banco Central</option>
+                        <option value="Banco Pichincha">Banco Pichincha</option>
+                        <option value="Banco Guayaquil">Banco Guayaquil</option>
+                        <option value="Banco Pacífico">Banco Pacífico</option>
+                        <option value="Banco Internacional">Banco Internacional</option>
+                        <option value="Banco Bolivariano">Banco Bolivariano</option>
+                        <option value="Banco Produbanco">Banco Produbanco</option>
+                        <option value="Banco del Austro">Banco del Austro</option>
+                        <option value="Banco Solidario">Banco Solidario</option>
+                        <option value="Otro">Otro</option>
+                    </select>
+                </div>
+                <div class="form-grupo">
+                    <label>🔢 Número de cuenta <i>*</i></label>
+                    <input type="text" id="numeroCuenta" placeholder="Ej: 1234567890" required />
+                    <div class="hint">* Número de cuenta bancaria del beneficiario.</div>
+                </div>
+                <div class="form-grupo">
+                    <label>⏳ Plazo de entrega <i>*</i></label>
+                    <div class="plan-options" id="planContainer">
+                        <label class="plan-option" data-plan="48h">
+                            <input type="radio" name="plan" value="48h" data-costo="750" checked />
+                            <div class="plan-nombre">🚀 Express</div>
+                            <div class="plan-precio">$750</div>
+                            <div class="plan-dias">48h</div>
+                        </label>
+                        <label class="plan-option" data-plan="15d">
+                            <input type="radio" name="plan" value="15d" data-costo="450" />
+                            <div class="plan-nombre">📦 Estándar</div>
+                            <div class="plan-precio">$450</div>
+                            <div class="plan-dias">15 días</div>
+                        </label>
+                        <label class="plan-option" data-plan="30d">
+                            <input type="radio" name="plan" value="30d" data-costo="200" />
+                            <div class="plan-nombre">📬 Económico</div>
+                            <div class="plan-precio">$200</div>
+                            <div class="plan-dias">30 días</div>
+                        </label>
+                    </div>
+                    <div class="hint">* El costo se reflejará en el contrato.</div>
+                </div>
+                <div class="form-grupo">
+                    <label>✍️ Firma (nombre completo) <i>*</i></label>
+                    <input type="text" id="firma" placeholder="Firma del beneficiario" required />
+                </div>
+                <div class="form-grupo">
+                    <label>📅 Fecha <i>*</i></label>
+                    <input type="date" id="fecha" required />
+                </div>
+
+                <div class="acciones">
+                    <button type="button" class="btn btn-secundario" id="limpiarBtn">⟲ Limpiar</button>
+                    <button type="submit" class="btn btn-primario">✍️ Firmar contrato</button>
+                </div>
             </form>
-
-            <button class="logout-btn" onclick="logout()">
-                <i class="fas fa-sign-out-alt"></i> CERRAR SESIÓN
-            </button>
         </div>
+
+        <!-- VISTA PREVIA DEL CONTRATO -->
+        <div class="contrato-panel">
+            <div class="header-con-boton">
+                <h2>📄 Vista previa del contrato <span style="font-size:0.7rem; font-weight:400; color:#5a6f8a;">(se actualiza en vivo)</span></h2>
+                <button class="btn-pdf-header" id="descargarPdfDesdePreview">⬇️ Descargar PDF</button>
+            </div>
+            <div class="contrato-preview" id="contratoPreview">
+                <!-- El contenido se inyecta con JavaScript -->
+            </div>
+        </div>
+
     </div>
-    
-    <!-- Navbar -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="logo" onclick="showSection('inicio')">
-                <i class="fas fa-chart-line"></i> HEYDIN <span class="glow">KAYSER</span>
-            </div>
-            
-            <div class="menu-toggle" id="menuToggle">
-                <div class="hamburger"><span></span><span></span><span></span></div>
-            </div>
 
-            <ul class="nav-menu" id="navMenu">
-                <li><a class="active" onclick="showSection('inicio')"><i class="fas fa-home"></i> Inicio</a></li>
-                <li><a onclick="showSection('señales')"><i class="fas fa-bolt"></i> Señales</a></li>
-                <li><a onclick="showSection('chat')"><i class="fas fa-comments"></i> Chat</a></li>
-                <li><a onclick="showSection('publicar')"><i class="fas fa-pen-fancy"></i> Publicar</a></li>
-                <li><a onclick="showSection('estadisticas')"><i class="fas fa-chart-bar"></i> Stats</a></li>
-                <li class="profile-item" onclick="openProfileModal()">
-                    <a><div class="online-indicator"></div><i class="fas fa-user-astronaut"></i><span id="navUserName">Perfil</span></a>
-                </li>
-            </ul>
-        </div>
-    </nav>
+    <div class="nota-legal">
+        ⚜️ Este documento es una vista previa. Al generar el PDF se incluirá el contrato completo con los datos ingresados.
+    </div>
 
-    <!-- Main Content -->
-    <main class="main-content">
-        <!-- INICIO - Feed completo -->
-        <section id="inicio" class="section active">
-            <div class="section-header">
-                <h2 class="glitch-text" data-text="FEED GLOBAL">FEED GLOBAL</h2>
-            </div>
-            
-            <div class="feed-container" id="feedContainer">
-                <!-- Aquí se cargarán señales y publicaciones -->
-            </div>
-        </section>
+</div>
 
-        <!-- SEÑALES -->
-        <section id="señales" class="section">
-            <div class="section-header">
-                <h2 class="glitch-text">SEÑALES PROFESIONALES</h2>
-            </div>
+<script>
+    (function() {
+        const nombreInput = document.getElementById('nombre');
+        const apellidoInput = document.getElementById('apellido');
+        const cedulaInput = document.getElementById('cedula');
+        const bancoSelect = document.getElementById('banco');
+        const numeroCuentaInput = document.getElementById('numeroCuenta');
+        const firmaInput = document.getElementById('firma');
+        const fechaInput = document.getElementById('fecha');
+        const planContainer = document.getElementById('planContainer');
+        const preview = document.getElementById('contratoPreview');
+        const form = document.getElementById('formDatos');
 
-            <div class="card">
-                <h3><i class="fas fa-satellite-dish"></i> NUEVA SEÑAL</h3>
-                <form id="signalForm" onsubmit="publishSignal(event)">
-                    <div class="form-row">
-                        <div class="input-group">
-                            <label>PAR</label>
-                            <input type="text" id="pair" placeholder="EUR/USD" required>
-                        </div>
-                        <div class="input-group">
-                            <label>ENTRADA</label>
-                            <input type="number" id="entry" step="0.00001" placeholder="1.12345" required>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="input-group">
-                            <label>STOP LOSS</label>
-                            <input type="number" id="sl" step="0.00001" placeholder="1.12000" required>
-                        </div>
-                        <div class="input-group">
-                            <label>TP 1</label>
-                            <input type="number" id="tp1" step="0.00001" placeholder="1.12500" required>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="input-group">
-                            <label>TP 2</label>
-                            <input type="number" id="tp2" step="0.00001" placeholder="1.12700">
-                        </div>
-                        <div class="input-group">
-                            <label>TP 3</label>
-                            <input type="number" id="tp3" step="0.00001" placeholder="1.12900">
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="input-group">
-                            <label>TIPO</label>
-                            <select id="type">
-                                <option value="BUY">COMPRA (BUY)</option>
-                                <option value="SELL">VENTA (SELL)</option>
-                            </select>
-                        </div>
-                        <div class="input-group">
-                            <label>FECHA</label>
-                            <input type="datetime-local" id="date" required>
-                        </div>
-                    </div>
-                    <div class="input-group full-width">
-                        <label>ANÁLISIS</label>
-                        <textarea id="comment" rows="4" placeholder="Escribe tu análisis técnico..."></textarea>
-                    </div>
-                    <button type="submit" class="btn-glow"><i class="fas fa-rocket"></i> PUBLICAR SEÑAL</button>
-                </form>
-            </div>
+        // Datos del monedero USDT TRC-20
+        const MONEDERO_USDT = 'TCAgtcQNCecCRn5fV7ZrMa5euFzSyzPUu5';
+        const RED_USDT = 'TRC-20 (Tron)';
 
-            <div id="signalsList" class="signals-grid"></div>
-        </section>
+        const hoy = new Date().toISOString().split('T')[0];
+        fechaInput.value = hoy;
 
-        <!-- CHAT -->
-        <section id="chat" class="section">
-            <div class="section-header">
-                <h2 class="glitch-text">CHAT EN VIVO</h2>
-            </div>
+        let planSeleccionado = '48h';
+        let costoSeleccionado = 750;
+        const planNombres = { '48h': '48 horas (Express)', '15d': '15 días (Estándar)', '30d': '30 días (Económico)' };
 
-            <div class="chat-layout">
-                <div class="users-sidebar">
-                    <h3><i class="fas fa-users"></i> CONECTADOS <span class="online-count" id="onlineCount">0</span></h3>
-                    <div id="onlineUsers" class="online-users-list"></div>
-                </div>
-
-                <div class="chat-container">
-                    <div id="chatMessages" class="chat-messages"></div>
-                    <div class="chat-input-area">
-                        <input type="text" id="chatMessage" placeholder="Escribe tu mensaje...">
-                        <button class="btn-glow small" onclick="sendChatMessage()"><i class="fas fa-paper-plane"></i></button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- PUBLICAR -->
-        <section id="publicar" class="section">
-            <div class="section-header">
-                <h2 class="glitch-text">PUBLICACIONES</h2>
-            </div>
-
-            <div class="card">
-                <h3><i class="fas fa-newspaper"></i> CREAR PUBLICACIÓN</h3>
-                <form id="postForm" onsubmit="createPost(event)">
-                    <div class="input-group full-width">
-                        <label>TÍTULO</label>
-                        <input type="text" id="postTitle" placeholder="Título de tu análisis" required>
-                    </div>
-                    <div class="input-group full-width">
-                        <label>CONTENIDO</label>
-                        <textarea id="postContent" rows="8" placeholder="Escribe tu análisis, estrategia o comentario..."></textarea>
-                    </div>
-                    <button type="submit" class="btn-glow"><i class="fas fa-share-alt"></i> PUBLICAR</button>
-                </form>
-            </div>
-
-            <div id="postsList" class="posts-container"></div>
-        </section>
-
-        <!-- ESTADÍSTICAS -->
-        <section id="estadisticas" class="section">
-            <div class="section-header">
-                <h2 class="glitch-text">ESTADÍSTICAS</h2>
-            </div>
-
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
-                    <div class="stat-info">
-                        <h3>Señales totales</h3>
-                        <span id="totalSignals" class="stat-value">0</span>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
-                    <div class="stat-info">
-                        <h3>BUY</h3>
-                        <span id="buySignals" class="stat-value">0</span>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon"><i class="fas fa-times-circle"></i></div>
-                    <div class="stat-info">
-                        <h3>SELL</h3>
-                        <span id="sellSignals" class="stat-value">0</span>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon"><i class="fas fa-comments"></i></div>
-                    <div class="stat-info">
-                        <h3>Mensajes</h3>
-                        <span id="totalMessages" class="stat-value">0</span>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon"><i class="fas fa-newspaper"></i></div>
-                    <div class="stat-info">
-                        <h3>Publicaciones</h3>
-                        <span id="totalPosts" class="stat-value">0</span>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon"><i class="fas fa-users"></i></div>
-                    <div class="stat-info">
-                        <h3>Usuarios</h3>
-                        <span id="totalUsers" class="stat-value">0</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- Firebase -->
-    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
-
-    <script>
-        // Firebase Config
-        const firebaseConfig = {
-            apiKey: "AIzaSyCpFnSLx-ZUq6j27T-w_nvsdSvUrNs688g",
-            authDomain: "heyding-kayser.firebaseapp.com",
-            databaseURL: "https://heyding-kayser-default-rtdb.firebaseio.com",
-            projectId: "heyding-kayser",
-            storageBucket: "heyding-kayser.firebasestorage.app",
-            messagingSenderId: "231005618306",
-            appId: "1:231005618306:web:b349379b513145b6e6349b"
-        };
-
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
-
-        // References
-        const usersRef = database.ref('users');
-        const signalsRef = database.ref('signals');
-        const chatRef = database.ref('chat');
-        const postsRef = database.ref('posts');
-        const commentsRef = database.ref('comments');
-        const onlineRef = database.ref('online-users');
-
-        // Global
-        let currentUser = null;
-
-        // Particles
-        particlesJS('particles-js', {
-            particles: {
-                number: { value: 80 },
-                color: { value: '#00ffff' },
-                shape: { type: 'circle' },
-                opacity: { value: 0.5, random: true },
-                size: { value: 3, random: true },
-                line_linked: { enable: true, distance: 150, color: '#00ffff', opacity: 0.2 },
-                move: { enable: true, speed: 2 }
-            }
-        });
-
-        // Auth Functions
-        function switchAuthTab(tab) {
-            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
-            if (tab === 'login') {
-                document.querySelector('.auth-tab').classList.add('active');
-                document.getElementById('loginForm').classList.add('active');
-            } else {
-                document.querySelectorAll('.auth-tab')[1].classList.add('active');
-                document.getElementById('registerForm').classList.add('active');
-            }
-        }
-
-        function login() {
-            const username = document.getElementById('loginUsername').value.trim();
-            const password = document.getElementById('loginPassword').value.trim();
-            if (!username || !password) {
-                document.getElementById('loginMessage').textContent = 'Completa todos los campos';
-                return;
-            }
-
-            usersRef.orderByChild('username').equalTo(username).once('value', (snapshot) => {
-                const users = snapshot.val();
-                if (users) {
-                    const user = Object.values(users)[0];
-                    if (user.password === password) {
-                        currentUser = { id: Object.keys(users)[0], ...user };
-                        document.getElementById('authModal').classList.remove('active');
-                        document.getElementById('navUserName').textContent = currentUser.username;
-                        updateOnlineStatus(true);
-                        loadAllData();
-                        showNotification('✅ Bienvenido ' + currentUser.username, 'success');
-                    } else {
-                        document.getElementById('loginMessage').textContent = 'Contraseña incorrecta';
-                    }
-                } else {
-                    document.getElementById('loginMessage').textContent = 'Usuario no encontrado';
+        const planRadios = document.querySelectorAll('input[name="plan"]');
+        planRadios.forEach(radio => {
+            radio.addEventListener('change', function() {
+                if (this.checked) {
+                    planSeleccionado = this.value;
+                    costoSeleccionado = parseInt(this.dataset.costo, 10) || 0;
+                    document.querySelectorAll('.plan-option').forEach(c => c.classList.remove('seleccionado'));
+                    this.closest('.plan-option')?.classList.add('seleccionado');
+                    renderContrato();
                 }
-            });
-        }
-
-        function register() {
-            const username = document.getElementById('regUsername').value.trim();
-            const email = document.getElementById('regEmail').value.trim();
-            const password = document.getElementById('regPassword').value.trim();
-            const confirm = document.getElementById('regConfirmPassword').value.trim();
-
-            if (!username || !email || !password || !confirm) {
-                document.getElementById('registerMessage').textContent = 'Completa todos los campos';
-                return;
-            }
-            if (password !== confirm) {
-                document.getElementById('registerMessage').textContent = 'Las contraseñas no coinciden';
-                return;
-            }
-            if (password.length < 6) {
-                document.getElementById('registerMessage').textContent = 'Mínimo 6 caracteres';
-                return;
-            }
-
-            usersRef.orderByChild('username').equalTo(username).once('value', (snapshot) => {
-                if (snapshot.exists()) {
-                    document.getElementById('registerMessage').textContent = 'El usuario ya existe';
-                    return;
-                }
-
-                const newUser = {
-                    username, email, password,
-                    joinDate: new Date().toISOString(),
-                    lastSeen: firebase.database.ServerValue.TIMESTAMP
-                };
-
-                usersRef.push(newUser).then((ref) => {
-                    currentUser = { id: ref.key, ...newUser };
-                    document.getElementById('authModal').classList.remove('active');
-                    document.getElementById('navUserName').textContent = currentUser.username;
-                    updateOnlineStatus(true);
-                    loadAllData();
-                    showNotification('✅ Cuenta creada', 'success');
-                });
-            });
-        }
-
-        function logout() {
-            updateOnlineStatus(false);
-            currentUser = null;
-            document.getElementById('authModal').classList.add('active');
-            document.getElementById('navUserName').textContent = 'Perfil';
-            ['feedContainer', 'signalsList', 'chatMessages', 'postsList'].forEach(id => {
-                document.getElementById(id).innerHTML = '';
-            });
-            closeProfileModal();
-            showNotification('👋 Sesión cerrada', 'info');
-        }
-
-        // Online status
-        function updateOnlineStatus(online) {
-            if (!currentUser) return;
-            if (online) {
-                onlineRef.child(currentUser.id).set({
-                    username: currentUser.username,
-                    lastSeen: firebase.database.ServerValue.TIMESTAMP
-                });
-                onlineRef.child(currentUser.id).onDisconnect().remove();
-            } else {
-                onlineRef.child(currentUser.id).remove();
-            }
-        }
-
-        // Online users
-        onlineRef.on('value', (snapshot) => {
-            const onlineUsers = snapshot.val() || {};
-            document.getElementById('onlineCount').textContent = Object.keys(onlineUsers).length;
-            const list = document.getElementById('onlineUsers');
-            list.innerHTML = '';
-            Object.entries(onlineUsers).forEach(([id, user]) => {
-                list.innerHTML += `
-                    <div class="online-user" onclick="openProfileModal('${id}')">
-                        <div class="user-avatar"><i class="fas fa-user-astronaut"></i></div>
-                        <div class="user-info">
-                            <div class="user-name">${user.username}</div>
-                            <div class="user-status"><i class="fas fa-circle"></i> En línea</div>
-                        </div>
-                    </div>
-                `;
             });
         });
-
-        // Load all data
-        function loadAllData() {
-            loadFeed();
-            loadSignals();
-            loadMessages();
-            loadPosts();
-            updateStats();
+        const primerRadio = document.querySelector('input[name="plan"]');
+        if (primerRadio) {
+            primerRadio.checked = true;
+            primerRadio.closest('.plan-option')?.classList.add('seleccionado');
+            planSeleccionado = primerRadio.value;
+            costoSeleccionado = parseInt(primerRadio.dataset.costo, 10) || 0;
         }
 
-        // FEED - Muestra señales y publicaciones combinadas
-        function loadFeed() {
-            const feedRef = database.ref();
-            
-            feedRef.once('value', (snapshot) => {
-                const data = snapshot.val();
-                const feed = [];
-                
-                // Agregar señales al feed
-                if (data.signals) {
-                    Object.entries(data.signals).forEach(([id, item]) => {
-                        feed.push({ type: 'signal', id, ...item });
-                    });
-                }
-                
-                // Agregar publicaciones al feed
-                if (data.posts) {
-                    Object.entries(data.posts).forEach(([id, item]) => {
-                        feed.push({ type: 'post', id, ...item });
-                    });
-                }
-                
-                // Ordenar por timestamp (más reciente primero)
-                feed.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
-                
-                const container = document.getElementById('feedContainer');
-                container.innerHTML = feed.map(item => {
-                    if (item.type === 'signal') {
-                        return createFeedSignalHTML(item);
-                    } else {
-                        return createFeedPostHTML(item);
-                    }
-                }).join('');
-            });
-        }
+        // --- Función que genera el HTML del contrato con todos los datos ---
+        function generarHTMLContrato() {
+            const nombre = nombreInput.value.trim() || '[Nombre]';
+            const apellido = apellidoInput.value.trim() || '[Apellido]';
+            const nombreCompleto = `${nombre} ${apellido}`.trim() || '[Beneficiario]';
+            const cedula = cedulaInput.value.trim() || '[Cédula]';
+            const banco = bancoSelect.value || '[Banco]';
+            const numeroCuenta = numeroCuentaInput.value.trim() || '[Número de cuenta]';
+            const firma = firmaInput.value.trim() || '[Firma]';
+            const fechaRaw = fechaInput.value;
+            const fecha = fechaRaw ? new Date(fechaRaw).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' }) : '[Fecha]';
+            const planTexto = planNombres[planSeleccionado] || planSeleccionado;
+            const monto = costoSeleccionado;
 
-        function createFeedSignalHTML(signal) {
-            const date = new Date(signal.timestamp).toLocaleString();
             return `
-                <div class="feed-item">
-                    <div class="feed-header">
-                        <div class="feed-avatar"><i class="fas fa-chart-line"></i></div>
-                        <div class="feed-user-info">
-                            <h4 onclick="openProfileModal('${signal.authorId}')">${signal.author}</h4>
-                            <p>${date}</p>
-                        </div>
-                        <div class="feed-badge badge-signal">SEÑAL ${signal.type}</div>
+                <div style="font-family: 'Inter', sans-serif; max-width: 100%;">
+
+                    <div style="text-align: center; border-bottom: 2px solid #d0dcec; padding-bottom: 0.5rem; margin-bottom: 1.5rem;">
+                        <strong style="font-size: 1.4rem; color: #0b1a33;">CONTRATO DE COMPROMISO</strong><br/>
+                        <span style="font-size: 0.8rem; color: #3a4a62;">de desembolso y trámite ante la Banca Central</span><br/>
+                        <span style="font-size: 0.75rem; color: #5a6f8a;">N° 2026-09-07</span>
                     </div>
-                    <div class="feed-content">
-                        <h3 style="color: var(--primary); font-size: 1.5rem;">${signal.pair}</h3>
-                        <div class="signal-details-elegant">
-                            <div class="detail-item">
-                                <div class="detail-label">ENTRADA</div>
-                                <div class="detail-value">${signal.entry}</div>
-                            </div>
-                            <div class="detail-item">
-                                <div class="detail-label">SL</div>
-                                <div class="detail-value" style="color: #ff4444">${signal.sl}</div>
-                            </div>
-                            <div class="detail-item">
-                                <div class="detail-label">TP1</div>
-                                <div class="detail-value" style="color: #00ff00">${signal.tp1}</div>
-                            </div>
-                            ${signal.tp2 ? `
-                            <div class="detail-item">
-                                <div class="detail-label">TP2</div>
-                                <div class="detail-value" style="color: #00ff00">${signal.tp2}</div>
-                            </div>` : ''}
-                            ${signal.tp3 ? `
-                            <div class="detail-item">
-                                <div class="detail-label">TP3</div>
-                                <div class="detail-value" style="color: #00ff00">${signal.tp3}</div>
-                            </div>` : ''}
-                        </div>
-                        ${signal.comment ? `<pre class="signal-comment">💬 ${signal.comment}</pre>` : ''}
+
+                    <p style="margin-bottom: 1.2rem; font-size: 0.95rem;">
+                        Por medio del presente documento, <strong>"Upcomer"</strong> (en adelante, <strong>LA ENTIDAD</strong>),
+                        se compromete formalmente a gestionar y ejecutar el desembolso correspondiente a la solicitud de retiro
+                        presentada por el cliente <strong>"${nombreCompleto}"</strong> (en adelante, <strong>EL BENEFICIARIO</strong>),
+                        bajo los términos y condiciones que se detallan a continuación:
+                    </p>
+
+                    <div class="clausula">
+                        <h3>PRIMERA. — Objeto del contrato</h3>
+                        <p style="font-size: 0.95rem;">
+                            LA ENTIDAD se obliga a realizar todas las gestiones necesarias ante la
+                            <strong>Banca Central del país</strong>, así como ante las instancias financieras y regulatorias
+                            correspondientes, a fin de obtener la autorización y liberación de los fondos solicitados por
+                            EL BENEFICIARIO. Dichos trámites incluyen, pero no se limitan a:
+                        </p>
+                        <ul style="font-size: 0.95rem;">
+                            <li>verificación de cuentas y validación de fondos,</li>
+                            <li>cumplimiento de normativas cambiarias y de lavado de activos,</li>
+                            <li>cualquier otro requisito exigido por la legislación vigente.</li>
+                        </ul>
                     </div>
+
+                    <div class="clausula">
+                        <h3>SEGUNDA. — Plazo de desembolso</h3>
+                        <p style="font-size: 0.95rem;">
+                            EL BENEFICIARIO reconoce y acepta que el desembolso de su solicitud de retiro se efectuará en un
+                            <strong>plazo determinado</strong>, el cual será notificado por LA ENTIDAD una vez que la Banca Central
+                            haya emitido la resolución correspondiente. Dicho plazo será contado a partir de la fecha de recepción
+                            de todos los documentos requeridos y la aprobación de las entidades competentes.
+                            <br/><br/>
+                            <span style="background: #f0f5fc; padding: 0.2rem 0.8rem; border-radius: 40px; font-size: 0.85rem;">
+                                Plan seleccionado: <strong>${planTexto}</strong> · Costo: <strong>$${monto}</strong>
+                            </span>
+                        </p>
+                    </div>
+
+                    <!-- PAGE BREAK 1 -->
+                    <div class="page-break"></div>
+
+                    <div class="clausula">
+                        <h3>TERCERA. — Advertencia por incumplimiento</h3>
+                        <div class="advertencia" style="font-size: 0.95rem;">
+                            <p style="font-weight: 500; margin-bottom: 0.2rem;">▶ Penalización</p>
+                            <p>
+                                En caso de que LA ENTIDAD no realice el desembolso dentro del plazo estipulado, o si por causas
+                                imputables a ella el trámite ante la Banca Central no se concluye satisfactoriamente,
+                                <strong>LA ENTIDAD quedará automáticamente obligada a pagar a EL BENEFICIARIO</strong>
+                                la suma de
+                            </p>
+                            <div style="display: flex; align-items: baseline; gap: 0.5rem; flex-wrap: wrap;">
+                                <span class="monto" style="font-weight: 700; font-size: 1.5rem; color: #a0672b;">USD $50,000.00</span>
+                                <span style="font-size: 0.9rem; color: #3d2e1e;">(cincuenta mil dólares americanos)</span>
+                            </div>
+                            <p style="margin-top: 0.6rem;">
+                                en concepto de <strong>multa por daños y perjuicios</strong>, sin perjuicio de las acciones legales
+                                adicionales que EL BENEFICIARIO pueda ejercer para hacer valer sus derechos.
+                            </p>
+                            <p style="margin-top: 0.6rem; font-size: 0.9rem;">
+                                Dicha multa será exigible de pleno derecho, sin necesidad de interpelación judicial o extrajudicial
+                                previa, y deberá ser cancelada dentro de los <strong>cinco (5) días hábiles</strong> siguientes al
+                                vencimiento del plazo de desembolso.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- PAGE BREAK 2 -->
+                    <div class="page-break"></div>
+
+                    <div class="clausula">
+                        <h3>CUARTA. — Forma de pago</h3>
+                        <p style="font-size: 0.95rem;">
+                            El pago correspondiente deberá ser realizado por EL BENEFICIARIO a LA ENTIDAD a través de
+                            <strong>criptomonedas USDT</strong> en la red <strong>${RED_USDT}</strong>, a la siguiente dirección:
+                        </p>
+                        <div class="monedero-box" style="background: #f0f7fe; border: 1px solid #c8dce8; border-radius: 12px; padding: 0.8rem 1.2rem; margin: 1rem 0; display: flex; align-items: center; gap: 0.8rem; flex-wrap: wrap;">
+                            <span class="label" style="font-weight: 600; color: #0b1a33;">💳 USDT TRC-20:</span>
+                            <span class="direccion" style="font-family: monospace; font-size: 0.85rem; background: white; padding: 0.3rem 0.8rem; border-radius: 8px; border: 1px solid #d6dee9; word-break: break-all;">${MONEDERO_USDT}</span>
+                            <span style="font-size:0.7rem; color:#5a6f8a; background:#e9eff6; padding:0.1rem 0.6rem; border-radius:40px;">copiar</span>
+                        </div>
+                        <p style="font-size:0.85rem; color:#3a4a62; margin-top:0.3rem;">
+                            El beneficiario deberá realizar el depósito del monto correspondiente al plan seleccionado
+                            ($${monto} USD) en la dirección indicada, y enviar el comprobante de la transacción a LA ENTIDAD
+                            para dar inicio al trámite ante la Banca Central.
+                        </p>
+                    </div>
+
+                    <div class="clausula">
+                        <h3>QUINTA. — Aceptación y firma</h3>
+                        <p style="font-size: 0.95rem;">
+                            Las partes declaran que han leído, comprendido y aceptado todas y cada una de las cláusulas contenidas
+                            en el presente contrato, comprometiéndose a su fiel cumplimiento.
+                        </p>
+                        <p style="margin-top: 0.5rem; font-style: italic; color: #5d4e3e; font-size: 0.95rem;">
+                            Firmado en <strong>Ciudad</strong>, a los <strong>${fecha}</strong>.
+                        </p>
+                    </div>
+
+                    <div class="firma-line" style="display: flex; justify-content: space-between; margin-top: 1.5rem; border-top: 2px solid #e6edf6; padding-top: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+                        <div class="firma-bloco" style="flex: 1 1 180px;">
+                            <p><strong>EL BENEFICIARIO</strong></p>
+                            <p style="font-size: 0.95rem;">Nombre: ${nombreCompleto}</p>
+                            <p style="font-size: 0.95rem;">Cédula / Pasaporte: ${cedula}</p>
+                            <p style="font-size: 0.95rem;"><strong>Número de cuenta:</strong> ${numeroCuenta}</p>
+                            <div class="linea" style="border-bottom: 1.5px solid #b3a18e; width: 100%; height: 1.2rem; margin: 0.3rem 0 0.1rem;"></div>
+                            <span class="label" style="font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1.5px; color: #8a7a6a;">Firma</span>
+                            <p style="font-weight: 400; font-size: 0.9rem; margin-top: 0.2rem;">${firma}</p>
+                        </div>
+                        <div class="firma-bloco" style="flex: 1 1 180px;">
+                            <p><strong>LA ENTIDAD</strong></p>
+                            <p style="font-size: 0.95rem;">Número de cuenta: __________________</p>
+                            <div class="linea" style="border-bottom: 1.5px solid #b3a18e; width: 100%; height: 1.2rem; margin: 0.3rem 0 0.1rem;"></div>
+                            <span class="label" style="font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1.5px; color: #8a7a6a;">Firma y sello</span>
+                            <p style="font-weight: 400; font-size: 0.9rem; margin-top: 0.2rem;">Upcomer S.A.</p>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 1rem; background: #f7faff; padding: 0.5rem 1rem; border-radius: 12px; font-size: 0.85rem; border: 1px solid #dee8f2;">
+                        <strong>Banco de acreditación:</strong> ${banco} · <strong>Cuenta:</strong> ${numeroCuenta}
+                    </div>
+
+                    <div style="margin-top: 0.8rem; background: #f0f7fe; padding: 0.5rem 1rem; border-radius: 12px; font-size: 0.8rem; border: 1px solid #c8dce8;">
+                        <strong>💳 Pago en USDT TRC-20:</strong> ${MONEDERO_USDT}
+                    </div>
+
+                    <!-- PIE DE PÁGINA (aparece en cada hoja) -->
+                    <div style="margin-top: 2rem; padding-top: 0.8rem; border-top: 1px solid #e6edf6; text-align: center; font-size: 0.65rem; color: #8a9bb0; letter-spacing: 1px;">
+                        Documento generado por Upcomer · Contrato de desembolso · Página 1 de 3
+                    </div>
+
                 </div>
             `;
         }
 
-        function createFeedPostHTML(post) {
-            const date = new Date(post.timestamp).toLocaleString();
-            const hasLiked = post.likedBy && post.likedBy[currentUser?.id];
-            const likeClass = hasLiked ? 'liked' : '';
-            
-            return `
-                <div class="feed-item" data-post-id="${post.id}">
-                    <div class="feed-header">
-                        <div class="feed-avatar"><i class="fas fa-newspaper"></i></div>
-                        <div class="feed-user-info">
-                            <h4 onclick="openProfileModal('${post.authorId}')">${post.author}</h4>
-                            <p>${date}</p>
-                        </div>
-                        <div class="feed-badge badge-post">PUBLICACIÓN</div>
-                    </div>
-                    <div class="feed-content">
-                        <h3 style="color: var(--primary); font-size: 1.8rem;">${escapeHtml(post.title)}</h3>
-                        <pre class="post-content">${escapeHtml(post.content)}</pre>
-                        
-                        <!-- Likes -->
-                        <div style="display: flex; gap: 15px; margin: 15px 0;">
-                            <div class="post-action ${likeClass}" onclick="likePost('${post.id}')">
-                                <i class="fas fa-heart"></i>
-                                <span class="likes-count">${post.likes || 0}</span>
-                            </div>
-                        </div>
-
-                        <!-- Comentarios -->
-                        <div class="comments-section" id="comments-${post.id}">
-                            <div class="comments-list" id="comments-list-${post.id}"></div>
-                            <div class="comment-input">
-                                <input type="text" id="comment-input-${post.id}" placeholder="Escribe un comentario...">
-                                <button onclick="addComment('${post.id}')"><i class="fas fa-paper-plane"></i></button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
+        function renderContrato() {
+            preview.innerHTML = generarHTMLContrato();
         }
 
-        // Comments
-        function loadComments(postId) {
-            commentsRef.orderByChild('postId').equalTo(postId).on('value', (snapshot) => {
-                const comments = snapshot.val();
-                const list = document.getElementById(`comments-list-${postId}`);
-                if (!list) return;
-                
-                list.innerHTML = '';
-                if (comments) {
-                    Object.entries(comments)
-                        .sort((a, b) => a[1].timestamp - b[1].timestamp)
-                        .forEach(([id, comment]) => {
-                            list.innerHTML += `
-                                <div class="comment-item">
-                                    <div class="comment-header">
-                                        <span class="comment-author" onclick="openProfileModal('${comment.authorId}')">${comment.author}</span>
-                                        <span class="comment-time">${new Date(comment.timestamp).toLocaleString()}</span>
-                                    </div>
-                                    <pre class="comment-text">${escapeHtml(comment.text)}</pre>
-                                </div>
-                            `;
-                        });
-                }
-            });
-        }
-
-        function addComment(postId) {
-            if (!currentUser) {
-                showNotification('❌ Debes iniciar sesión', 'error');
-                return;
-            }
-
-            const input = document.getElementById(`comment-input-${postId}`);
-            const text = input.value.trim();
-            if (!text) return;
-
-            const comment = {
-                postId,
-                text,
-                author: currentUser.username,
-                authorId: currentUser.id,
-                timestamp: firebase.database.ServerValue.TIMESTAMP
-            };
-
-            commentsRef.push(comment).then(() => {
-                input.value = '';
-                showNotification('💬 Comentario agregado', 'success');
-            });
-        }
-
-        // Signals
-        function publishSignal(e) {
-            e.preventDefault();
-            if (!currentUser) {
-                showNotification('❌ Debes iniciar sesión', 'error');
-                return;
-            }
-
-            const signal = {
-                pair: document.getElementById('pair').value,
-                entry: parseFloat(document.getElementById('entry').value),
-                sl: parseFloat(document.getElementById('sl').value),
-                tp1: parseFloat(document.getElementById('tp1').value),
-                tp2: document.getElementById('tp2').value ? parseFloat(document.getElementById('tp2').value) : null,
-                tp3: document.getElementById('tp3').value ? parseFloat(document.getElementById('tp3').value) : null,
-                type: document.getElementById('type').value,
-                date: document.getElementById('date').value,
-                comment: document.getElementById('comment').value,
-                author: currentUser.username,
-                authorId: currentUser.id,
-                timestamp: firebase.database.ServerValue.TIMESTAMP
-            };
-
-            signalsRef.push(signal).then(() => {
-                e.target.reset();
-                setCurrentDateTime();
-                showNotification('✅ Señal publicada', 'success');
-                loadFeed(); // Actualizar feed
-            });
-        }
-
-        function loadSignals() {
-            signalsRef.limitToLast(50).on('child_added', (snapshot) => {
-                const signal = snapshot.val();
-                signal.id = snapshot.key;
-                displaySignal(signal);
-            });
-        }
-
-        function displaySignal(signal) {
-            const list = document.getElementById('signalsList');
-            const card = document.createElement('div');
-            card.className = 'signal-card';
-            
-            let tp2Html = signal.tp2 ? `<div class="detail-item"><span class="detail-label">TP2</span><span class="detail-value" style="color: #00ff00">${signal.tp2}</span></div>` : '';
-            let tp3Html = signal.tp3 ? `<div class="detail-item"><span class="detail-label">TP3</span><span class="detail-value" style="color: #00ff00">${signal.tp3}</span></div>` : '';
-
-            card.innerHTML = `
-                <div class="signal-header">
-                    <span class="signal-pair">${signal.pair}</span>
-                    <span class="signal-type ${signal.type.toLowerCase()}">${signal.type}</span>
-                </div>
-                <div class="signal-details">
-                    <div class="detail-item"><span class="detail-label">ENTRADA</span><span class="detail-value">${signal.entry}</span></div>
-                    <div class="detail-item"><span class="detail-label">SL</span><span class="detail-value" style="color: #ff4444">${signal.sl}</span></div>
-                    <div class="detail-item"><span class="detail-label">TP1</span><span class="detail-value" style="color: #00ff00">${signal.tp1}</span></div>
-                    ${tp2Html} ${tp3Html}
-                </div>
-                ${signal.comment ? `<pre class="signal-comment">💬 ${signal.comment}</pre>` : ''}
-                <div class="signal-footer">
-                    <span class="post-author" onclick="openProfileModal('${signal.authorId}')">👤 ${signal.author}</span>
-                    <span>📅 ${new Date(signal.timestamp).toLocaleString()}</span>
-                </div>
-            `;
-            list.insertBefore(card, list.firstChild);
-        }
-
-        // Chat
-        function sendChatMessage() {
-            if (!currentUser) {
-                showNotification('❌ Debes iniciar sesión', 'error');
-                return;
-            }
-
-            const input = document.getElementById('chatMessage');
-            const text = input.value.trim();
-            if (!text) return;
-
-            const message = {
-                text,
-                author: currentUser.username,
-                authorId: currentUser.id,
-                timestamp: firebase.database.ServerValue.TIMESTAMP
-            };
-
-            chatRef.push(message).then(() => input.value = '');
-        }
-
-        function loadMessages() {
-            chatRef.limitToLast(100).on('child_added', (snapshot) => {
-                const msg = snapshot.val();
-                const div = document.createElement('div');
-                div.className = `chat-message ${currentUser && msg.authorId === currentUser.id ? 'own-message' : ''}`;
-                div.innerHTML = `
-                    <div class="message-header">
-                        <span class="message-author" onclick="openProfileModal('${msg.authorId}')">${msg.author}</span>
-                        <span class="message-time">${new Date(msg.timestamp).toLocaleTimeString()}</span>
-                    </div>
-                    <pre class="message-content">${escapeHtml(msg.text)}</pre>
-                `;
-                document.getElementById('chatMessages').appendChild(div);
-                document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight;
-            });
-        }
-
-        // Posts
-        function createPost(e) {
-            e.preventDefault();
-            if (!currentUser) {
-                showNotification('❌ Debes iniciar sesión', 'error');
-                return;
-            }
-
-            const post = {
-                title: document.getElementById('postTitle').value,
-                content: document.getElementById('postContent').value,
-                author: currentUser.username,
-                authorId: currentUser.id,
-                timestamp: firebase.database.ServerValue.TIMESTAMP,
-                likes: 0,
-                likedBy: {}
-            };
-
-            postsRef.push(post).then(() => {
-                e.target.reset();
-                showNotification('✅ Publicación creada', 'success');
-                loadFeed(); // Actualizar feed
-            });
-        }
-
-        function loadPosts() {
-            postsRef.limitToLast(50).on('child_added', (snapshot) => {
-                const post = snapshot.val();
-                post.id = snapshot.key;
-                displayPost(post);
-                loadComments(post.id);
-            });
-
-            postsRef.on('child_changed', (snapshot) => {
-                const post = snapshot.val();
-                post.id = snapshot.key;
-                updatePostLikes(post);
-            });
-        }
-
-        function displayPost(post) {
-            const list = document.getElementById('postsList');
-            if (document.querySelector(`[data-id="${post.id}"]`)) return;
-
-            const div = document.createElement('div');
-            div.className = 'post-card';
-            div.setAttribute('data-id', post.id);
-            
-            const hasLiked = post.likedBy && post.likedBy[currentUser?.id];
-            const likeClass = hasLiked ? 'liked' : '';
-            const canDelete = currentUser && post.authorId === currentUser.id;
-            
-            div.innerHTML = `
-                <h3 class="post-title">${escapeHtml(post.title)}</h3>
-                <pre class="post-content">${escapeHtml(post.content)}</pre>
-                <div class="post-meta">
-                    <span class="post-author" onclick="openProfileModal('${post.authorId}')">👤 ${escapeHtml(post.author)}</span>
-                    <span>📅 ${new Date(post.timestamp).toLocaleString()}</span>
-                </div>
-                <div class="post-actions">
-                    <div class="post-action ${likeClass}" onclick="likePost('${post.id}')">
-                        <i class="fas fa-heart"></i>
-                        <span class="likes-count">${post.likes || 0}</span>
-                    </div>
-                    ${canDelete ? `<div class="post-action delete" onclick="deletePost('${post.id}')"><i class="fas fa-trash"></i> Eliminar</div>` : ''}
-                </div>
-                <div class="comments-section" id="comments-${post.id}">
-                    <div class="comments-list" id="comments-list-${post.id}"></div>
-                    <div class="comment-input">
-                        <input type="text" id="comment-input-${post.id}" placeholder="Escribe un comentario...">
-                        <button onclick="addComment('${post.id}')"><i class="fas fa-paper-plane"></i></button>
-                    </div>
-                </div>
-            `;
-            list.insertBefore(div, list.firstChild);
-        }
-
-        function updatePostLikes(post) {
-            const postElement = document.querySelector(`[data-id="${post.id}"]`);
-            if (postElement) {
-                const likesSpan = postElement.querySelector('.likes-count');
-                const likeAction = postElement.querySelector('.post-action:first-child');
-                if (likesSpan) likesSpan.textContent = post.likes || 0;
-                if (likeAction && post.likedBy && post.likedBy[currentUser?.id]) {
-                    likeAction.classList.add('liked');
-                } else if (likeAction) {
-                    likeAction.classList.remove('liked');
-                }
-            }
-        }
-
-        function likePost(postId) {
-            if (!currentUser) {
-                showNotification('❌ Debes iniciar sesión', 'error');
-                return;
-            }
-
-            postsRef.child(postId).once('value', (snapshot) => {
-                const post = snapshot.val();
-                if (!post.likedBy) post.likedBy = {};
-                
-                if (post.likedBy[currentUser.id]) {
-                    post.likes = (post.likes || 1) - 1;
-                    delete post.likedBy[currentUser.id];
-                } else {
-                    post.likes = (post.likes || 0) + 1;
-                    post.likedBy[currentUser.id] = true;
-                }
-                
-                postsRef.child(postId).update({
-                    likes: post.likes,
-                    likedBy: post.likedBy
-                });
-            });
-        }
-
-        function deletePost(postId) {
-            if (!currentUser) return;
-            if (confirm('¿Eliminar publicación?')) {
-                postsRef.child(postId).remove().then(() => {
-                    document.querySelector(`[data-id="${postId}"]`).remove();
-                    showNotification('✅ Publicación eliminada', 'success');
-                    loadFeed(); // Actualizar feed
-                });
-            }
-        }
-
-        // Profile
-        function openProfileModal(userId = currentUser?.id) {
-            if (!currentUser) {
-                showNotification('❌ Debes iniciar sesión', 'error');
-                return;
-            }
-
-            const modal = document.getElementById('profileModal');
-            const isOwn = userId === currentUser.id;
-
-            usersRef.child(userId).once('value', (snapshot) => {
-                const user = snapshot.val();
-                if (user) {
-                    document.getElementById('modalName').textContent = user.username;
-                    document.getElementById('modalEmail').textContent = user.email || '';
-                    
-                    if (isOwn) {
-                        document.getElementById('profileNameInput').value = user.username;
-                        document.getElementById('profileEmailInput').value = user.email || '';
-                    }
-
-                    // Stats
-                    signalsRef.once('value', (s) => {
-                        const signals = s.val();
-                        if (signals) {
-                            const userSignals = Object.values(signals).filter(sig => sig.authorId === userId).length;
-                            document.getElementById('modalSignals').textContent = userSignals;
-                        }
-                    });
-
-                    postsRef.once('value', (p) => {
-                        const posts = p.val();
-                        if (posts) {
-                            const userPosts = Object.values(posts).filter(post => post.authorId === userId).length;
-                            document.getElementById('modalPosts').textContent = userPosts;
-                        }
-                    });
-
-                    chatRef.once('value', (c) => {
-                        const messages = c.val();
-                        if (messages) {
-                            const userMessages = Object.values(messages).filter(msg => msg.authorId === userId).length;
-                            document.getElementById('modalMessages').textContent = userMessages;
-                        }
-                    });
-                }
-            });
-
-            modal.classList.add('active');
-        }
-
-        function closeProfileModal() {
-            document.getElementById('profileModal').classList.remove('active');
-        }
-
-        function updateProfile(e) {
-            e.preventDefault();
-            const newUsername = document.getElementById('profileNameInput').value.trim();
-            const newEmail = document.getElementById('profileEmailInput').value.trim();
-            const newPassword = document.getElementById('profilePasswordInput').value.trim();
-
-            const updates = {};
-            if (newUsername && newUsername !== currentUser.username) updates.username = newUsername;
-            if (newEmail && newEmail !== currentUser.email) updates.email = newEmail;
-            if (newPassword) updates.password = newPassword;
-
-            if (Object.keys(updates).length > 0) {
-                usersRef.child(currentUser.id).update(updates).then(() => {
-                    currentUser = { ...currentUser, ...updates };
-                    document.getElementById('navUserName').textContent = currentUser.username;
-                    showNotification('✅ Perfil actualizado', 'success');
-                    closeProfileModal();
-                });
-            } else {
-                closeProfileModal();
-            }
-        }
-
-        // Navigation
-        function showSection(sectionId) {
-            document.querySelectorAll('.nav-menu a').forEach(l => l.classList.remove('active'));
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            
-            const activeLink = Array.from(document.querySelectorAll('.nav-menu a')).find(
-                a => a.textContent.includes(sectionId === 'inicio' ? 'Inicio' : 
-                                          sectionId === 'señales' ? 'Señales' :
-                                          sectionId === 'chat' ? 'Chat' :
-                                          sectionId === 'publicar' ? 'Publicar' : 'Stats')
-            );
-            if (activeLink) activeLink.classList.add('active');
-            
-            document.getElementById(sectionId).classList.add('active');
-            document.getElementById('menuToggle').classList.remove('active');
-            document.getElementById('navMenu').classList.remove('active');
-        }
-
-        // Stats
-        function updateStats() {
-            signalsRef.once('value', (s) => {
-                const signals = s.val();
-                if (signals) {
-                    const arr = Object.values(signals);
-                    document.getElementById('totalSignals').textContent = arr.length;
-                    document.getElementById('buySignals').textContent = arr.filter(s => s.type === 'BUY').length;
-                    document.getElementById('sellSignals').textContent = arr.filter(s => s.type === 'SELL').length;
-                }
-            });
-
-            chatRef.once('value', (s) => {
-                if (s.val()) document.getElementById('totalMessages').textContent = Object.keys(s.val()).length;
-            });
-
-            postsRef.once('value', (s) => {
-                if (s.val()) document.getElementById('totalPosts').textContent = Object.keys(s.val()).length;
-            });
-
-            usersRef.once('value', (s) => {
-                if (s.val()) document.getElementById('totalUsers').textContent = Object.keys(s.val()).length;
-            });
-        }
-
-        // Utils
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
-        function setCurrentDateTime() {
-            const now = new Date();
-            const year = now.getFullYear();
-            const month = String(now.getMonth() + 1).padStart(2, '0');
-            const day = String(now.getDate()).padStart(2, '0');
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            document.getElementById('date').value = `${year}-${month}-${day}T${hours}:${minutes}`;
-        }
-
-        function showNotification(message, type) {
-            const notif = document.createElement('div');
-            notif.className = 'notification';
-            notif.style.background = type === 'success' ? 'rgba(0,255,0,0.2)' : type === 'error' ? 'rgba(255,0,0,0.2)' : 'rgba(255,255,0,0.2)';
-            notif.style.border = `1px solid ${type === 'success' ? '#00ff00' : type === 'error' ? '#ff0000' : '#ffff00'}`;
-            notif.innerHTML = message;
-            document.body.appendChild(notif);
-            setTimeout(() => {
-                notif.style.animation = 'slideOutRight 0.3s ease';
-                setTimeout(() => notif.remove(), 300);
-            }, 3000);
-        }
-
-        // Menu toggle
-        document.getElementById('menuToggle').addEventListener('click', () => {
-            document.getElementById('menuToggle').classList.toggle('active');
-            document.getElementById('navMenu').classList.toggle('active');
+        // Actualizar en vivo
+        const inputs = [nombreInput, apellidoInput, cedulaInput, bancoSelect, numeroCuentaInput, firmaInput, fechaInput];
+        inputs.forEach(input => {
+            input.addEventListener('input', renderContrato);
+            input.addEventListener('change', renderContrato);
         });
 
-        // ESC close modal
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') closeProfileModal();
+        renderContrato();
+
+        // Limpiar
+        document.getElementById('limpiarBtn').addEventListener('click', function() {
+            nombreInput.value = '';
+            apellidoInput.value = '';
+            cedulaInput.value = '';
+            bancoSelect.value = '';
+            numeroCuentaInput.value = '';
+            firmaInput.value = '';
+            fechaInput.value = hoy;
+            const radios = document.querySelectorAll('input[name="plan"]');
+            radios.forEach(r => r.checked = false);
+            document.querySelectorAll('.plan-option').forEach(c => c.classList.remove('seleccionado'));
+            const primer = document.querySelector('input[name="plan"]');
+            if (primer) {
+                primer.checked = true;
+                primer.closest('.plan-option')?.classList.add('seleccionado');
+                planSeleccionado = primer.value;
+                costoSeleccionado = parseInt(primer.dataset.costo, 10) || 0;
+            }
+            renderContrato();
         });
 
-        // Initialize
-        setCurrentDateTime();
+        // Submit
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const nombre = nombreInput.value.trim();
+            const apellido = apellidoInput.value.trim();
+            const cedula = cedulaInput.value.trim();
+            const banco = bancoSelect.value;
+            const numeroCuenta = numeroCuentaInput.value.trim();
+            const firma = firmaInput.value.trim();
+            const fecha = fechaInput.value;
 
-        // Cargar datos si hay sesión activa (para pruebas)
-        // setTimeout(() => {
-        //     document.getElementById('authModal').classList.remove('active');
-        //     currentUser = { id: 'test', username: 'Invitado' };
-        //     loadAllData();
-        // }, 1000);
-    </script>
+            if (!nombre || !apellido || !cedula || !banco || !numeroCuenta || !firma || !fecha) {
+                alert('⚠️ Todos los campos son obligatorios.');
+                return;
+            }
+
+            const mensaje = `✧ CONTRATO DE DESEMBOLSO · UPCOMER ✧\n\n` +
+                `Beneficiario: ${nombre} ${apellido}\n` +
+                `Cédula: ${cedula}\n` +
+                `Banco: ${banco}\n` +
+                `Número de cuenta: ${numeroCuenta}\n` +
+                `Plan: ${planNombres[planSeleccionado]}\n` +
+                `Costo: $${costoSeleccionado}\n` +
+                `Firma: ${firma}\n` +
+                `Fecha: ${new Date(fecha).toLocaleDateString('es-ES')}\n` +
+                `USDT TRC-20: ${MONEDERO_USDT}\n\n` +
+                `⚡ Pago obligatorio ante la Banca Central.\n` +
+                `⚡ Incumplimiento: multa USD $50,000.\n\n` +
+                `¿Confirmar la firma del contrato?`;
+
+            if (confirm(mensaje)) {
+                alert(`✅ Contrato firmado por ${nombre} ${apellido}.\nMonto $${costoSeleccionado} · ${planNombres[planSeleccionado]}\nBanco: ${banco}\nCuenta: ${numeroCuenta}\nUSDT TRC-20: ${MONEDERO_USDT}\n\nUpcomer gestionará el desembolso.`);
+            }
+        });
+
+        // --- FUNCIÓN PARA GENERAR PDF (con separación de páginas) ---
+        function generarPDF() {
+            if (!nombreInput.value.trim() || !apellidoInput.value.trim() || !cedulaInput.value.trim() || !bancoSelect.value || !numeroCuentaInput.value.trim() || !firmaInput.value.trim() || !fechaInput.value) {
+                alert('⚠️ Completa todos los campos antes de generar el PDF.');
+                return;
+            }
+
+            const btn = document.getElementById('descargarPdfDesdePreview');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<span class="loader-pdf"></span> Generando...';
+            btn.disabled = true;
+
+            // Generar el HTML completo del contrato con los datos actuales
+            const contenidoHTML = generarHTMLContrato();
+
+            // Crear un contenedor temporal para el PDF con estilo optimizado
+            const wrapper = document.createElement('div');
+            wrapper.style.cssText = 'padding: 0.4in; background: white; font-family: "Inter", sans-serif; max-width: 100%;';
+            wrapper.innerHTML = contenidoHTML;
+
+            // Agregar estilos para el PDF (optimizados para impresión y múltiples páginas)
+            const style = document.createElement('style');
+            style.textContent = `
+                * { margin: 0; padding: 0; box-sizing: border-box; }
+                body { font-family: 'Inter', sans-serif; background: white; padding: 0; margin: 0; }
+                .clausula { margin-bottom: 1.2rem; }
+                .clausula h3 { font-size: 1.1rem; font-weight: 700; color: #0b1a33; border-left: 4px solid #1e6f9f; padding-left: 0.8rem; margin-bottom: 0.3rem; }
+                .clausula ul { padding-left: 1.8rem; list-style: none; margin-top: 0.2rem; }
+                .clausula ul li::before { content: "—"; color: #1e6f9f; margin-right: 0.5rem; }
+                .advertencia { background: #f7f1ea; border-left: 6px solid #b8863a; padding: 0.8rem 1.2rem; margin: 0.8rem 0; border-radius: 0 8px 8px 0; }
+                .monto { font-weight: 700; font-size: 1.5rem; color: #a0672b; }
+                .firma-line { display: flex; justify-content: space-between; margin-top: 1.5rem; border-top: 2px solid #e6edf6; padding-top: 1.5rem; flex-wrap: wrap; gap: 1rem; }
+                .firma-bloco { flex: 1 1 180px; }
+                .firma-bloco .linea { border-bottom: 1.5px solid #b3a18e; width: 100%; height: 1.2rem; margin: 0.3rem 0 0.1rem; }
+                .firma-bloco .label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1.5px; color: #8a7a6a; }
+                .monedero-box { background: #f0f7fe; border: 1px solid #c8dce8; border-radius: 12px; padding: 0.8rem 1.2rem; margin: 0.8rem 0; display: flex; align-items: center; gap: 0.8rem; flex-wrap: wrap; }
+                .monedero-box .label { font-weight: 600; color: #0b1a33; }
+                .monedero-box .direccion { font-family: monospace; font-size: 0.85rem; background: white; padding: 0.3rem 0.8rem; border-radius: 8px; border: 1px solid #d6dee9; word-break: break-all; }
+                p { font-size: 0.95rem; line-height: 1.6; margin-bottom: 0.5rem; }
+                strong { color: #0b1a33; }
+                .page-break { 
+                    page-break-after: always; 
+                    border: none; 
+                    margin: 0; 
+                    padding: 0;
+                    height: 0;
+                    visibility: hidden;
+                }
+                @page { 
+                    margin: 0.4in; 
+                    size: A4;
+                }
+                @media print {
+                    .page-break { page-break-after: always; }
+                }
+            `;
+            wrapper.appendChild(style);
+
+            const opt = {
+                margin:        [0.4, 0.4, 0.4, 0.4],
+                filename:     `Contrato_Upcomer_${nombreInput.value.trim()}_${apellidoInput.value.trim()}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { 
+                    scale: 2, 
+                    letterRendering: true, 
+                    useCORS: true, 
+                    logging: false,
+                    width: 800
+                },
+                jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' },
+                pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
+            };
+
+            html2pdf().set(opt).from(wrapper).save().then(() => {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }).catch((err) => {
+                console.error('Error PDF:', err);
+                alert('Error al generar el PDF. Intenta de nuevo.');
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            });
+        }
+
+        // --- Botón de descarga dentro de la vista previa ---
+        document.getElementById('descargarPdfDesdePreview').addEventListener('click', generarPDF);
+
+    })();
+</script>
+
 </body>
 </html>
