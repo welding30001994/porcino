@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>📊 Señales de Trading</title>
+<title>📊 YESLY ADELAY · Señales</title>
 <style>
   * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', sans-serif; }
 
@@ -12,9 +12,6 @@
     background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
     padding:20px;
     color:#fff;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
   }
 
   h1 {
@@ -30,13 +27,13 @@
   .container {
     width:100%;
     max-width:480px;
+    margin:0 auto 30px;
     background: rgba(255,255,255,0.07);
     backdrop-filter: blur(15px);
     border:1px solid rgba(255,255,255,0.15);
     border-radius:24px;
     padding:24px;
     box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-    margin-bottom:30px;
   }
 
   .image-box {
@@ -53,45 +50,28 @@
     transition:0.3s;
     background:rgba(0,0,0,0.2);
   }
-
   .image-box:hover { border-color:#00f5a0; }
-
   .image-box img { width:100%; height:100%; object-fit:cover; display:none; }
   .image-box span { color:#aaa; font-size:0.9rem; text-align:center; padding:10px; }
 
-  .img-info {
-    font-size:0.75rem;
-    color:#00f5a0;
-    text-align:center;
-    margin-bottom:15px;
-    min-height:16px;
-  }
+  .img-info { font-size:0.75rem; color:#00f5a0; text-align:center; margin-bottom:15px; min-height:16px; }
 
-  .grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:18px; }
+  .grid-form { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:18px; }
   .field { display:flex; flex-direction:column; gap:6px; }
 
   .field label {
-    font-size:0.72rem;
-    text-transform:uppercase;
-    letter-spacing:1px;
-    color:#00f5a0;
-    font-weight:700;
+    font-size:0.72rem; text-transform:uppercase; letter-spacing:1px;
+    color:#00f5a0; font-weight:700;
   }
 
-  .field input {
-    padding:12px;
-    border-radius:12px;
+  .field input, .field select {
+    padding:12px; border-radius:12px;
     border:1px solid rgba(255,255,255,0.15);
-    background:rgba(0,0,0,0.3);
-    color:#fff;
-    font-size:1rem;
-    outline:none;
-    transition:0.3s;
+    background:rgba(0,0,0,0.3); color:#fff; font-size:1rem; outline:none; transition:0.3s;
   }
 
-  .field input:focus {
-    border-color:#00f5a0;
-    box-shadow:0 0 0 3px rgba(0,245,160,0.2);
+  .field input:focus, .field select:focus {
+    border-color:#00f5a0; box-shadow:0 0 0 3px rgba(0,245,160,0.2);
   }
 
   .full { grid-column: span 2; }
@@ -99,44 +79,36 @@
   .buttons { display:flex; gap:10px; margin-top:10px; }
 
   button {
-    flex:1;
-    padding:14px;
-    border:none;
-    border-radius:12px;
-    font-size:1rem;
-    font-weight:700;
-    cursor:pointer;
-    transition:0.3s;
+    flex:1; padding:14px; border:none; border-radius:12px;
+    font-size:1rem; font-weight:700; cursor:pointer; transition:0.3s;
   }
 
   .save { background: linear-gradient(90deg,#00f5a0,#00d9f5); color:#000; }
   .save:hover { transform:translateY(-2px); box-shadow:0 10px 25px rgba(0,245,160,0.4); }
-
   .clear { background: rgba(255,80,80,0.2); color:#ff6b6b; border:1px solid rgba(255,80,80,0.4); }
   .clear:hover { background: rgba(255,80,80,0.35); }
 
   .status { text-align:center; font-size:0.8rem; margin-top:8px; color:#00f5a0; min-height:18px; }
 
-  /* HISTORIAL */
-  .history-title {
-    width:100%;
-    max-width:480px;
-    font-size:1.1rem;
+  /* ===== HISTORIAL EN GRID ===== */
+  .history-header {
+    max-width:1200px;
+    margin:0 auto 16px;
+    font-size:1.15rem;
     color:#00f5a0;
-    margin-bottom:12px;
     display:flex;
     justify-content:space-between;
     align-items:center;
+    padding:0 4px;
   }
+  .history-header span { font-size:0.8rem; color:#aaa; font-weight:400; }
 
-  .history-title span { font-size:0.8rem; color:#aaa; font-weight:400; }
-
-  .history {
-    width:100%;
-    max-width:480px;
-    display:flex;
-    flex-direction:column;
-    gap:16px;
+  .grid-history {
+    max-width:1200px;
+    margin:0 auto;
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap:18px;
   }
 
   .card {
@@ -147,6 +119,8 @@
     overflow:hidden;
     box-shadow: 0 10px 30px rgba(0,0,0,0.4);
     animation: fadeIn 0.4s ease;
+    display:flex;
+    flex-direction:column;
   }
 
   @keyframes fadeIn {
@@ -162,10 +136,10 @@
     background:#111;
   }
 
-  .card-body { padding:14px 16px 16px; }
+  .card-body { padding:14px 16px 16px; flex:1; display:flex; flex-direction:column; }
 
   .card-date {
-    font-size:0.72rem;
+    font-size:0.7rem;
     color:#00d9f5;
     text-transform:uppercase;
     letter-spacing:1px;
@@ -181,32 +155,34 @@
     color:#00f5a0;
     padding:2px 8px;
     border-radius:20px;
-    font-size:0.65rem;
+    font-size:0.62rem;
   }
 
-  .card-row {
-    display:flex;
-    justify-content:space-between;
-    padding:6px 0;
-    border-bottom:1px solid rgba(255,255,255,0.08);
-    font-size:0.92rem;
+  /* Señal formateada estilo mensaje */
+  .signal-block {
+    background: rgba(0,0,0,0.35);
+    border-radius:12px;
+    padding:12px 14px;
+    font-size:0.82rem;
+    line-height:1.5;
+    white-space:pre-wrap;
+    word-break:break-word;
+    font-family:'Segoe UI', sans-serif;
+    border:1px solid rgba(255,255,255,0.08);
+    margin-bottom:10px;
   }
-  .card-row:last-child { border:none; }
 
-  .card-row .tag { font-weight:700; color:#ccc; }
-  .card-row .sl { color:#ff6b6b; font-weight:700; }
-  .card-row .tp { color:#00f5a0; font-weight:700; }
-  .card-row .entry { color:#fff; font-weight:700; }
+  .signal-block .buy  { color:#00f5a0; font-weight:700; }
+  .signal-block .sell { color:#ff6b6b; font-weight:700; }
 
   .delete-btn {
-    width:100%;
-    margin-top:10px;
+    margin-top:auto;
     padding:8px;
     border:none;
     border-radius:10px;
     background: rgba(255,80,80,0.15);
     color:#ff6b6b;
-    font-size:0.8rem;
+    font-size:0.78rem;
     font-weight:700;
     cursor:pointer;
     transition:0.3s;
@@ -214,18 +190,36 @@
   .delete-btn:hover { background: rgba(255,80,80,0.35); }
 
   .empty {
-    width:100%;
-    max-width:480px;
+    grid-column: 1 / -1;
     text-align:center;
     color:#666;
-    padding:30px;
+    padding:40px;
     font-size:0.9rem;
+  }
+
+  .copy-btn {
+    padding:8px;
+    border:none;
+    border-radius:10px;
+    background: rgba(0,217,245,0.15);
+    color:#00d9f5;
+    font-size:0.78rem;
+    font-weight:700;
+    cursor:pointer;
+    transition:0.3s;
+    margin-bottom:8px;
+  }
+  .copy-btn:hover { background: rgba(0,217,245,0.35); }
+
+  @media (max-width:480px) {
+    .grid-form { grid-template-columns:1fr; }
+    .full { grid-column: span 1; }
   }
 </style>
 </head>
 <body>
 
-<h1>📊 Mis Señales de Trading</h1>
+<h1>📊 YESLY ADELAY · Señales</h1>
 
 <!-- FORMULARIO -->
 <div class="container">
@@ -236,38 +230,53 @@
   <div class="img-info" id="imgInfo"></div>
   <input type="file" id="fileInput" accept="image/*" hidden>
 
-  <div class="grid">
+  <div class="grid-form">
+    <div class="field">
+      <label>Tipo</label>
+      <select id="type">
+        <option value="BUY">🟢 BUY</option>
+        <option value="SELL">🔴 SELL</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Par / Activo</label>
+      <input type="text" id="pair" placeholder="Ej: XAUUSD">
+    </div>
+
     <div class="field full">
       <label>Precio de Entrada</label>
-      <input type="number" step="any" id="entry" placeholder="Ej: 1.2345">
+      <input type="number" step="any" id="entry" placeholder="Ej: 3853">
     </div>
     <div class="field"><label>SL</label><input type="number" step="any" id="sl" placeholder="Stop Loss"></div>
     <div class="field"><label>TP1</label><input type="number" step="any" id="tp1" placeholder="TP1"></div>
     <div class="field"><label>TP2</label><input type="number" step="any" id="tp2" placeholder="TP2"></div>
     <div class="field"><label>TP3</label><input type="number" step="any" id="tp3" placeholder="TP3"></div>
+
+    <div class="field full">
+      <label>Nota (opcional)</label>
+      <input type="text" id="note" placeholder="Ej: Gestiona riesgo — arriesga 5% por cada $1,000.">
+    </div>
   </div>
 
   <div class="buttons">
-    <button class="save" onclick="saveSignal()">🚀 Compartir Señal</button>
+    <button class="save" onclick="publishSignal()">🚀 Publicar Señal</button>
     <button class="clear" onclick="resetForm()">🧹 Limpiar</button>
   </div>
 
   <div class="status" id="status"></div>
 </div>
 
-<!-- HISTORIAL -->
-<div class="history-title">
+<!-- HISTORIAL GRID -->
+<div class="history-header">
   📁 Historial de señales <span id="count">0</span>
 </div>
-<div class="history" id="history">
-  <div class="empty" id="emptyMsg">Aún no has compartido ninguna señal 😴</div>
-</div>
+<div class="grid-history" id="history"></div>
 
 <script>
   /* ============================================================
      INDEXEDDB
      ============================================================ */
-  const DB_NAME = 'TradeSignalsDB';
+  const DB_NAME = 'YeslySignalsDB';
   const STORE = 'signals';
   let db;
 
@@ -293,7 +302,6 @@
       req.onerror = () => reject(req.error);
     });
   }
-
   function dbGetAll() {
     return new Promise((resolve, reject) => {
       const tx = db.transaction(STORE, 'readonly');
@@ -302,7 +310,6 @@
       req.onerror = () => reject(req.error);
     });
   }
-
   function dbDelete(id) {
     return new Promise((resolve, reject) => {
       const tx = db.transaction(STORE, 'readwrite');
@@ -346,11 +353,37 @@
     return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
   }
 
-  function formatDate(iso) {
+  function formatDateLong(iso) {
     const d = new Date(iso);
-    const fecha = d.toLocaleDateString('es-ES', { day:'2-digit', month:'short', year:'numeric' });
-    const hora  = d.toLocaleTimeString('es-ES', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
-    return { fecha, hora };
+    const dias = ['DOMINGO','LUNES','MARTES','MIÉRCOLES','JUEVES','VIERNES','SÁBADO'];
+    const meses = ['ENERO','FEBRERO','MARZO','ABRIL','MAYO','JUNIO','JULIO','AGOSTO','SEPTIEMBRE','OCTUBRE','NOVIEMBRE','DICIEMBRE'];
+    return `${dias[d.getDay()]}, ${d.getDate()} DE ${meses[d.getMonth()]} DE ${d.getFullYear()}`;
+  }
+
+  function formatTime(iso) {
+    const d = new Date(iso);
+    return d.toLocaleTimeString('es-ES', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
+  }
+
+  /* ============================================================
+     GENERAR TEXTO DE SEÑAL (formato exacto)
+     ============================================================ */
+  function buildSignalText(sig) {
+    const fecha = formatDateLong(sig.createdAt);
+    const tipoIcon = sig.type === 'BUY' ? '🟢' : '🔴';
+    const linea = '━━━━━━━━━━━━━━━';
+
+    let txt = `💬  📆  ${fecha}\n\n`;
+    txt += `${tipoIcon} ${sig.type} · ${sig.pair}\n\n`;
+    txt += `👉 ENTRADA   :   ${sig.entry}\n`;
+    txt += `⚠️  SL       :   ${sig.sl}\n\n`;
+    txt += `🎯 TARGETS\n`;
+    txt += `✅ TP1 :   ${sig.tp1}\n`;
+    txt += `✅ TP2 :   ${sig.tp2}\n`;
+    txt += `✅ TP3 :   ${sig.tp3}\n`;
+    if (sig.note) txt += `\n📌 Nota: ${sig.note}\n`;
+    txt += `\n🔗 https://yesly-adelay.vercel.app/`;
+    return txt;
   }
 
   /* ============================================================
@@ -362,13 +395,12 @@
   const statusEl = document.getElementById('status');
   const imgInfo = document.getElementById('imgInfo');
   const historyEl = document.getElementById('history');
-  const emptyMsg = document.getElementById('emptyMsg');
   const countEl = document.getElementById('count');
 
   let currentImageData = '';
 
   /* ============================================================
-     INICIALIZAR
+     INIT
      ============================================================ */
   window.addEventListener('DOMContentLoaded', async () => {
     await openDB();
@@ -381,17 +413,14 @@
   fileInput.addEventListener('change', async e => {
     const file = e.target.files[0];
     if (!file) return;
-
     const originalSize = file.size;
     imgInfo.textContent = '⏳ Comprimiendo imagen...';
-
     try {
       const compressed = await compressImage(file, 1200, 0.75);
       currentImageData = compressed;
       previewImg.src = compressed;
       previewImg.style.display = 'block';
       imageText.style.display = 'none';
-
       const approxBytes = Math.round((compressed.length * 3) / 4);
       imgInfo.textContent = `✅ Original: ${formatBytes(originalSize)} → Comprimida: ~${formatBytes(approxBytes)}`;
     } catch (err) {
@@ -401,17 +430,20 @@
   });
 
   /* ============================================================
-     GUARDAR / COMPARTIR SEÑAL
+     PUBLICAR SEÑAL
      ============================================================ */
-  async function saveSignal() {
+  async function publishSignal() {
+    const type = document.getElementById('type').value;
+    const pair = document.getElementById('pair').value.trim().toUpperCase();
     const entry = document.getElementById('entry').value.trim();
     const sl = document.getElementById('sl').value.trim();
     const tp1 = document.getElementById('tp1').value.trim();
     const tp2 = document.getElementById('tp2').value.trim();
     const tp3 = document.getElementById('tp3').value.trim();
+    const note = document.getElementById('note').value.trim();
 
-    if (!currentImageData && !entry) {
-      statusEl.textContent = '⚠️ Sube una imagen o pon al menos la entrada';
+    if (!pair || !entry || !sl || !tp1) {
+      statusEl.textContent = '⚠️ Completa par, entrada, SL y al menos TP1';
       setTimeout(() => statusEl.textContent = '', 2500);
       return;
     }
@@ -420,12 +452,12 @@
 
     const signal = {
       image: currentImageData || '',
-      entry, sl, tp1, tp2, tp3,
+      type, pair, entry, sl, tp1, tp2, tp3, note,
       createdAt: now
     };
 
     await dbAdd(signal);
-    statusEl.textContent = '✅ Señal compartida y guardada';
+    statusEl.textContent = '✅ Señal publicada con fecha y hora';
     setTimeout(() => statusEl.textContent = '', 2500);
 
     resetForm();
@@ -433,7 +465,7 @@
   }
 
   /* ============================================================
-     RESET FORMULARIO
+     RESET
      ============================================================ */
   function resetForm() {
     currentImageData = '';
@@ -442,15 +474,15 @@
     previewImg.style.display = 'none';
     imageText.style.display = 'block';
     imgInfo.textContent = '';
-    ['entry','sl','tp1','tp2','tp3'].forEach(id => document.getElementById(id).value = '');
+    ['pair','entry','sl','tp1','tp2','tp3','note'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('type').value = 'BUY';
   }
 
   /* ============================================================
-     RENDER HISTORIAL
+     RENDER HISTORIAL EN GRID
      ============================================================ */
   async function renderHistory() {
     const all = await dbGetAll();
-    // más recientes primero
     all.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
     historyEl.innerHTML = '';
@@ -459,43 +491,70 @@
     if (all.length === 0) {
       const empty = document.createElement('div');
       empty.className = 'empty';
-      empty.textContent = 'Aún no has compartido ninguna señal 😴';
+      empty.textContent = 'Aún no has publicado ninguna señal 😴';
       historyEl.appendChild(empty);
       return;
     }
 
     all.forEach(sig => {
-      const { fecha, hora } = formatDate(sig.createdAt);
+      const fecha = formatDateLong(sig.createdAt);
+      const hora = formatTime(sig.createdAt);
+      const tipoIcon = sig.type === 'BUY' ? '🟢' : '🔴';
+      const tipoColor = sig.type === 'BUY' ? 'buy' : 'sell';
 
       const card = document.createElement('div');
       card.className = 'card';
 
-      let imgHtml = '';
-      if (sig.image) {
-        imgHtml = `<img class="card-img" src="${sig.image}" alt="señal">`;
-      }
+      let imgHtml = sig.image ? `<img class="card-img" src="${sig.image}" alt="señal">` : '';
+
+      const textSignal = buildSignalText(sig);
 
       card.innerHTML = `
         ${imgHtml}
         <div class="card-body">
           <div class="card-date">
-            <span>📅 ${fecha} · 🕒 ${hora}</span>
+            <span>📆 ${fecha} · 🕒 ${hora}</span>
             <span class="badge">#${sig.id}</span>
           </div>
-          <div class="card-row"><span class="tag">Entrada</span><span class="entry">${sig.entry || '-'}</span></div>
-          <div class="card-row"><span class="tag">SL</span><span class="sl">${sig.sl || '-'}</span></div>
-          <div class="card-row"><span class="tag">TP1</span><span class="tp">${sig.tp1 || '-'}</span></div>
-          <div class="card-row"><span class="tag">TP2</span><span class="tp">${sig.tp2 || '-'}</span></div>
-          <div class="card-row"><span class="tag">TP3</span><span class="tp">${sig.tp3 || '-'}</span></div>
-          <button class="delete-btn" onclick="removeSignal(${sig.id})">🗑 Eliminar esta señal</button>
+          <div class="signal-block">
+<span class="${tipoColor}">${tipoIcon} ${sig.type} · ${sig.pair}</span>
+
+👉 ENTRADA   :   ${sig.entry}
+⚠️  SL       :   ${sig.sl}
+
+🎯 TARGETS
+✅ TP1 :   ${sig.tp1}
+✅ TP2 :   ${sig.tp2 || '-'}
+✅ TP3 :   ${sig.tp3 || '-'}
+${sig.note ? `\n📌 Nota: ${sig.note}` : ''}
+🔗 https://yesly-adelay.vercel.app/
+          </div>
+          <button class="copy-btn" onclick="copySignal('${sig.id}')">📋 Copiar señal</button>
+          <button class="delete-btn" onclick="removeSignal(${sig.id})">🗑 Eliminar</button>
         </div>
       `;
       historyEl.appendChild(card);
     });
+
+    // guardamos en memoria para copiar
+    window._signalsCache = {};
+    all.forEach(s => window._signalsCache[s.id] = buildSignalText(s));
   }
 
   /* ============================================================
-     ELIMINAR SEÑAL
+     COPIAR SEÑAL
+     ============================================================ */
+  function copySignal(id) {
+    const txt = window._signalsCache?.[id];
+    if (!txt) return;
+    navigator.clipboard.writeText(txt).then(() => {
+      statusEl.textContent = '📋 Señal copiada al portapapeles';
+      setTimeout(() => statusEl.textContent = '', 2000);
+    });
+  }
+
+  /* ============================================================
+     ELIMINAR
      ============================================================ */
   async function removeSignal(id) {
     if (!confirm('¿Eliminar esta señal del historial?')) return;
