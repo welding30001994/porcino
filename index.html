@@ -113,7 +113,11 @@
     to { opacity:1; transform:translateY(0); }
   }
 
-  .card-img { width:100%; height:180px; object-fit:cover; display:block; background:#111; }
+  .card-img {
+    width:100%; height:180px; object-fit:cover;
+    display:block; background:#111;
+    cursor:pointer;
+  }
 
   .card-body { padding:14px 16px 16px; flex:1; display:flex; flex-direction:column; }
 
@@ -142,20 +146,38 @@
   .signal-block .buy  { color:#00f5a0; font-weight:700; }
   .signal-block .sell { color:#ff6b6b; font-weight:700; }
 
+  .url-box {
+    background: rgba(0,217,245,0.08);
+    border:1px solid rgba(0,217,245,0.3);
+    border-radius:10px;
+    padding:8px 10px;
+    font-size:0.7rem;
+    color:#00d9f5;
+    word-break:break-all;
+    margin-bottom:10px;
+    font-family: monospace;
+  }
+  .url-box strong { color:#fff; display:block; margin-bottom:3px; font-family:'Segoe UI',sans-serif; font-size:0.68rem; }
+
+  .actions { display:flex; flex-direction:column; gap:6px; margin-top:auto; }
+
+  .copy-btn, .url-btn, .open-btn {
+    padding:8px; border:none; border-radius:10px;
+    font-size:0.78rem; font-weight:700; cursor:pointer; transition:0.3s;
+  }
+  .copy-btn { background: rgba(0,217,245,0.15); color:#00d9f5; }
+  .copy-btn:hover { background: rgba(0,217,245,0.35); }
+  .url-btn { background: rgba(0,245,160,0.15); color:#00f5a0; }
+  .url-btn:hover { background: rgba(0,245,160,0.35); }
+  .open-btn { background: rgba(255,255,255,0.08); color:#ccc; }
+  .open-btn:hover { background: rgba(255,255,255,0.18); }
+
   .delete-btn {
-    margin-top:auto; padding:8px; border:none; border-radius:10px;
+    padding:8px; border:none; border-radius:10px;
     background: rgba(255,80,80,0.15); color:#ff6b6b;
     font-size:0.78rem; font-weight:700; cursor:pointer; transition:0.3s;
   }
   .delete-btn:hover { background: rgba(255,80,80,0.35); }
-
-  .copy-btn {
-    padding:8px; border:none; border-radius:10px;
-    background: rgba(0,217,245,0.15); color:#00d9f5;
-    font-size:0.78rem; font-weight:700; cursor:pointer; transition:0.3s;
-    margin-bottom:8px;
-  }
-  .copy-btn:hover { background: rgba(0,217,245,0.35); }
 
   .empty {
     grid-column: 1 / -1;
@@ -293,7 +315,7 @@
     return date.toLocaleTimeString('es-ES', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
   }
 
-  function buildSignalText(sig) {
+  function buildSignalText(sig, includeImageUrl = false) {
     const fecha = formatDateLong(sig.createdAtDate);
     const tipoIcon = sig.type === 'BUY' ? '🟢' : '🔴';
     let txt = `💬  📆  ${fecha}\n\n`;
@@ -305,6 +327,7 @@
     txt += `✅ TP2 :   ${sig.tp2 || '-'}\n`;
     txt += `✅ TP3 :   ${sig.tp3 || '-'}\n`;
     if (sig.note) txt += `\n📌 Nota: ${sig.note}\n`;
+    if (includeImageUrl && sig.imageUrl) txt += `\n🖼️ Imagen: ${sig.imageUrl}\n`;
     txt += `\n🔗 https://yesly-adelay.vercel.app/`;
     return txt;
   }
@@ -347,7 +370,7 @@
   });
 
   /* ============================================================
-     PUBLICAR SEÑAL (Firestore + Storage)
+     PUBLICAR SEÑAL (Storage + Firestore)
      ============================================================ */
   window.publishSignal = async function () {
     const type = document.getElementById('type').value;
@@ -366,32 +389,39 @@
     }
 
     publishBtn.disabled = true;
-    statusEl.textContent = '⏳ Publicando...';
+    statusEl.textContent = '⏳ Subiendo imagen a Storage...';
 
     try {
       let imageUrl = '';
 
-      // 1) Subir imagen a Firebase Storage
+      // ===== 1) SUBIR IMAGEN A STORAGE Y OBTENER URL PÚBLICA =====
       if (currentImageData) {
         const fileName = `signals/${Date.now()}_${Math.random().toString(36).slice(2)}.jpg`;
         const storageRef = ref(storage, fileName);
+
+        // Subir como data_url (ya viene comprimida)
         await uploadString(storageRef, currentImageData, 'data_url');
+
+        // Obtener URL pública (esta es la que se puede compartir)
         imageUrl = await getDownloadURL(storageRef);
+
+        console.log('✅ URL pública de la imagen:', imageUrl);
+        statusEl.textContent = '✅ Imagen subida. Guardando señal...';
       }
 
-      // 2) Guardar en Firestore
+      // ===== 2) GUARDAR EN FIRESTORE CON LA URL =====
       await addDoc(collection(db, 'signals'), {
         type, pair, entry, sl, tp1, tp2, tp3, note,
-        imageUrl,
+        imageUrl,                            // 👈 aquí se guarda la URL
         createdAt: serverTimestamp()
       });
 
-      statusEl.textContent = '✅ Señal publicada en la nube';
+      statusEl.textContent = '✅ Señal publicada con imagen';
       setTimeout(() => statusEl.textContent = '', 2500);
       resetForm();
     } catch (err) {
-      console.error(err);
-      statusEl.textContent = '❌ Error al publicar: ' + err.message;
+      console.error('❌ Error al publicar:', err);
+      statusEl.textContent = '❌ Error: ' + err.message;
     } finally {
       publishBtn.disabled = false;
     }
@@ -426,7 +456,15 @@
     const card = document.createElement('div');
     card.className = 'card';
 
-    let imgHtml = sig.imageUrl ? `<img class="card-img" src="${sig.imageUrl}" alt="señal" loading="lazy">` : '';
+    // Imagen clicable para abrir en nueva pestaña
+    let imgHtml = sig.imageUrl
+      ? `<img class="card-img" src="${sig.imageUrl}" alt="señal" loading="lazy" data-open-img="${sig.imageUrl}">`
+      : '';
+
+    // Bloque de URL visible
+    let urlHtml = sig.imageUrl
+      ? `<div class="url-box"><strong>🔗 URL de la imagen:</strong>${sig.imageUrl}</div>`
+      : '';
 
     card.innerHTML = `
       ${imgHtml}
@@ -448,19 +486,53 @@
 ${sig.note ? `\n📌 Nota: ${sig.note}` : ''}
 🔗 https://yesly-adelay.vercel.app/
         </div>
-        <button class="copy-btn" data-copy="${sig.id}">📋 Copiar señal</button>
-        <button class="delete-btn" data-del="${sig.id}">🗑 Eliminar</button>
+        ${urlHtml}
+        <div class="actions">
+          <button class="copy-btn" data-copy="${sig.id}">📋 Copiar señal</button>
+          ${sig.imageUrl ? `
+            <button class="url-btn" data-copy-url="${sig.imageUrl}">🔗 Copiar URL de imagen</button>
+            <button class="open-btn" data-open="${sig.imageUrl}">🌐 Abrir imagen</button>
+          ` : ''}
+          <button class="delete-btn" data-del="${sig.id}">🗑 Eliminar</button>
+        </div>
       </div>
     `;
 
+    // Copiar señal (con URL incluida si tiene imagen)
     card.querySelector('[data-copy]').addEventListener('click', () => {
-      const txt = signalsCache[sig.id];
-      if (txt) navigator.clipboard.writeText(txt).then(() => {
-        statusEl.textContent = '📋 Señal copiada';
+      const txt = buildSignalText(sig, true);
+      navigator.clipboard.writeText(txt).then(() => {
+        statusEl.textContent = '📋 Señal copiada (con URL de imagen)';
         setTimeout(() => statusEl.textContent = '', 2000);
       });
     });
 
+    // Copiar URL de imagen
+    const urlBtn = card.querySelector('[data-copy-url]');
+    if (urlBtn) {
+      urlBtn.addEventListener('click', () => {
+        navigator.clipboard.writeText(sig.imageUrl).then(() => {
+          statusEl.textContent = '🔗 URL de imagen copiada';
+          setTimeout(() => statusEl.textContent = '', 2000);
+        });
+      });
+    }
+
+    // Abrir imagen en nueva pestaña
+    const openBtn = card.querySelector('[data-open]');
+    if (openBtn) {
+      openBtn.addEventListener('click', () => {
+        window.open(sig.imageUrl, '_blank');
+      });
+    }
+
+    // Click en imagen → abrir en nueva pestaña
+    const imgEl = card.querySelector('[data-open-img]');
+    if (imgEl) {
+      imgEl.addEventListener('click', () => window.open(sig.imageUrl, '_blank'));
+    }
+
+    // Eliminar
     card.querySelector('[data-del]').addEventListener('click', async () => {
       if (!confirm('¿Eliminar esta señal?')) return;
       try {
@@ -500,8 +572,7 @@ ${sig.note ? `\n📌 Nota: ${sig.note}` : ''}
     snapshot.forEach(docSnap => {
       const data = docSnap.data();
       data.id = docSnap.id;
-      const createdAtDate = data.createdAt?.toDate ? data.createdAt.toDate() : new Date();
-      signalsCache[data.id] = buildSignalText({ ...data, createdAtDate });
+      signalsCache[data.id] = data;
       historyEl.appendChild(renderCard(data));
     });
   }, err => {
