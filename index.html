@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>📊 YESLY ADELAY · Señales</title>
+<title>YESLY ADELAY · VIP</title>
 <style>
   * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', sans-serif; }
 
@@ -14,9 +14,194 @@
     color:#fff;
   }
 
+  /* ============ LOGIN / REGISTRO ============ */
+  .auth-wrap {
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+  }
+
+  .auth-card {
+    width:100%;
+    max-width:420px;
+    background: rgba(255,255,255,0.07);
+    backdrop-filter: blur(18px);
+    border:1px solid rgba(255,255,255,0.15);
+    border-radius:24px;
+    padding:32px 26px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+  }
+
+  .auth-logo {
+    text-align:center;
+    margin-bottom:24px;
+  }
+  .auth-logo h2 {
+    font-size:1.7rem;
+    background: linear-gradient(90deg,#00f5a0,#00d9f5);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    font-weight:800;
+    letter-spacing:1px;
+  }
+  .auth-logo p {
+    font-size:0.75rem;
+    color:#00d9f5;
+    letter-spacing:3px;
+    text-transform:uppercase;
+    margin-top:4px;
+  }
+  .auth-logo small {
+    display:block;
+    font-size:0.72rem;
+    color:#aaa;
+    margin-top:10px;
+  }
+
+  .auth-tabs {
+    display:flex;
+    gap:8px;
+    background: rgba(0,0,0,0.3);
+    border-radius:12px;
+    padding:5px;
+    margin-bottom:20px;
+  }
+  .auth-tabs button {
+    flex:1;
+    padding:10px;
+    border:none;
+    border-radius:9px;
+    background:transparent;
+    color:#aaa;
+    font-weight:700;
+    font-size:0.85rem;
+    cursor:pointer;
+    transition:0.3s;
+  }
+  .auth-tabs button.active {
+    background: linear-gradient(90deg,#00f5a0,#00d9f5);
+    color:#000;
+  }
+
+  .auth-form { display:none; flex-direction:column; gap:12px; }
+  .auth-form.active { display:flex; }
+
+  .auth-form label {
+    font-size:0.7rem;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    color:#00f5a0;
+    font-weight:700;
+    margin-bottom:-4px;
+  }
+
+  .auth-form input {
+    padding:13px;
+    border-radius:12px;
+    border:1px solid rgba(255,255,255,0.15);
+    background:rgba(0,0,0,0.3);
+    color:#fff;
+    font-size:0.95rem;
+    outline:none;
+    transition:0.3s;
+  }
+  .auth-form input:focus {
+    border-color:#00f5a0;
+    box-shadow:0 0 0 3px rgba(0,245,160,0.2);
+  }
+
+  .auth-form .check {
+    display:flex;
+    gap:8px;
+    font-size:0.75rem;
+    color:#aaa;
+    align-items:flex-start;
+    margin-top:4px;
+  }
+  .auth-form .check input { width:16px; height:16px; margin-top:2px; }
+
+  .auth-btn {
+    padding:14px;
+    border:none;
+    border-radius:12px;
+    background: linear-gradient(90deg,#00f5a0,#00d9f5);
+    color:#000;
+    font-weight:800;
+    font-size:1rem;
+    cursor:pointer;
+    transition:0.3s;
+    margin-top:6px;
+  }
+  .auth-btn:hover { transform:translateY(-2px); box-shadow:0 10px 25px rgba(0,245,160,0.4); }
+  .auth-btn:disabled { opacity:0.6; cursor:not-allowed; }
+
+  .auth-msg {
+    text-align:center;
+    font-size:0.8rem;
+    min-height:18px;
+    margin-top:6px;
+  }
+  .auth-msg.error { color:#ff6b6b; }
+  .auth-msg.ok { color:#00f5a0; }
+
+  .auth-footer {
+    text-align:center;
+    font-size:0.72rem;
+    color:#666;
+    margin-top:18px;
+    line-height:1.5;
+  }
+  .auth-footer a { color:#00d9f5; text-decoration:none; }
+
+  /* ============ APP ============ */
+  #app { display:none; }
+
+  .topbar {
+    max-width:1200px;
+    margin:0 auto 20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background: rgba(255,255,255,0.07);
+    backdrop-filter: blur(15px);
+    border:1px solid rgba(255,255,255,0.15);
+    border-radius:16px;
+    padding:12px 18px;
+  }
+  .topbar .user {
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:0.85rem;
+  }
+  .avatar {
+    width:36px; height:36px;
+    border-radius:50%;
+    background: linear-gradient(90deg,#00f5a0,#00d9f5);
+    color:#000;
+    display:flex; justify-content:center; align-items:center;
+    font-weight:800;
+    font-size:0.95rem;
+    text-transform:uppercase;
+  }
+  .logout-btn {
+    padding:8px 14px;
+    border:none;
+    border-radius:10px;
+    background: rgba(255,80,80,0.15);
+    color:#ff6b6b;
+    font-weight:700;
+    font-size:0.78rem;
+    cursor:pointer;
+    transition:0.3s;
+  }
+  .logout-btn:hover { background: rgba(255,80,80,0.35); }
+
   h1 {
     text-align:center;
-    font-size:1.6rem;
+    font-size:1.5rem;
     margin-bottom:20px;
     background: linear-gradient(90deg,#00f5a0,#00d9f5);
     -webkit-background-clip:text;
@@ -71,10 +256,7 @@
   .full { grid-column: span 2; }
 
   .buttons { display:flex; gap:10px; margin-top:10px; }
-  button {
-    flex:1; padding:14px; border:none; border-radius:12px;
-    font-size:1rem; font-weight:700; cursor:pointer; transition:0.3s;
-  }
+  button { flex:1; padding:14px; border:none; border-radius:12px; font-size:1rem; font-weight:700; cursor:pointer; transition:0.3s; }
   .save { background: linear-gradient(90deg,#00f5a0,#00d9f5); color:#000; }
   .save:hover { transform:translateY(-2px); box-shadow:0 10px 25px rgba(0,245,160,0.4); }
   .save:disabled { opacity:0.6; cursor:not-allowed; }
@@ -184,6 +366,14 @@
     text-align:center; color:#666; padding:40px; font-size:0.9rem;
   }
 
+  .author-tag {
+    font-size:0.65rem;
+    color:#aaa;
+    text-align:right;
+    margin-bottom:8px;
+    font-style:italic;
+  }
+
   @media (max-width:480px) {
     .grid-form { grid-template-columns:1fr; }
     .full { grid-column: span 1; }
@@ -192,59 +382,132 @@
 </head>
 <body>
 
-<h1>📊 YESLY ADELAY · Señales</h1>
+<!-- ============================================================
+     LOGIN / REGISTRO
+     ============================================================ -->
+<div class="auth-wrap" id="authWrap">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <h2>YESLY ADELAY</h2>
+      <p>VIP · Acceso Élite</p>
+      <small>Ingresa o crea tu cuenta VIP</small>
+    </div>
 
-<div class="container">
-  <div class="image-box" id="imageBox" onclick="document.getElementById('fileInput').click()">
-    <img id="previewImg" alt="preview">
-    <span id="imageText">📷 Toca para subir una imagen</span>
+    <div class="auth-tabs">
+      <button id="tabLogin" class="active" onclick="switchTab('login')">Iniciar Sesión</button>
+      <button id="tabRegister" onclick="switchTab('register')">Registrarse</button>
+    </div>
+
+    <!-- LOGIN -->
+    <form class="auth-form active" id="loginForm">
+      <label>Correo electrónico</label>
+      <input type="email" id="loginEmail" placeholder="tucorreo@ejemplo.com" required>
+      <label>Contraseña</label>
+      <input type="password" id="loginPass" placeholder="••••••••" required>
+      <button type="submit" class="auth-btn" id="loginBtn">INGRESAR</button>
+      <div class="auth-msg" id="loginMsg"></div>
+    </form>
+
+    <!-- REGISTRO -->
+    <form class="auth-form" id="registerForm">
+      <label>Nombre completo</label>
+      <input type="text" id="regName" placeholder="Tu nombre" required>
+      <label>Correo electrónico</label>
+      <input type="email" id="regEmail" placeholder="tucorreo@ejemplo.com" required>
+      <label>Contraseña</label>
+      <input type="password" id="regPass" placeholder="Mínimo 6 caracteres" required>
+      <div class="check">
+        <input type="checkbox" id="regTerms" required>
+        <span>Acepto que las señales son informativas, el trading implica riesgo y declaro ser mayor de edad.</span>
+      </div>
+      <button type="submit" class="auth-btn" id="registerBtn">ACTIVAR CUENTA</button>
+      <div class="auth-msg" id="registerMsg"></div>
+    </form>
+
+    <div class="auth-footer">
+      © YESLY ADELAY · Trading con IA predictiva.<br>
+      Los resultados no están garantizados.
+    </div>
   </div>
-  <div class="img-info" id="imgInfo"></div>
-  <input type="file" id="fileInput" accept="image/*" hidden>
-
-  <div class="grid-form">
-    <div class="field">
-      <label>Tipo</label>
-      <select id="type">
-        <option value="BUY">🟢 BUY</option>
-        <option value="SELL">🔴 SELL</option>
-      </select>
-    </div>
-    <div class="field">
-      <label>Par / Activo</label>
-      <input type="text" id="pair" placeholder="Ej: XAUUSD">
-    </div>
-
-    <div class="field full">
-      <label>Precio de Entrada</label>
-      <input type="number" step="any" id="entry" placeholder="Ej: 3853">
-    </div>
-    <div class="field"><label>SL</label><input type="number" step="any" id="sl" placeholder="Stop Loss"></div>
-    <div class="field"><label>TP1</label><input type="number" step="any" id="tp1" placeholder="TP1"></div>
-    <div class="field"><label>TP2</label><input type="number" step="any" id="tp2" placeholder="TP2"></div>
-    <div class="field"><label>TP3</label><input type="number" step="any" id="tp3" placeholder="TP3"></div>
-
-    <div class="field full">
-      <label>Nota (opcional)</label>
-      <input type="text" id="note" placeholder="Ej: Gestiona riesgo — arriesga 5% por cada $1,000.">
-    </div>
-  </div>
-
-  <div class="buttons">
-    <button class="save" id="publishBtn" onclick="publishSignal()">🚀 Publicar Señal</button>
-    <button class="clear" onclick="resetForm()">🧹 Limpiar</button>
-  </div>
-
-  <div class="status" id="status"></div>
 </div>
 
-<div class="history-header">
-  📁 Historial de señales <span id="count">0</span>
-</div>
-<div class="grid-history" id="history"></div>
+<!-- ============================================================
+     APP (solo si está logueado)
+     ============================================================ -->
+<div id="app">
 
+  <div class="topbar">
+    <div class="user">
+      <div class="avatar" id="avatar">U</div>
+      <div>
+        <div style="font-weight:700;" id="userName">Usuario</div>
+        <div style="font-size:0.7rem; color:#aaa;" id="userEmail">correo@</div>
+      </div>
+    </div>
+    <button class="logout-btn" onclick="logout()">Salir</button>
+  </div>
+
+  <h1>📊 YESLY ADELAY · Señales</h1>
+
+  <div class="container">
+    <div class="image-box" id="imageBox" onclick="document.getElementById('fileInput').click()">
+      <img id="previewImg" alt="preview">
+      <span id="imageText">📷 Toca para subir una imagen</span>
+    </div>
+    <div class="img-info" id="imgInfo"></div>
+    <input type="file" id="fileInput" accept="image/*" hidden>
+
+    <div class="grid-form">
+      <div class="field">
+        <label>Tipo</label>
+        <select id="type">
+          <option value="BUY">🟢 BUY</option>
+          <option value="SELL">🔴 SELL</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Par / Activo</label>
+        <input type="text" id="pair" placeholder="Ej: XAUUSD">
+      </div>
+
+      <div class="field full">
+        <label>Precio de Entrada</label>
+        <input type="number" step="any" id="entry" placeholder="Ej: 3853">
+      </div>
+      <div class="field"><label>SL</label><input type="number" step="any" id="sl" placeholder="Stop Loss"></div>
+      <div class="field"><label>TP1</label><input type="number" step="any" id="tp1" placeholder="TP1"></div>
+      <div class="field"><label>TP2</label><input type="number" step="any" id="tp2" placeholder="TP2"></div>
+      <div class="field"><label>TP3</label><input type="number" step="any" id="tp3" placeholder="TP3"></div>
+
+      <div class="field full">
+        <label>Nota (opcional)</label>
+        <input type="text" id="note" placeholder="Ej: Gestiona riesgo — arriesga 5% por cada $1,000.">
+      </div>
+    </div>
+
+    <div class="buttons">
+      <button class="save" id="publishBtn" onclick="publishSignal()">🚀 Publicar Señal</button>
+      <button class="clear" onclick="resetForm()">🧹 Limpiar</button>
+    </div>
+
+    <div class="status" id="status"></div>
+  </div>
+
+  <div class="history-header">
+    📁 Historial de señales <span id="count">0</span>
+  </div>
+  <div class="grid-history" id="history"></div>
+</div>
+
+<!-- ============================================================
+     FIREBASE
+     ============================================================ -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import {
+    getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
+    signOut, onAuthStateChanged, updateProfile
+  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
   import {
     getFirestore, collection, addDoc, onSnapshot,
     query, orderBy, deleteDoc, doc, serverTimestamp
@@ -268,8 +531,147 @@
   };
 
   const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
   const db = getFirestore(app);
   const storage = getStorage(app);
+
+  /* ============================================================
+     ELEMENTOS
+     ============================================================ */
+  const authWrap = document.getElementById('authWrap');
+  const appWrap = document.getElementById('app');
+  const loginForm = document.getElementById('loginForm');
+  const registerForm = document.getElementById('registerForm');
+  const loginMsg = document.getElementById('loginMsg');
+  const registerMsg = document.getElementById('registerMsg');
+  const loginBtn = document.getElementById('loginBtn');
+  const registerBtn = document.getElementById('registerBtn');
+
+  const fileInput = document.getElementById('fileInput');
+  const previewImg = document.getElementById('previewImg');
+  const imageText = document.getElementById('imageText');
+  const statusEl = document.getElementById('status');
+  const imgInfo = document.getElementById('imgInfo');
+  const historyEl = document.getElementById('history');
+  const countEl = document.getElementById('count');
+  const publishBtn = document.getElementById('publishBtn');
+  const userNameEl = document.getElementById('userName');
+  const userEmailEl = document.getElementById('userEmail');
+  const avatarEl = document.getElementById('avatar');
+
+  let currentImageData = '';
+  let currentUser = null;
+  let unsubscribeSignals = null;
+
+  /* ============================================================
+     CAMBIAR TAB
+     ============================================================ */
+  window.switchTab = function (tab) {
+    const isLogin = tab === 'login';
+    document.getElementById('tabLogin').classList.toggle('active', isLogin);
+    document.getElementById('tabRegister').classList.toggle('active', !isLogin);
+    loginForm.classList.toggle('active', isLogin);
+    registerForm.classList.toggle('active', !isLogin);
+    loginMsg.textContent = '';
+    registerMsg.textContent = '';
+  };
+
+  /* ============================================================
+     TRADUCIR ERRORES
+     ============================================================ */
+  function traducirError(code) {
+    const map = {
+      'auth/invalid-email': 'Correo inválido',
+      'auth/user-not-found': 'No existe una cuenta con ese correo',
+      'auth/wrong-password': 'Contraseña incorrecta',
+      'auth/invalid-credential': 'Correo o contraseña incorrectos',
+      'auth/email-already-in-use': 'Ese correo ya está registrado',
+      'auth/weak-password': 'La contraseña debe tener al menos 6 caracteres',
+      'auth/too-many-requests': 'Demasiados intentos. Intenta más tarde',
+      'auth/network-request-failed': 'Error de red',
+    };
+    return map[code] || 'Error: ' + code;
+  }
+
+  /* ============================================================
+     LOGIN
+     ============================================================ */
+  loginForm.addEventListener('submit', async e => {
+    e.preventDefault();
+    const email = document.getElementById('loginEmail').value.trim();
+    const pass = document.getElementById('loginPass').value;
+    loginMsg.className = 'auth-msg';
+    loginMsg.textContent = '⏳ Ingresando...';
+    loginBtn.disabled = true;
+    try {
+      await signInWithEmailAndPassword(auth, email, pass);
+      loginMsg.className = 'auth-msg ok';
+      loginMsg.textContent = '✅ Bienvenido';
+    } catch (err) {
+      loginMsg.className = 'auth-msg error';
+      loginMsg.textContent = '❌ ' + traducirError(err.code);
+    } finally {
+      loginBtn.disabled = false;
+    }
+  });
+
+  /* ============================================================
+     REGISTRO
+     ============================================================ */
+  registerForm.addEventListener('submit', async e => {
+    e.preventDefault();
+    const name = document.getElementById('regName').value.trim();
+    const email = document.getElementById('regEmail').value.trim();
+    const pass = document.getElementById('regPass').value;
+    registerMsg.className = 'auth-msg';
+    registerMsg.textContent = '⏳ Creando cuenta...';
+    registerBtn.disabled = true;
+    try {
+      const cred = await createUserWithEmailAndPassword(auth, email, pass);
+      await updateProfile(cred.user, { displayName: name });
+      registerMsg.className = 'auth-msg ok';
+      registerMsg.textContent = '✅ Cuenta creada';
+    } catch (err) {
+      registerMsg.className = 'auth-msg error';
+      registerMsg.textContent = '❌ ' + traducirError(err.code);
+    } finally {
+      registerBtn.disabled = false;
+    }
+  });
+
+  /* ============================================================
+     LOGOUT
+     ============================================================ */
+  window.logout = async function () {
+    if (!confirm('¿Cerrar sesión?')) return;
+    await signOut(auth);
+  };
+
+  /* ============================================================
+     ESTADO DE SESIÓN
+     ============================================================ */
+  onAuthStateChanged(auth, user => {
+    currentUser = user;
+    if (user) {
+      // Mostrar app
+      authWrap.style.display = 'none';
+      appWrap.style.display = 'block';
+
+      const name = user.displayName || user.email.split('@')[0];
+      userNameEl.textContent = name;
+      userEmailEl.textContent = user.email;
+      avatarEl.textContent = name.charAt(0).toUpperCase();
+
+      // Escuchar señales en tiempo real
+      if (unsubscribeSignals) unsubscribeSignals();
+      startSignalsListener();
+    } else {
+      // Mostrar login
+      authWrap.style.display = 'flex';
+      appWrap.style.display = 'none';
+      if (unsubscribeSignals) { unsubscribeSignals(); unsubscribeSignals = null; }
+    }
+  });
 
   /* ============================================================
      HELPERS
@@ -333,22 +735,7 @@
   }
 
   /* ============================================================
-     ELEMENTOS
-     ============================================================ */
-  const fileInput = document.getElementById('fileInput');
-  const previewImg = document.getElementById('previewImg');
-  const imageText = document.getElementById('imageText');
-  const statusEl = document.getElementById('status');
-  const imgInfo = document.getElementById('imgInfo');
-  const historyEl = document.getElementById('history');
-  const countEl = document.getElementById('count');
-  const publishBtn = document.getElementById('publishBtn');
-
-  let currentImageData = '';
-  let signalsCache = {};
-
-  /* ============================================================
-     SUBIR IMAGEN + COMPRIMIR
+     SUBIR IMAGEN
      ============================================================ */
   fileInput.addEventListener('change', async e => {
     const file = e.target.files[0];
@@ -370,9 +757,11 @@
   });
 
   /* ============================================================
-     PUBLICAR SEÑAL (Storage + Firestore)
+     PUBLICAR SEÑAL
      ============================================================ */
   window.publishSignal = async function () {
+    if (!currentUser) { alert('Debes iniciar sesión'); return; }
+
     const type = document.getElementById('type').value;
     const pair = document.getElementById('pair').value.trim().toUpperCase();
     const entry = document.getElementById('entry').value.trim();
@@ -394,33 +783,28 @@
     try {
       let imageUrl = '';
 
-      // ===== 1) SUBIR IMAGEN A STORAGE Y OBTENER URL PÚBLICA =====
       if (currentImageData) {
         const fileName = `signals/${Date.now()}_${Math.random().toString(36).slice(2)}.jpg`;
         const storageRef = ref(storage, fileName);
-
-        // Subir como data_url (ya viene comprimida)
         await uploadString(storageRef, currentImageData, 'data_url');
-
-        // Obtener URL pública (esta es la que se puede compartir)
         imageUrl = await getDownloadURL(storageRef);
-
-        console.log('✅ URL pública de la imagen:', imageUrl);
         statusEl.textContent = '✅ Imagen subida. Guardando señal...';
       }
 
-      // ===== 2) GUARDAR EN FIRESTORE CON LA URL =====
       await addDoc(collection(db, 'signals'), {
         type, pair, entry, sl, tp1, tp2, tp3, note,
-        imageUrl,                            // 👈 aquí se guarda la URL
+        imageUrl,
+        authorName: currentUser.displayName || currentUser.email.split('@')[0],
+        authorEmail: currentUser.email,
+        authorUid: currentUser.uid,
         createdAt: serverTimestamp()
       });
 
-      statusEl.textContent = '✅ Señal publicada con imagen';
+      statusEl.textContent = '✅ Señal publicada';
       setTimeout(() => statusEl.textContent = '', 2500);
       resetForm();
     } catch (err) {
-      console.error('❌ Error al publicar:', err);
+      console.error(err);
       statusEl.textContent = '❌ Error: ' + err.message;
     } finally {
       publishBtn.disabled = false;
@@ -456,12 +840,10 @@
     const card = document.createElement('div');
     card.className = 'card';
 
-    // Imagen clicable para abrir en nueva pestaña
     let imgHtml = sig.imageUrl
       ? `<img class="card-img" src="${sig.imageUrl}" alt="señal" loading="lazy" data-open-img="${sig.imageUrl}">`
       : '';
 
-    // Bloque de URL visible
     let urlHtml = sig.imageUrl
       ? `<div class="url-box"><strong>🔗 URL de la imagen:</strong>${sig.imageUrl}</div>`
       : '';
@@ -486,6 +868,7 @@
 ${sig.note ? `\n📌 Nota: ${sig.note}` : ''}
 🔗 https://yesly-adelay.vercel.app/
         </div>
+        <div class="author-tag">👤 ${sig.authorName || 'Anónimo'}</div>
         ${urlHtml}
         <div class="actions">
           <button class="copy-btn" data-copy="${sig.id}">📋 Copiar señal</button>
@@ -498,41 +881,28 @@ ${sig.note ? `\n📌 Nota: ${sig.note}` : ''}
       </div>
     `;
 
-    // Copiar señal (con URL incluida si tiene imagen)
     card.querySelector('[data-copy]').addEventListener('click', () => {
       const txt = buildSignalText(sig, true);
       navigator.clipboard.writeText(txt).then(() => {
-        statusEl.textContent = '📋 Señal copiada (con URL de imagen)';
+        statusEl.textContent = '📋 Señal copiada';
         setTimeout(() => statusEl.textContent = '', 2000);
       });
     });
 
-    // Copiar URL de imagen
     const urlBtn = card.querySelector('[data-copy-url]');
-    if (urlBtn) {
-      urlBtn.addEventListener('click', () => {
-        navigator.clipboard.writeText(sig.imageUrl).then(() => {
-          statusEl.textContent = '🔗 URL de imagen copiada';
-          setTimeout(() => statusEl.textContent = '', 2000);
-        });
+    if (urlBtn) urlBtn.addEventListener('click', () => {
+      navigator.clipboard.writeText(sig.imageUrl).then(() => {
+        statusEl.textContent = '🔗 URL copiada';
+        setTimeout(() => statusEl.textContent = '', 2000);
       });
-    }
+    });
 
-    // Abrir imagen en nueva pestaña
     const openBtn = card.querySelector('[data-open]');
-    if (openBtn) {
-      openBtn.addEventListener('click', () => {
-        window.open(sig.imageUrl, '_blank');
-      });
-    }
+    if (openBtn) openBtn.addEventListener('click', () => window.open(sig.imageUrl, '_blank'));
 
-    // Click en imagen → abrir en nueva pestaña
     const imgEl = card.querySelector('[data-open-img]');
-    if (imgEl) {
-      imgEl.addEventListener('click', () => window.open(sig.imageUrl, '_blank'));
-    }
+    if (imgEl) imgEl.addEventListener('click', () => window.open(sig.imageUrl, '_blank'));
 
-    // Eliminar
     card.querySelector('[data-del]').addEventListener('click', async () => {
       if (!confirm('¿Eliminar esta señal?')) return;
       try {
@@ -550,35 +920,31 @@ ${sig.note ? `\n📌 Nota: ${sig.note}` : ''}
   }
 
   /* ============================================================
-     ESCUCHAR FIRESTORE EN TIEMPO REAL
+     LISTENER DE SEÑALES (solo cuando hay sesión)
      ============================================================ */
-  const q = query(collection(db, 'signals'), orderBy('createdAt', 'desc'));
-
-  onSnapshot(q, snapshot => {
-    historyEl.innerHTML = '';
-    signalsCache = {};
-
-    if (snapshot.empty) {
-      const empty = document.createElement('div');
-      empty.className = 'empty';
-      empty.textContent = 'Aún no has publicado ninguna señal 😴';
-      historyEl.appendChild(empty);
-      countEl.textContent = '0 señales';
-      return;
-    }
-
-    countEl.textContent = snapshot.size + ' señal' + (snapshot.size === 1 ? '' : 'es');
-
-    snapshot.forEach(docSnap => {
-      const data = docSnap.data();
-      data.id = docSnap.id;
-      signalsCache[data.id] = data;
-      historyEl.appendChild(renderCard(data));
+  function startSignalsListener() {
+    const q = query(collection(db, 'signals'), orderBy('createdAt', 'desc'));
+    unsubscribeSignals = onSnapshot(q, snapshot => {
+      historyEl.innerHTML = '';
+      if (snapshot.empty) {
+        const empty = document.createElement('div');
+        empty.className = 'empty';
+        empty.textContent = 'Aún no has publicado ninguna señal 😴';
+        historyEl.appendChild(empty);
+        countEl.textContent = '0 señales';
+        return;
+      }
+      countEl.textContent = snapshot.size + ' señal' + (snapshot.size === 1 ? '' : 'es');
+      snapshot.forEach(docSnap => {
+        const data = docSnap.data();
+        data.id = docSnap.id;
+        historyEl.appendChild(renderCard(data));
+      });
+    }, err => {
+      console.error(err);
+      statusEl.textContent = '❌ Error: ' + err.message;
     });
-  }, err => {
-    console.error(err);
-    statusEl.textContent = '❌ Error de conexión: ' + err.message;
-  });
+  }
 </script>
 
 </body>
