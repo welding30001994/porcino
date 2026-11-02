@@ -37,17 +37,12 @@
   }
 
   .image-box {
-    width:100%;
-    height:150px;
+    width:100%; height:150px;
     border:2px dashed rgba(255,255,255,0.3);
     border-radius:16px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    cursor:pointer;
-    overflow:hidden;
-    margin-bottom:10px;
-    transition:0.3s;
+    display:flex; justify-content:center; align-items:center;
+    cursor:pointer; overflow:hidden;
+    margin-bottom:10px; transition:0.3s;
     background:rgba(0,0,0,0.2);
   }
   .image-box:hover { border-color:#00f5a0; }
@@ -69,7 +64,6 @@
     border:1px solid rgba(255,255,255,0.15);
     background:rgba(0,0,0,0.3); color:#fff; font-size:1rem; outline:none; transition:0.3s;
   }
-
   .field input:focus, .field select:focus {
     border-color:#00f5a0; box-shadow:0 0 0 3px rgba(0,245,160,0.2);
   }
@@ -77,35 +71,28 @@
   .full { grid-column: span 2; }
 
   .buttons { display:flex; gap:10px; margin-top:10px; }
-
   button {
     flex:1; padding:14px; border:none; border-radius:12px;
     font-size:1rem; font-weight:700; cursor:pointer; transition:0.3s;
   }
-
   .save { background: linear-gradient(90deg,#00f5a0,#00d9f5); color:#000; }
   .save:hover { transform:translateY(-2px); box-shadow:0 10px 25px rgba(0,245,160,0.4); }
+  .save:disabled { opacity:0.6; cursor:not-allowed; }
   .clear { background: rgba(255,80,80,0.2); color:#ff6b6b; border:1px solid rgba(255,80,80,0.4); }
   .clear:hover { background: rgba(255,80,80,0.35); }
 
   .status { text-align:center; font-size:0.8rem; margin-top:8px; color:#00f5a0; min-height:18px; }
 
-  /* ===== HISTORIAL EN GRID ===== */
   .history-header {
-    max-width:1200px;
-    margin:0 auto 16px;
-    font-size:1.15rem;
-    color:#00f5a0;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
+    max-width:1200px; margin:0 auto 16px;
+    font-size:1.15rem; color:#00f5a0;
+    display:flex; justify-content:space-between; align-items:center;
     padding:0 4px;
   }
   .history-header span { font-size:0.8rem; color:#aaa; font-weight:400; }
 
   .grid-history {
-    max-width:1200px;
-    margin:0 auto;
+    max-width:1200px; margin:0 auto;
     display:grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
     gap:18px;
@@ -119,97 +106,61 @@
     overflow:hidden;
     box-shadow: 0 10px 30px rgba(0,0,0,0.4);
     animation: fadeIn 0.4s ease;
-    display:flex;
-    flex-direction:column;
+    display:flex; flex-direction:column;
   }
-
   @keyframes fadeIn {
     from { opacity:0; transform:translateY(10px); }
     to { opacity:1; transform:translateY(0); }
   }
 
-  .card-img {
-    width:100%;
-    height:180px;
-    object-fit:cover;
-    display:block;
-    background:#111;
-  }
+  .card-img { width:100%; height:180px; object-fit:cover; display:block; background:#111; }
 
   .card-body { padding:14px 16px 16px; flex:1; display:flex; flex-direction:column; }
 
   .card-date {
-    font-size:0.7rem;
-    color:#00d9f5;
-    text-transform:uppercase;
-    letter-spacing:1px;
-    font-weight:700;
+    font-size:0.7rem; color:#00d9f5;
+    text-transform:uppercase; letter-spacing:1px; font-weight:700;
     margin-bottom:10px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
+    display:flex; justify-content:space-between; align-items:center;
   }
-
   .card-date .badge {
     background:rgba(0,245,160,0.15);
-    color:#00f5a0;
-    padding:2px 8px;
-    border-radius:20px;
-    font-size:0.62rem;
+    color:#00f5a0; padding:2px 8px; border-radius:20px; font-size:0.62rem;
   }
 
-  /* Señal formateada estilo mensaje */
   .signal-block {
     background: rgba(0,0,0,0.35);
     border-radius:12px;
     padding:12px 14px;
     font-size:0.82rem;
     line-height:1.5;
-    white-space:pre-wrap;
-    word-break:break-word;
+    white-space:pre-wrap; word-break:break-word;
     font-family:'Segoe UI', sans-serif;
     border:1px solid rgba(255,255,255,0.08);
     margin-bottom:10px;
   }
-
   .signal-block .buy  { color:#00f5a0; font-weight:700; }
   .signal-block .sell { color:#ff6b6b; font-weight:700; }
 
   .delete-btn {
-    margin-top:auto;
-    padding:8px;
-    border:none;
-    border-radius:10px;
-    background: rgba(255,80,80,0.15);
-    color:#ff6b6b;
-    font-size:0.78rem;
-    font-weight:700;
-    cursor:pointer;
-    transition:0.3s;
+    margin-top:auto; padding:8px; border:none; border-radius:10px;
+    background: rgba(255,80,80,0.15); color:#ff6b6b;
+    font-size:0.78rem; font-weight:700; cursor:pointer; transition:0.3s;
   }
   .delete-btn:hover { background: rgba(255,80,80,0.35); }
 
-  .empty {
-    grid-column: 1 / -1;
-    text-align:center;
-    color:#666;
-    padding:40px;
-    font-size:0.9rem;
-  }
-
   .copy-btn {
-    padding:8px;
-    border:none;
-    border-radius:10px;
-    background: rgba(0,217,245,0.15);
-    color:#00d9f5;
-    font-size:0.78rem;
-    font-weight:700;
-    cursor:pointer;
-    transition:0.3s;
+    padding:8px; border:none; border-radius:10px;
+    background: rgba(0,217,245,0.15); color:#00d9f5;
+    font-size:0.78rem; font-weight:700; cursor:pointer; transition:0.3s;
     margin-bottom:8px;
   }
   .copy-btn:hover { background: rgba(0,217,245,0.35); }
+
+  .empty {
+    grid-column: 1 / -1;
+    text-align:center; color:#666; padding:40px; font-size:0.9rem;
+  }
 
   @media (max-width:480px) {
     .grid-form { grid-template-columns:1fr; }
@@ -221,7 +172,6 @@
 
 <h1>📊 YESLY ADELAY · Señales</h1>
 
-<!-- FORMULARIO -->
 <div class="container">
   <div class="image-box" id="imageBox" onclick="document.getElementById('fileInput').click()">
     <img id="previewImg" alt="preview">
@@ -259,68 +209,48 @@
   </div>
 
   <div class="buttons">
-    <button class="save" onclick="publishSignal()">🚀 Publicar Señal</button>
+    <button class="save" id="publishBtn" onclick="publishSignal()">🚀 Publicar Señal</button>
     <button class="clear" onclick="resetForm()">🧹 Limpiar</button>
   </div>
 
   <div class="status" id="status"></div>
 </div>
 
-<!-- HISTORIAL GRID -->
 <div class="history-header">
   📁 Historial de señales <span id="count">0</span>
 </div>
 <div class="grid-history" id="history"></div>
 
-<script>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import {
+    getFirestore, collection, addDoc, onSnapshot,
+    query, orderBy, deleteDoc, doc, serverTimestamp
+  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  import {
+    getStorage, ref, uploadString, getDownloadURL, deleteObject
+  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+
   /* ============================================================
-     INDEXEDDB
+     CONFIG FIREBASE
      ============================================================ */
-  const DB_NAME = 'YeslySignalsDB';
-  const STORE = 'signals';
-  let db;
+  const firebaseConfig = {
+    apiKey: "AIzaSyB1Cs2os3tTfrMbYSAmDeJAGnP4tTtsFdw",
+    authDomain: "beaver-trading.firebaseapp.com",
+    databaseURL: "https://beaver-trading-default-rtdb.firebaseio.com",
+    projectId: "beaver-trading",
+    storageBucket: "beaver-trading.firebasestorage.app",
+    messagingSenderId: "926610131904",
+    appId: "1:926610131904:web:c147bd337bd12b4d085625",
+    measurementId: "G-1K51WWF2ZJ"
+  };
 
-  function openDB() {
-    return new Promise((resolve, reject) => {
-      const req = indexedDB.open(DB_NAME, 1);
-      req.onupgradeneeded = e => {
-        const database = e.target.result;
-        if (!database.objectStoreNames.contains(STORE)) {
-          database.createObjectStore(STORE, { keyPath: 'id', autoIncrement: true });
-        }
-      };
-      req.onsuccess = e => { db = e.target.result; resolve(db); };
-      req.onerror = e => reject(e.target.error);
-    });
-  }
-
-  function dbAdd(data) {
-    return new Promise((resolve, reject) => {
-      const tx = db.transaction(STORE, 'readwrite');
-      const req = tx.objectStore(STORE).add(data);
-      req.onsuccess = () => resolve(req.result);
-      req.onerror = () => reject(req.error);
-    });
-  }
-  function dbGetAll() {
-    return new Promise((resolve, reject) => {
-      const tx = db.transaction(STORE, 'readonly');
-      const req = tx.objectStore(STORE).getAll();
-      req.onsuccess = () => resolve(req.result || []);
-      req.onerror = () => reject(req.error);
-    });
-  }
-  function dbDelete(id) {
-    return new Promise((resolve, reject) => {
-      const tx = db.transaction(STORE, 'readwrite');
-      const req = tx.objectStore(STORE).delete(id);
-      req.onsuccess = () => resolve();
-      req.onerror = () => reject(req.error);
-    });
-  }
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const storage = getStorage(app);
 
   /* ============================================================
-     COMPRESIÓN DE IMAGEN
+     HELPERS
      ============================================================ */
   function compressImage(file, maxWidth = 1200, quality = 0.75) {
     return new Promise((resolve, reject) => {
@@ -353,34 +283,27 @@
     return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
   }
 
-  function formatDateLong(iso) {
-    const d = new Date(iso);
+  function formatDateLong(date) {
     const dias = ['DOMINGO','LUNES','MARTES','MIÉRCOLES','JUEVES','VIERNES','SÁBADO'];
     const meses = ['ENERO','FEBRERO','MARZO','ABRIL','MAYO','JUNIO','JULIO','AGOSTO','SEPTIEMBRE','OCTUBRE','NOVIEMBRE','DICIEMBRE'];
-    return `${dias[d.getDay()]}, ${d.getDate()} DE ${meses[d.getMonth()]} DE ${d.getFullYear()}`;
+    return `${dias[date.getDay()]}, ${date.getDate()} DE ${meses[date.getMonth()]} DE ${date.getFullYear()}`;
   }
 
-  function formatTime(iso) {
-    const d = new Date(iso);
-    return d.toLocaleTimeString('es-ES', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
+  function formatTime(date) {
+    return date.toLocaleTimeString('es-ES', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
   }
 
-  /* ============================================================
-     GENERAR TEXTO DE SEÑAL (formato exacto)
-     ============================================================ */
   function buildSignalText(sig) {
-    const fecha = formatDateLong(sig.createdAt);
+    const fecha = formatDateLong(sig.createdAtDate);
     const tipoIcon = sig.type === 'BUY' ? '🟢' : '🔴';
-    const linea = '━━━━━━━━━━━━━━━';
-
     let txt = `💬  📆  ${fecha}\n\n`;
     txt += `${tipoIcon} ${sig.type} · ${sig.pair}\n\n`;
     txt += `👉 ENTRADA   :   ${sig.entry}\n`;
     txt += `⚠️  SL       :   ${sig.sl}\n\n`;
     txt += `🎯 TARGETS\n`;
     txt += `✅ TP1 :   ${sig.tp1}\n`;
-    txt += `✅ TP2 :   ${sig.tp2}\n`;
-    txt += `✅ TP3 :   ${sig.tp3}\n`;
+    txt += `✅ TP2 :   ${sig.tp2 || '-'}\n`;
+    txt += `✅ TP3 :   ${sig.tp3 || '-'}\n`;
     if (sig.note) txt += `\n📌 Nota: ${sig.note}\n`;
     txt += `\n🔗 https://yesly-adelay.vercel.app/`;
     return txt;
@@ -396,16 +319,10 @@
   const imgInfo = document.getElementById('imgInfo');
   const historyEl = document.getElementById('history');
   const countEl = document.getElementById('count');
+  const publishBtn = document.getElementById('publishBtn');
 
   let currentImageData = '';
-
-  /* ============================================================
-     INIT
-     ============================================================ */
-  window.addEventListener('DOMContentLoaded', async () => {
-    await openDB();
-    await renderHistory();
-  });
+  let signalsCache = {};
 
   /* ============================================================
      SUBIR IMAGEN + COMPRIMIR
@@ -430,9 +347,9 @@
   });
 
   /* ============================================================
-     PUBLICAR SEÑAL
+     PUBLICAR SEÑAL (Firestore + Storage)
      ============================================================ */
-  async function publishSignal() {
+  window.publishSignal = async function () {
     const type = document.getElementById('type').value;
     const pair = document.getElementById('pair').value.trim().toUpperCase();
     const entry = document.getElementById('entry').value.trim();
@@ -448,26 +365,42 @@
       return;
     }
 
-    const now = new Date().toISOString();
+    publishBtn.disabled = true;
+    statusEl.textContent = '⏳ Publicando...';
 
-    const signal = {
-      image: currentImageData || '',
-      type, pair, entry, sl, tp1, tp2, tp3, note,
-      createdAt: now
-    };
+    try {
+      let imageUrl = '';
 
-    await dbAdd(signal);
-    statusEl.textContent = '✅ Señal publicada con fecha y hora';
-    setTimeout(() => statusEl.textContent = '', 2500);
+      // 1) Subir imagen a Firebase Storage
+      if (currentImageData) {
+        const fileName = `signals/${Date.now()}_${Math.random().toString(36).slice(2)}.jpg`;
+        const storageRef = ref(storage, fileName);
+        await uploadString(storageRef, currentImageData, 'data_url');
+        imageUrl = await getDownloadURL(storageRef);
+      }
 
-    resetForm();
-    await renderHistory();
-  }
+      // 2) Guardar en Firestore
+      await addDoc(collection(db, 'signals'), {
+        type, pair, entry, sl, tp1, tp2, tp3, note,
+        imageUrl,
+        createdAt: serverTimestamp()
+      });
+
+      statusEl.textContent = '✅ Señal publicada en la nube';
+      setTimeout(() => statusEl.textContent = '', 2500);
+      resetForm();
+    } catch (err) {
+      console.error(err);
+      statusEl.textContent = '❌ Error al publicar: ' + err.message;
+    } finally {
+      publishBtn.disabled = false;
+    }
+  };
 
   /* ============================================================
      RESET
      ============================================================ */
-  function resetForm() {
+  window.resetForm = function () {
     currentImageData = '';
     fileInput.value = '';
     previewImg.src = '';
@@ -476,47 +409,33 @@
     imgInfo.textContent = '';
     ['pair','entry','sl','tp1','tp2','tp3','note'].forEach(id => document.getElementById(id).value = '');
     document.getElementById('type').value = 'BUY';
-  }
+  };
 
   /* ============================================================
-     RENDER HISTORIAL EN GRID
+     RENDER TARJETA
      ============================================================ */
-  async function renderHistory() {
-    const all = await dbGetAll();
-    all.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  function renderCard(sig) {
+    const createdAtDate = sig.createdAt?.toDate ? sig.createdAt.toDate() : new Date();
+    sig.createdAtDate = createdAtDate;
 
-    historyEl.innerHTML = '';
-    countEl.textContent = all.length + ' señal' + (all.length === 1 ? '' : 'es');
+    const fecha = formatDateLong(createdAtDate);
+    const hora = formatTime(createdAtDate);
+    const tipoIcon = sig.type === 'BUY' ? '🟢' : '🔴';
+    const tipoColor = sig.type === 'BUY' ? 'buy' : 'sell';
 
-    if (all.length === 0) {
-      const empty = document.createElement('div');
-      empty.className = 'empty';
-      empty.textContent = 'Aún no has publicado ninguna señal 😴';
-      historyEl.appendChild(empty);
-      return;
-    }
+    const card = document.createElement('div');
+    card.className = 'card';
 
-    all.forEach(sig => {
-      const fecha = formatDateLong(sig.createdAt);
-      const hora = formatTime(sig.createdAt);
-      const tipoIcon = sig.type === 'BUY' ? '🟢' : '🔴';
-      const tipoColor = sig.type === 'BUY' ? 'buy' : 'sell';
+    let imgHtml = sig.imageUrl ? `<img class="card-img" src="${sig.imageUrl}" alt="señal" loading="lazy">` : '';
 
-      const card = document.createElement('div');
-      card.className = 'card';
-
-      let imgHtml = sig.image ? `<img class="card-img" src="${sig.image}" alt="señal">` : '';
-
-      const textSignal = buildSignalText(sig);
-
-      card.innerHTML = `
-        ${imgHtml}
-        <div class="card-body">
-          <div class="card-date">
-            <span>📆 ${fecha} · 🕒 ${hora}</span>
-            <span class="badge">#${sig.id}</span>
-          </div>
-          <div class="signal-block">
+    card.innerHTML = `
+      ${imgHtml}
+      <div class="card-body">
+        <div class="card-date">
+          <span>📆 ${fecha} · 🕒 ${hora}</span>
+          <span class="badge">#${sig.id.slice(-4)}</span>
+        </div>
+        <div class="signal-block">
 <span class="${tipoColor}">${tipoIcon} ${sig.type} · ${sig.pair}</span>
 
 👉 ENTRADA   :   ${sig.entry}
@@ -528,39 +447,67 @@
 ✅ TP3 :   ${sig.tp3 || '-'}
 ${sig.note ? `\n📌 Nota: ${sig.note}` : ''}
 🔗 https://yesly-adelay.vercel.app/
-          </div>
-          <button class="copy-btn" onclick="copySignal('${sig.id}')">📋 Copiar señal</button>
-          <button class="delete-btn" onclick="removeSignal(${sig.id})">🗑 Eliminar</button>
         </div>
-      `;
-      historyEl.appendChild(card);
+        <button class="copy-btn" data-copy="${sig.id}">📋 Copiar señal</button>
+        <button class="delete-btn" data-del="${sig.id}">🗑 Eliminar</button>
+      </div>
+    `;
+
+    card.querySelector('[data-copy]').addEventListener('click', () => {
+      const txt = signalsCache[sig.id];
+      if (txt) navigator.clipboard.writeText(txt).then(() => {
+        statusEl.textContent = '📋 Señal copiada';
+        setTimeout(() => statusEl.textContent = '', 2000);
+      });
     });
 
-    // guardamos en memoria para copiar
-    window._signalsCache = {};
-    all.forEach(s => window._signalsCache[s.id] = buildSignalText(s));
+    card.querySelector('[data-del]').addEventListener('click', async () => {
+      if (!confirm('¿Eliminar esta señal?')) return;
+      try {
+        await deleteDoc(doc(db, 'signals', sig.id));
+        if (sig.imageUrl) {
+          try { await deleteObject(ref(storage, sig.imageUrl)); } catch(e) {}
+        }
+      } catch (err) {
+        console.error(err);
+        alert('Error al eliminar: ' + err.message);
+      }
+    });
+
+    return card;
   }
 
   /* ============================================================
-     COPIAR SEÑAL
+     ESCUCHAR FIRESTORE EN TIEMPO REAL
      ============================================================ */
-  function copySignal(id) {
-    const txt = window._signalsCache?.[id];
-    if (!txt) return;
-    navigator.clipboard.writeText(txt).then(() => {
-      statusEl.textContent = '📋 Señal copiada al portapapeles';
-      setTimeout(() => statusEl.textContent = '', 2000);
-    });
-  }
+  const q = query(collection(db, 'signals'), orderBy('createdAt', 'desc'));
 
-  /* ============================================================
-     ELIMINAR
-     ============================================================ */
-  async function removeSignal(id) {
-    if (!confirm('¿Eliminar esta señal del historial?')) return;
-    await dbDelete(id);
-    await renderHistory();
-  }
+  onSnapshot(q, snapshot => {
+    historyEl.innerHTML = '';
+    signalsCache = {};
+
+    if (snapshot.empty) {
+      const empty = document.createElement('div');
+      empty.className = 'empty';
+      empty.textContent = 'Aún no has publicado ninguna señal 😴';
+      historyEl.appendChild(empty);
+      countEl.textContent = '0 señales';
+      return;
+    }
+
+    countEl.textContent = snapshot.size + ' señal' + (snapshot.size === 1 ? '' : 'es');
+
+    snapshot.forEach(docSnap => {
+      const data = docSnap.data();
+      data.id = docSnap.id;
+      const createdAtDate = data.createdAt?.toDate ? data.createdAt.toDate() : new Date();
+      signalsCache[data.id] = buildSignalText({ ...data, createdAtDate });
+      historyEl.appendChild(renderCard(data));
+    });
+  }, err => {
+    console.error(err);
+    statusEl.textContent = '❌ Error de conexión: ' + err.message;
+  });
 </script>
 
 </body>
