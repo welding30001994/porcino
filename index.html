@@ -1,561 +1,507 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Contrato + Formulario · Upcomer</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', 'Segoe UI', sans-serif; }
-        body { background: #f0f4fb; display: flex; justify-content: center; padding: 2rem 1rem; min-height: 100vh; }
-        .app-wrapper { max-width: 1100px; width: 100%; background: white; border-radius: 32px; box-shadow: 0 20px 40px -12px rgba(0,0,0,0.15); padding: 2.5rem 2.8rem; border: 1px solid #e6edf6; }
-        .app-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #e9edf4; padding-bottom: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
-        .app-header h1 { font-weight: 700; font-size: 2rem; letter-spacing: -0.5px; color: #0b1a33; }
-        .app-header h1 span { color: #1e6f9f; font-weight: 300; }
-        .app-badge { background: #0b1a33; color: white; font-size: 0.7rem; font-weight: 600; padding: 0.4rem 1.4rem; border-radius: 40px; letter-spacing: 0.4px; text-transform: uppercase; }
-        .grid-panel { display: grid; grid-template-columns: 1fr 1.8fr; gap: 2rem; align-items: start; }
-        @media (max-width: 860px) { .grid-panel { grid-template-columns: 1fr; gap: 2.5rem; } }
-        .form-panel { background: #f7faff; border-radius: 24px; padding: 1.8rem 1.5rem; border: 1px solid #dee8f2; }
-        .form-panel h2 { font-size: 1.1rem; font-weight: 600; color: #0b1a33; margin-bottom: 1.2rem; display: flex; align-items: center; gap: 8px; }
-        .form-grupo { margin-bottom: 1.2rem; }
-        .form-grupo label { font-weight: 500; font-size: 0.82rem; color: #1f2a3f; display: flex; align-items: center; gap: 6px; margin-bottom: 0.3rem; }
-        .form-grupo label i { color: #b91c1c; font-style: normal; font-weight: 600; }
-        .form-grupo input, .form-grupo select { width: 100%; padding: 0.7rem 1rem; border: 1px solid #d6dee9; border-radius: 14px; font-size: 0.95rem; background: white; transition: 0.2s; }
-        .form-grupo input:focus, .form-grupo select:focus { outline: none; border-color: #1e6f9f; box-shadow: 0 0 0 3px rgba(30,111,159,0.10); }
-        .form-grupo .hint { font-size: 0.7rem; color: #5a6f8a; margin-top: 0.2rem; }
-        .plan-options { display: flex; gap: 0.8rem; flex-wrap: wrap; margin-top: 0.3rem; }
-        .plan-option { flex: 1 1 100px; background: white; border: 2px solid #d6dee9; border-radius: 16px; padding: 0.6rem 0.4rem; text-align: center; cursor: pointer; transition: all 0.15s; }
-        .plan-option:hover { border-color: #8bb3d0; }
-        .plan-option input[type="radio"] { display: none; }
-        .plan-option .plan-nombre { font-weight: 600; font-size: 0.9rem; color: #0b1a33; }
-        .plan-option .plan-precio { font-weight: 700; font-size: 1.1rem; color: #1e6f9f; }
-        .plan-option .plan-dias { font-size: 0.65rem; color: #3a4a62; background: #e9eff6; padding: 0.1rem 0.6rem; border-radius: 40px; display: inline-block; margin-top: 2px; }
-        .plan-option.seleccionado { border-color: #1e6f9f; background: #e6f0fa; box-shadow: 0 4px 10px rgba(30,111,159,0.08); }
-        .acciones { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1.5rem; }
-        .btn { padding: 0.7rem 2rem; border-radius: 60px; font-weight: 600; font-size: 0.9rem; border: none; cursor: pointer; transition: all 0.2s; letter-spacing: 0.3px; }
-        .btn-primario { background: #0b1a33; color: white; box-shadow: 0 6px 14px rgba(11,26,51,0.15); }
-        .btn-primario:hover { background: #1e2f4a; transform: scale(1.02); }
-        .btn-secundario { background: transparent; border: 1px solid #b4c4db; color: #2a3b55; }
-        .btn-secundario:hover { background: #f0f5fe; }
-        .btn-pdf-header { background: #1e6f9f; color: white; border: none; padding: 0.4rem 1.2rem; border-radius: 40px; font-size: 0.75rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
-        .btn-pdf-header:hover { background: #0b3b5a; transform: scale(1.02); }
-        .loader-pdf { display: inline-block; width: 18px; height: 18px; border: 3px solid rgba(255,255,255,0.15); border-radius: 50%; border-top-color: #1e6f9f; animation: spin 0.8s linear infinite; margin-right: 8px; vertical-align: middle; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .contrato-panel { background: #fcfcfc; border-radius: 24px; padding: 1.8rem 2rem; border: 1px solid #dee8f2; }
-        .contrato-panel .header-con-boton { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem; flex-wrap: wrap; gap: 0.8rem; }
-        .contrato-panel .header-con-boton h2 { font-size: 1.1rem; font-weight: 600; color: #0b1a33; margin: 0; }
-        .contrato-preview { background: white; padding: 1.8rem 2rem; border-radius: 18px; border: 1px solid #e6edf6; font-size: 0.9rem; line-height: 1.7; color: #1f2a3f; max-height: 600px; overflow-y: auto; }
-        .contrato-preview strong { color: #0b1a33; }
-        .contrato-preview .clausula { margin-bottom: 1.4rem; }
-        .contrato-preview .clausula h3 { font-size: 1rem; font-weight: 700; color: #0b1a33; margin-bottom: 0.2rem; border-left: 4px solid #1e6f9f; padding-left: 0.8rem; }
-        .contrato-preview .clausula ul { padding-left: 2rem; list-style: none; margin-top: 0.2rem; }
-        .contrato-preview .clausula ul li::before { content: "—"; color: #1e6f9f; margin-right: 0.5rem; }
-        .contrato-preview .advertencia { background: #f7f1ea; border-left: 6px solid #b8863a; padding: 1rem 1.5rem; margin: 1rem 0 1.2rem 0; border-radius: 0 8px 8px 0; }
-        .contrato-preview .advertencia .monto { font-weight: 700; font-size: 1.4rem; color: #a0672b; }
-        .contrato-preview .firma-line { display: flex; justify-content: space-between; margin-top: 1.5rem; border-top: 2px solid #e6edf6; padding-top: 1.5rem; flex-wrap: wrap; gap: 1rem; }
-        .contrato-preview .firma-bloco { flex: 1 1 180px; }
-        .contrato-preview .firma-bloco .linea { border-bottom: 1.5px solid #b3a18e; width: 100%; height: 1.2rem; margin: 0.3rem 0 0.1rem; }
-        .contrato-preview .firma-bloco .label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1.5px; color: #8a7a6a; }
-        .contrato-preview .monedero-box { background: #f0f7fe; border: 1px solid #c8dce8; border-radius: 12px; padding: 0.8rem 1.2rem; margin: 1rem 0; display: flex; align-items: center; gap: 0.8rem; flex-wrap: wrap; }
-        .contrato-preview .monedero-box .label { font-weight: 600; color: #0b1a33; }
-        .contrato-preview .monedero-box .direccion { font-family: monospace; font-size: 0.85rem; background: white; padding: 0.3rem 0.8rem; border-radius: 8px; border: 1px solid #d6dee9; word-break: break-all; }
-        .nota-legal { margin-top: 1.2rem; font-size: 0.75rem; color: #7a6b5d; background: #f4efea; padding: 0.6rem 1.2rem; border-radius: 40px; text-align: center; border: 1px solid #e1d5c9; }
-        /* --- Estilos para el PDF (separador de página) --- */
-        .page-break { 
-            page-break-after: always; 
-            border-bottom: 2px dashed #d0dcec; 
-            margin: 1.5rem 0; 
-            padding-bottom: 1rem;
-            text-align: center;
-            color: #8a9bb0;
-            font-size: 0.7rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-        .page-break::after {
-            content: "— Continuación —";
-        }
-        @media print { 
-            .page-break { 
-                border-bottom: none; 
-                margin: 0; 
-                padding: 0;
-                page-break-after: always;
-            }
-            .page-break::after { content: ""; }
-        }
-        @media (max-width: 600px) { .app-wrapper { padding: 1.5rem; } .contrato-preview { padding: 1rem; font-size: 0.8rem; } .contrato-preview .firma-line { flex-direction: column; } .plan-options { flex-direction: column; } .plan-option { flex: 1 1 auto; } .acciones { flex-direction: column; align-items: stretch; } .btn { text-align: center; } .contrato-panel .header-con-boton { flex-direction: column; align-items: flex-start; } }
-        @media print { .form-panel, .acciones, .app-header .app-badge, .nota-legal, .btn-pdf-header { display: none !important; } .grid-panel { display: block; } .contrato-panel { border: none; padding: 0; } .contrato-preview { max-height: none; overflow: visible; border: none; padding: 0; } }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📊 Señales de Trading</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', sans-serif; }
+
+  body {
+    min-height:100vh;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    padding:20px;
+    color:#fff;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+  }
+
+  h1 {
+    text-align:center;
+    font-size:1.6rem;
+    margin-bottom:20px;
+    background: linear-gradient(90deg,#00f5a0,#00d9f5);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    font-weight:800;
+  }
+
+  .container {
+    width:100%;
+    max-width:480px;
+    background: rgba(255,255,255,0.07);
+    backdrop-filter: blur(15px);
+    border:1px solid rgba(255,255,255,0.15);
+    border-radius:24px;
+    padding:24px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    margin-bottom:30px;
+  }
+
+  .image-box {
+    width:100%;
+    height:150px;
+    border:2px dashed rgba(255,255,255,0.3);
+    border-radius:16px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    cursor:pointer;
+    overflow:hidden;
+    margin-bottom:10px;
+    transition:0.3s;
+    background:rgba(0,0,0,0.2);
+  }
+
+  .image-box:hover { border-color:#00f5a0; }
+
+  .image-box img { width:100%; height:100%; object-fit:cover; display:none; }
+  .image-box span { color:#aaa; font-size:0.9rem; text-align:center; padding:10px; }
+
+  .img-info {
+    font-size:0.75rem;
+    color:#00f5a0;
+    text-align:center;
+    margin-bottom:15px;
+    min-height:16px;
+  }
+
+  .grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:18px; }
+  .field { display:flex; flex-direction:column; gap:6px; }
+
+  .field label {
+    font-size:0.72rem;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    color:#00f5a0;
+    font-weight:700;
+  }
+
+  .field input {
+    padding:12px;
+    border-radius:12px;
+    border:1px solid rgba(255,255,255,0.15);
+    background:rgba(0,0,0,0.3);
+    color:#fff;
+    font-size:1rem;
+    outline:none;
+    transition:0.3s;
+  }
+
+  .field input:focus {
+    border-color:#00f5a0;
+    box-shadow:0 0 0 3px rgba(0,245,160,0.2);
+  }
+
+  .full { grid-column: span 2; }
+
+  .buttons { display:flex; gap:10px; margin-top:10px; }
+
+  button {
+    flex:1;
+    padding:14px;
+    border:none;
+    border-radius:12px;
+    font-size:1rem;
+    font-weight:700;
+    cursor:pointer;
+    transition:0.3s;
+  }
+
+  .save { background: linear-gradient(90deg,#00f5a0,#00d9f5); color:#000; }
+  .save:hover { transform:translateY(-2px); box-shadow:0 10px 25px rgba(0,245,160,0.4); }
+
+  .clear { background: rgba(255,80,80,0.2); color:#ff6b6b; border:1px solid rgba(255,80,80,0.4); }
+  .clear:hover { background: rgba(255,80,80,0.35); }
+
+  .status { text-align:center; font-size:0.8rem; margin-top:8px; color:#00f5a0; min-height:18px; }
+
+  /* HISTORIAL */
+  .history-title {
+    width:100%;
+    max-width:480px;
+    font-size:1.1rem;
+    color:#00f5a0;
+    margin-bottom:12px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  }
+
+  .history-title span { font-size:0.8rem; color:#aaa; font-weight:400; }
+
+  .history {
+    width:100%;
+    max-width:480px;
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+  }
+
+  .card {
+    background: rgba(255,255,255,0.07);
+    backdrop-filter: blur(15px);
+    border:1px solid rgba(255,255,255,0.15);
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    animation: fadeIn 0.4s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity:0; transform:translateY(10px); }
+    to { opacity:1; transform:translateY(0); }
+  }
+
+  .card-img {
+    width:100%;
+    height:180px;
+    object-fit:cover;
+    display:block;
+    background:#111;
+  }
+
+  .card-body { padding:14px 16px 16px; }
+
+  .card-date {
+    font-size:0.72rem;
+    color:#00d9f5;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    font-weight:700;
+    margin-bottom:10px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  }
+
+  .card-date .badge {
+    background:rgba(0,245,160,0.15);
+    color:#00f5a0;
+    padding:2px 8px;
+    border-radius:20px;
+    font-size:0.65rem;
+  }
+
+  .card-row {
+    display:flex;
+    justify-content:space-between;
+    padding:6px 0;
+    border-bottom:1px solid rgba(255,255,255,0.08);
+    font-size:0.92rem;
+  }
+  .card-row:last-child { border:none; }
+
+  .card-row .tag { font-weight:700; color:#ccc; }
+  .card-row .sl { color:#ff6b6b; font-weight:700; }
+  .card-row .tp { color:#00f5a0; font-weight:700; }
+  .card-row .entry { color:#fff; font-weight:700; }
+
+  .delete-btn {
+    width:100%;
+    margin-top:10px;
+    padding:8px;
+    border:none;
+    border-radius:10px;
+    background: rgba(255,80,80,0.15);
+    color:#ff6b6b;
+    font-size:0.8rem;
+    font-weight:700;
+    cursor:pointer;
+    transition:0.3s;
+  }
+  .delete-btn:hover { background: rgba(255,80,80,0.35); }
+
+  .empty {
+    width:100%;
+    max-width:480px;
+    text-align:center;
+    color:#666;
+    padding:30px;
+    font-size:0.9rem;
+  }
+</style>
 </head>
 <body>
 
-<div class="app-wrapper">
+<h1>📊 Mis Señales de Trading</h1>
 
-    <div class="app-header">
-        <h1>Upcomer <span>·</span> desembolso</h1>
-        <div class="app-badge">Contrato Banca Central</div>
+<!-- FORMULARIO -->
+<div class="container">
+  <div class="image-box" id="imageBox" onclick="document.getElementById('fileInput').click()">
+    <img id="previewImg" alt="preview">
+    <span id="imageText">📷 Toca para subir una imagen</span>
+  </div>
+  <div class="img-info" id="imgInfo"></div>
+  <input type="file" id="fileInput" accept="image/*" hidden>
+
+  <div class="grid">
+    <div class="field full">
+      <label>Precio de Entrada</label>
+      <input type="number" step="any" id="entry" placeholder="Ej: 1.2345">
     </div>
+    <div class="field"><label>SL</label><input type="number" step="any" id="sl" placeholder="Stop Loss"></div>
+    <div class="field"><label>TP1</label><input type="number" step="any" id="tp1" placeholder="TP1"></div>
+    <div class="field"><label>TP2</label><input type="number" step="any" id="tp2" placeholder="TP2"></div>
+    <div class="field"><label>TP3</label><input type="number" step="any" id="tp3" placeholder="TP3"></div>
+  </div>
 
-    <div class="grid-panel">
+  <div class="buttons">
+    <button class="save" onclick="saveSignal()">🚀 Compartir Señal</button>
+    <button class="clear" onclick="resetForm()">🧹 Limpiar</button>
+  </div>
 
-        <!-- FORMULARIO -->
-        <div class="form-panel">
-            <h2>📋 Datos del contrato</h2>
-            <form id="formDatos">
-                <div class="form-grupo">
-                    <label>👤 Nombre <i>*</i></label>
-                    <input type="text" id="nombre" placeholder="Nombre del beneficiario" required />
-                </div>
-                <div class="form-grupo">
-                    <label>📇 Apellido <i>*</i></label>
-                    <input type="text" id="apellido" placeholder="Apellido" required />
-                </div>
-                <div class="form-grupo">
-                    <label>🆔 Cédula / Pasaporte <i>*</i></label>
-                    <input type="text" id="cedula" placeholder="Ej: 1234567890" required />
-                </div>
-                <div class="form-grupo">
-                    <label>🏦 Banco para acreditación <i>*</i></label>
-                    <select id="banco" required>
-                        <option value="">Seleccione</option>
-                        <option value="Banco Central">Banco Central</option>
-                        <option value="Banco Pichincha">Banco Pichincha</option>
-                        <option value="Banco Guayaquil">Banco Guayaquil</option>
-                        <option value="Banco Pacífico">Banco Pacífico</option>
-                        <option value="Banco Internacional">Banco Internacional</option>
-                        <option value="Banco Bolivariano">Banco Bolivariano</option>
-                        <option value="Banco Produbanco">Banco Produbanco</option>
-                        <option value="Banco del Austro">Banco del Austro</option>
-                        <option value="Banco Solidario">Banco Solidario</option>
-                        <option value="Otro">Otro</option>
-                    </select>
-                </div>
-                <div class="form-grupo">
-                    <label>🔢 Número de cuenta <i>*</i></label>
-                    <input type="text" id="numeroCuenta" placeholder="Ej: 1234567890" required />
-                    <div class="hint">* Número de cuenta bancaria del beneficiario.</div>
-                </div>
-                <div class="form-grupo">
-                    <label>⏳ Plazo de entrega <i>*</i></label>
-                    <div class="plan-options" id="planContainer">
-                        <label class="plan-option" data-plan="48h">
-                            <input type="radio" name="plan" value="48h" data-costo="750" checked />
-                            <div class="plan-nombre">🚀 Express</div>
-                            <div class="plan-precio">$750</div>
-                            <div class="plan-dias">48h</div>
-                        </label>
-                        <label class="plan-option" data-plan="15d">
-                            <input type="radio" name="plan" value="15d" data-costo="450" />
-                            <div class="plan-nombre">📦 Estándar</div>
-                            <div class="plan-precio">$450</div>
-                            <div class="plan-dias">15 días</div>
-                        </label>
-                        <label class="plan-option" data-plan="30d">
-                            <input type="radio" name="plan" value="30d" data-costo="200" />
-                            <div class="plan-nombre">📬 Económico</div>
-                            <div class="plan-precio">$200</div>
-                            <div class="plan-dias">30 días</div>
-                        </label>
-                    </div>
-                    <div class="hint">* El costo se reflejará en el contrato.</div>
-                </div>
-                <div class="form-grupo">
-                    <label>✍️ Firma (nombre completo) <i>*</i></label>
-                    <input type="text" id="firma" placeholder="Firma del beneficiario" required />
-                </div>
-                <div class="form-grupo">
-                    <label>📅 Fecha <i>*</i></label>
-                    <input type="date" id="fecha" required />
-                </div>
+  <div class="status" id="status"></div>
+</div>
 
-                <div class="acciones">
-                    <button type="button" class="btn btn-secundario" id="limpiarBtn">⟲ Limpiar</button>
-                    <button type="submit" class="btn btn-primario">✍️ Firmar contrato</button>
-                </div>
-            </form>
-        </div>
-
-        <!-- VISTA PREVIA DEL CONTRATO -->
-        <div class="contrato-panel">
-            <div class="header-con-boton">
-                <h2>📄 Vista previa del contrato <span style="font-size:0.7rem; font-weight:400; color:#5a6f8a;">(se actualiza en vivo)</span></h2>
-                <button class="btn-pdf-header" id="descargarPdfDesdePreview">⬇️ Descargar PDF</button>
-            </div>
-            <div class="contrato-preview" id="contratoPreview">
-                <!-- El contenido se inyecta con JavaScript -->
-            </div>
-        </div>
-
-    </div>
-
-    <div class="nota-legal">
-        ⚜️ Este documento es una vista previa. Al generar el PDF se incluirá el contrato completo con los datos ingresados.
-    </div>
-
+<!-- HISTORIAL -->
+<div class="history-title">
+  📁 Historial de señales <span id="count">0</span>
+</div>
+<div class="history" id="history">
+  <div class="empty" id="emptyMsg">Aún no has compartido ninguna señal 😴</div>
 </div>
 
 <script>
-    (function() {
-        const nombreInput = document.getElementById('nombre');
-        const apellidoInput = document.getElementById('apellido');
-        const cedulaInput = document.getElementById('cedula');
-        const bancoSelect = document.getElementById('banco');
-        const numeroCuentaInput = document.getElementById('numeroCuenta');
-        const firmaInput = document.getElementById('firma');
-        const fechaInput = document.getElementById('fecha');
-        const planContainer = document.getElementById('planContainer');
-        const preview = document.getElementById('contratoPreview');
-        const form = document.getElementById('formDatos');
+  /* ============================================================
+     INDEXEDDB
+     ============================================================ */
+  const DB_NAME = 'TradeSignalsDB';
+  const STORE = 'signals';
+  let db;
 
-        // Datos del monedero USDT TRC-20
-        const MONEDERO_USDT = 'TCAgtcQNCecCRn5fV7ZrMa5euFzSyzPUu5';
-        const RED_USDT = 'TRC-20 (Tron)';
-
-        const hoy = new Date().toISOString().split('T')[0];
-        fechaInput.value = hoy;
-
-        let planSeleccionado = '48h';
-        let costoSeleccionado = 750;
-        const planNombres = { '48h': '48 horas (Express)', '15d': '15 días (Estándar)', '30d': '30 días (Económico)' };
-
-        const planRadios = document.querySelectorAll('input[name="plan"]');
-        planRadios.forEach(radio => {
-            radio.addEventListener('change', function() {
-                if (this.checked) {
-                    planSeleccionado = this.value;
-                    costoSeleccionado = parseInt(this.dataset.costo, 10) || 0;
-                    document.querySelectorAll('.plan-option').forEach(c => c.classList.remove('seleccionado'));
-                    this.closest('.plan-option')?.classList.add('seleccionado');
-                    renderContrato();
-                }
-            });
-        });
-        const primerRadio = document.querySelector('input[name="plan"]');
-        if (primerRadio) {
-            primerRadio.checked = true;
-            primerRadio.closest('.plan-option')?.classList.add('seleccionado');
-            planSeleccionado = primerRadio.value;
-            costoSeleccionado = parseInt(primerRadio.dataset.costo, 10) || 0;
+  function openDB() {
+    return new Promise((resolve, reject) => {
+      const req = indexedDB.open(DB_NAME, 1);
+      req.onupgradeneeded = e => {
+        const database = e.target.result;
+        if (!database.objectStoreNames.contains(STORE)) {
+          database.createObjectStore(STORE, { keyPath: 'id', autoIncrement: true });
         }
+      };
+      req.onsuccess = e => { db = e.target.result; resolve(db); };
+      req.onerror = e => reject(e.target.error);
+    });
+  }
 
-        // --- Función que genera el HTML del contrato con todos los datos ---
-        function generarHTMLContrato() {
-            const nombre = nombreInput.value.trim() || '[Nombre]';
-            const apellido = apellidoInput.value.trim() || '[Apellido]';
-            const nombreCompleto = `${nombre} ${apellido}`.trim() || '[Beneficiario]';
-            const cedula = cedulaInput.value.trim() || '[Cédula]';
-            const banco = bancoSelect.value || '[Banco]';
-            const numeroCuenta = numeroCuentaInput.value.trim() || '[Número de cuenta]';
-            const firma = firmaInput.value.trim() || '[Firma]';
-            const fechaRaw = fechaInput.value;
-            const fecha = fechaRaw ? new Date(fechaRaw).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' }) : '[Fecha]';
-            const planTexto = planNombres[planSeleccionado] || planSeleccionado;
-            const monto = costoSeleccionado;
+  function dbAdd(data) {
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(STORE, 'readwrite');
+      const req = tx.objectStore(STORE).add(data);
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error);
+    });
+  }
 
-            return `
-                <div style="font-family: 'Inter', sans-serif; max-width: 100%;">
+  function dbGetAll() {
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(STORE, 'readonly');
+      const req = tx.objectStore(STORE).getAll();
+      req.onsuccess = () => resolve(req.result || []);
+      req.onerror = () => reject(req.error);
+    });
+  }
 
-                    <div style="text-align: center; border-bottom: 2px solid #d0dcec; padding-bottom: 0.5rem; margin-bottom: 1.5rem;">
-                        <strong style="font-size: 1.4rem; color: #0b1a33;">CONTRATO DE COMPROMISO</strong><br/>
-                        <span style="font-size: 0.8rem; color: #3a4a62;">de desembolso y trámite ante la Banca Central</span><br/>
-                        <span style="font-size: 0.75rem; color: #5a6f8a;">N° 2026-09-07</span>
-                    </div>
+  function dbDelete(id) {
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(STORE, 'readwrite');
+      const req = tx.objectStore(STORE).delete(id);
+      req.onsuccess = () => resolve();
+      req.onerror = () => reject(req.error);
+    });
+  }
 
-                    <p style="margin-bottom: 1.2rem; font-size: 0.95rem;">
-                        Por medio del presente documento, <strong>"Upcomer"</strong> (en adelante, <strong>LA ENTIDAD</strong>),
-                        se compromete formalmente a gestionar y ejecutar el desembolso correspondiente a la solicitud de retiro
-                        presentada por el cliente <strong>"${nombreCompleto}"</strong> (en adelante, <strong>EL BENEFICIARIO</strong>),
-                        bajo los términos y condiciones que se detallan a continuación:
-                    </p>
+  /* ============================================================
+     COMPRESIÓN DE IMAGEN
+     ============================================================ */
+  function compressImage(file, maxWidth = 1200, quality = 0.75) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = ev => {
+        const img = new Image();
+        img.onload = () => {
+          let { width, height } = img;
+          if (width > maxWidth) {
+            height = Math.round((height * maxWidth) / width);
+            width = maxWidth;
+          }
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+          resolve(canvas.toDataURL('image/jpeg', quality));
+        };
+        img.onerror = reject;
+        img.src = ev.target.result;
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
 
-                    <div class="clausula">
-                        <h3>PRIMERA. — Objeto del contrato</h3>
-                        <p style="font-size: 0.95rem;">
-                            LA ENTIDAD se obliga a realizar todas las gestiones necesarias ante la
-                            <strong>Banca Central del país</strong>, así como ante las instancias financieras y regulatorias
-                            correspondientes, a fin de obtener la autorización y liberación de los fondos solicitados por
-                            EL BENEFICIARIO. Dichos trámites incluyen, pero no se limitan a:
-                        </p>
-                        <ul style="font-size: 0.95rem;">
-                            <li>verificación de cuentas y validación de fondos,</li>
-                            <li>cumplimiento de normativas cambiarias y de lavado de activos,</li>
-                            <li>cualquier otro requisito exigido por la legislación vigente.</li>
-                        </ul>
-                    </div>
+  function formatBytes(bytes) {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+  }
 
-                    <div class="clausula">
-                        <h3>SEGUNDA. — Plazo de desembolso</h3>
-                        <p style="font-size: 0.95rem;">
-                            EL BENEFICIARIO reconoce y acepta que el desembolso de su solicitud de retiro se efectuará en un
-                            <strong>plazo determinado</strong>, el cual será notificado por LA ENTIDAD una vez que la Banca Central
-                            haya emitido la resolución correspondiente. Dicho plazo será contado a partir de la fecha de recepción
-                            de todos los documentos requeridos y la aprobación de las entidades competentes.
-                            <br/><br/>
-                            <span style="background: #f0f5fc; padding: 0.2rem 0.8rem; border-radius: 40px; font-size: 0.85rem;">
-                                Plan seleccionado: <strong>${planTexto}</strong> · Costo: <strong>$${monto}</strong>
-                            </span>
-                        </p>
-                    </div>
+  function formatDate(iso) {
+    const d = new Date(iso);
+    const fecha = d.toLocaleDateString('es-ES', { day:'2-digit', month:'short', year:'numeric' });
+    const hora  = d.toLocaleTimeString('es-ES', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
+    return { fecha, hora };
+  }
 
-                    <!-- PAGE BREAK 1 -->
-                    <div class="page-break"></div>
+  /* ============================================================
+     ELEMENTOS
+     ============================================================ */
+  const fileInput = document.getElementById('fileInput');
+  const previewImg = document.getElementById('previewImg');
+  const imageText = document.getElementById('imageText');
+  const statusEl = document.getElementById('status');
+  const imgInfo = document.getElementById('imgInfo');
+  const historyEl = document.getElementById('history');
+  const emptyMsg = document.getElementById('emptyMsg');
+  const countEl = document.getElementById('count');
 
-                    <div class="clausula">
-                        <h3>TERCERA. — Advertencia por incumplimiento</h3>
-                        <div class="advertencia" style="font-size: 0.95rem;">
-                            <p style="font-weight: 500; margin-bottom: 0.2rem;">▶ Penalización</p>
-                            <p>
-                                En caso de que LA ENTIDAD no realice el desembolso dentro del plazo estipulado, o si por causas
-                                imputables a ella el trámite ante la Banca Central no se concluye satisfactoriamente,
-                                <strong>LA ENTIDAD quedará automáticamente obligada a pagar a EL BENEFICIARIO</strong>
-                                la suma de
-                            </p>
-                            <div style="display: flex; align-items: baseline; gap: 0.5rem; flex-wrap: wrap;">
-                                <span class="monto" style="font-weight: 700; font-size: 1.5rem; color: #a0672b;">USD $50,000.00</span>
-                                <span style="font-size: 0.9rem; color: #3d2e1e;">(cincuenta mil dólares americanos)</span>
-                            </div>
-                            <p style="margin-top: 0.6rem;">
-                                en concepto de <strong>multa por daños y perjuicios</strong>, sin perjuicio de las acciones legales
-                                adicionales que EL BENEFICIARIO pueda ejercer para hacer valer sus derechos.
-                            </p>
-                            <p style="margin-top: 0.6rem; font-size: 0.9rem;">
-                                Dicha multa será exigible de pleno derecho, sin necesidad de interpelación judicial o extrajudicial
-                                previa, y deberá ser cancelada dentro de los <strong>cinco (5) días hábiles</strong> siguientes al
-                                vencimiento del plazo de desembolso.
-                            </p>
-                        </div>
-                    </div>
+  let currentImageData = '';
 
-                    <!-- PAGE BREAK 2 -->
-                    <div class="page-break"></div>
+  /* ============================================================
+     INICIALIZAR
+     ============================================================ */
+  window.addEventListener('DOMContentLoaded', async () => {
+    await openDB();
+    await renderHistory();
+  });
 
-                    <div class="clausula">
-                        <h3>CUARTA. — Forma de pago</h3>
-                        <p style="font-size: 0.95rem;">
-                            El pago correspondiente deberá ser realizado por EL BENEFICIARIO a LA ENTIDAD a través de
-                            <strong>criptomonedas USDT</strong> en la red <strong>${RED_USDT}</strong>, a la siguiente dirección:
-                        </p>
-                        <div class="monedero-box" style="background: #f0f7fe; border: 1px solid #c8dce8; border-radius: 12px; padding: 0.8rem 1.2rem; margin: 1rem 0; display: flex; align-items: center; gap: 0.8rem; flex-wrap: wrap;">
-                            <span class="label" style="font-weight: 600; color: #0b1a33;">💳 USDT TRC-20:</span>
-                            <span class="direccion" style="font-family: monospace; font-size: 0.85rem; background: white; padding: 0.3rem 0.8rem; border-radius: 8px; border: 1px solid #d6dee9; word-break: break-all;">${MONEDERO_USDT}</span>
-                            <span style="font-size:0.7rem; color:#5a6f8a; background:#e9eff6; padding:0.1rem 0.6rem; border-radius:40px;">copiar</span>
-                        </div>
-                        <p style="font-size:0.85rem; color:#3a4a62; margin-top:0.3rem;">
-                            El beneficiario deberá realizar el depósito del monto correspondiente al plan seleccionado
-                            ($${monto} USD) en la dirección indicada, y enviar el comprobante de la transacción a LA ENTIDAD
-                            para dar inicio al trámite ante la Banca Central.
-                        </p>
-                    </div>
+  /* ============================================================
+     SUBIR IMAGEN + COMPRIMIR
+     ============================================================ */
+  fileInput.addEventListener('change', async e => {
+    const file = e.target.files[0];
+    if (!file) return;
 
-                    <div class="clausula">
-                        <h3>QUINTA. — Aceptación y firma</h3>
-                        <p style="font-size: 0.95rem;">
-                            Las partes declaran que han leído, comprendido y aceptado todas y cada una de las cláusulas contenidas
-                            en el presente contrato, comprometiéndose a su fiel cumplimiento.
-                        </p>
-                        <p style="margin-top: 0.5rem; font-style: italic; color: #5d4e3e; font-size: 0.95rem;">
-                            Firmado en <strong>Ciudad</strong>, a los <strong>${fecha}</strong>.
-                        </p>
-                    </div>
+    const originalSize = file.size;
+    imgInfo.textContent = '⏳ Comprimiendo imagen...';
 
-                    <div class="firma-line" style="display: flex; justify-content: space-between; margin-top: 1.5rem; border-top: 2px solid #e6edf6; padding-top: 1.5rem; flex-wrap: wrap; gap: 1rem;">
-                        <div class="firma-bloco" style="flex: 1 1 180px;">
-                            <p><strong>EL BENEFICIARIO</strong></p>
-                            <p style="font-size: 0.95rem;">Nombre: ${nombreCompleto}</p>
-                            <p style="font-size: 0.95rem;">Cédula / Pasaporte: ${cedula}</p>
-                            <p style="font-size: 0.95rem;"><strong>Número de cuenta:</strong> ${numeroCuenta}</p>
-                            <div class="linea" style="border-bottom: 1.5px solid #b3a18e; width: 100%; height: 1.2rem; margin: 0.3rem 0 0.1rem;"></div>
-                            <span class="label" style="font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1.5px; color: #8a7a6a;">Firma</span>
-                            <p style="font-weight: 400; font-size: 0.9rem; margin-top: 0.2rem;">${firma}</p>
-                        </div>
-                        <div class="firma-bloco" style="flex: 1 1 180px;">
-                            <p><strong>LA ENTIDAD</strong></p>
-                            <p style="font-size: 0.95rem;">Número de cuenta: __________________</p>
-                            <div class="linea" style="border-bottom: 1.5px solid #b3a18e; width: 100%; height: 1.2rem; margin: 0.3rem 0 0.1rem;"></div>
-                            <span class="label" style="font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1.5px; color: #8a7a6a;">Firma y sello</span>
-                            <p style="font-weight: 400; font-size: 0.9rem; margin-top: 0.2rem;">Upcomer S.A.</p>
-                        </div>
-                    </div>
+    try {
+      const compressed = await compressImage(file, 1200, 0.75);
+      currentImageData = compressed;
+      previewImg.src = compressed;
+      previewImg.style.display = 'block';
+      imageText.style.display = 'none';
 
-                    <div style="margin-top: 1rem; background: #f7faff; padding: 0.5rem 1rem; border-radius: 12px; font-size: 0.85rem; border: 1px solid #dee8f2;">
-                        <strong>Banco de acreditación:</strong> ${banco} · <strong>Cuenta:</strong> ${numeroCuenta}
-                    </div>
+      const approxBytes = Math.round((compressed.length * 3) / 4);
+      imgInfo.textContent = `✅ Original: ${formatBytes(originalSize)} → Comprimida: ~${formatBytes(approxBytes)}`;
+    } catch (err) {
+      imgInfo.textContent = '❌ Error al comprimir la imagen';
+      console.error(err);
+    }
+  });
 
-                    <div style="margin-top: 0.8rem; background: #f0f7fe; padding: 0.5rem 1rem; border-radius: 12px; font-size: 0.8rem; border: 1px solid #c8dce8;">
-                        <strong>💳 Pago en USDT TRC-20:</strong> ${MONEDERO_USDT}
-                    </div>
+  /* ============================================================
+     GUARDAR / COMPARTIR SEÑAL
+     ============================================================ */
+  async function saveSignal() {
+    const entry = document.getElementById('entry').value.trim();
+    const sl = document.getElementById('sl').value.trim();
+    const tp1 = document.getElementById('tp1').value.trim();
+    const tp2 = document.getElementById('tp2').value.trim();
+    const tp3 = document.getElementById('tp3').value.trim();
 
-                    <!-- PIE DE PÁGINA (aparece en cada hoja) -->
-                    <div style="margin-top: 2rem; padding-top: 0.8rem; border-top: 1px solid #e6edf6; text-align: center; font-size: 0.65rem; color: #8a9bb0; letter-spacing: 1px;">
-                        Documento generado por Upcomer · Contrato de desembolso · Página 1 de 3
-                    </div>
+    if (!currentImageData && !entry) {
+      statusEl.textContent = '⚠️ Sube una imagen o pon al menos la entrada';
+      setTimeout(() => statusEl.textContent = '', 2500);
+      return;
+    }
 
-                </div>
-            `;
-        }
+    const now = new Date().toISOString();
 
-        function renderContrato() {
-            preview.innerHTML = generarHTMLContrato();
-        }
+    const signal = {
+      image: currentImageData || '',
+      entry, sl, tp1, tp2, tp3,
+      createdAt: now
+    };
 
-        // Actualizar en vivo
-        const inputs = [nombreInput, apellidoInput, cedulaInput, bancoSelect, numeroCuentaInput, firmaInput, fechaInput];
-        inputs.forEach(input => {
-            input.addEventListener('input', renderContrato);
-            input.addEventListener('change', renderContrato);
-        });
+    await dbAdd(signal);
+    statusEl.textContent = '✅ Señal compartida y guardada';
+    setTimeout(() => statusEl.textContent = '', 2500);
 
-        renderContrato();
+    resetForm();
+    await renderHistory();
+  }
 
-        // Limpiar
-        document.getElementById('limpiarBtn').addEventListener('click', function() {
-            nombreInput.value = '';
-            apellidoInput.value = '';
-            cedulaInput.value = '';
-            bancoSelect.value = '';
-            numeroCuentaInput.value = '';
-            firmaInput.value = '';
-            fechaInput.value = hoy;
-            const radios = document.querySelectorAll('input[name="plan"]');
-            radios.forEach(r => r.checked = false);
-            document.querySelectorAll('.plan-option').forEach(c => c.classList.remove('seleccionado'));
-            const primer = document.querySelector('input[name="plan"]');
-            if (primer) {
-                primer.checked = true;
-                primer.closest('.plan-option')?.classList.add('seleccionado');
-                planSeleccionado = primer.value;
-                costoSeleccionado = parseInt(primer.dataset.costo, 10) || 0;
-            }
-            renderContrato();
-        });
+  /* ============================================================
+     RESET FORMULARIO
+     ============================================================ */
+  function resetForm() {
+    currentImageData = '';
+    fileInput.value = '';
+    previewImg.src = '';
+    previewImg.style.display = 'none';
+    imageText.style.display = 'block';
+    imgInfo.textContent = '';
+    ['entry','sl','tp1','tp2','tp3'].forEach(id => document.getElementById(id).value = '');
+  }
 
-        // Submit
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const nombre = nombreInput.value.trim();
-            const apellido = apellidoInput.value.trim();
-            const cedula = cedulaInput.value.trim();
-            const banco = bancoSelect.value;
-            const numeroCuenta = numeroCuentaInput.value.trim();
-            const firma = firmaInput.value.trim();
-            const fecha = fechaInput.value;
+  /* ============================================================
+     RENDER HISTORIAL
+     ============================================================ */
+  async function renderHistory() {
+    const all = await dbGetAll();
+    // más recientes primero
+    all.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
-            if (!nombre || !apellido || !cedula || !banco || !numeroCuenta || !firma || !fecha) {
-                alert('⚠️ Todos los campos son obligatorios.');
-                return;
-            }
+    historyEl.innerHTML = '';
+    countEl.textContent = all.length + ' señal' + (all.length === 1 ? '' : 'es');
 
-            const mensaje = `✧ CONTRATO DE DESEMBOLSO · UPCOMER ✧\n\n` +
-                `Beneficiario: ${nombre} ${apellido}\n` +
-                `Cédula: ${cedula}\n` +
-                `Banco: ${banco}\n` +
-                `Número de cuenta: ${numeroCuenta}\n` +
-                `Plan: ${planNombres[planSeleccionado]}\n` +
-                `Costo: $${costoSeleccionado}\n` +
-                `Firma: ${firma}\n` +
-                `Fecha: ${new Date(fecha).toLocaleDateString('es-ES')}\n` +
-                `USDT TRC-20: ${MONEDERO_USDT}\n\n` +
-                `⚡ Pago obligatorio ante la Banca Central.\n` +
-                `⚡ Incumplimiento: multa USD $50,000.\n\n` +
-                `¿Confirmar la firma del contrato?`;
+    if (all.length === 0) {
+      const empty = document.createElement('div');
+      empty.className = 'empty';
+      empty.textContent = 'Aún no has compartido ninguna señal 😴';
+      historyEl.appendChild(empty);
+      return;
+    }
 
-            if (confirm(mensaje)) {
-                alert(`✅ Contrato firmado por ${nombre} ${apellido}.\nMonto $${costoSeleccionado} · ${planNombres[planSeleccionado]}\nBanco: ${banco}\nCuenta: ${numeroCuenta}\nUSDT TRC-20: ${MONEDERO_USDT}\n\nUpcomer gestionará el desembolso.`);
-            }
-        });
+    all.forEach(sig => {
+      const { fecha, hora } = formatDate(sig.createdAt);
 
-        // --- FUNCIÓN PARA GENERAR PDF (con separación de páginas) ---
-        function generarPDF() {
-            if (!nombreInput.value.trim() || !apellidoInput.value.trim() || !cedulaInput.value.trim() || !bancoSelect.value || !numeroCuentaInput.value.trim() || !firmaInput.value.trim() || !fechaInput.value) {
-                alert('⚠️ Completa todos los campos antes de generar el PDF.');
-                return;
-            }
+      const card = document.createElement('div');
+      card.className = 'card';
 
-            const btn = document.getElementById('descargarPdfDesdePreview');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '<span class="loader-pdf"></span> Generando...';
-            btn.disabled = true;
+      let imgHtml = '';
+      if (sig.image) {
+        imgHtml = `<img class="card-img" src="${sig.image}" alt="señal">`;
+      }
 
-            // Generar el HTML completo del contrato con los datos actuales
-            const contenidoHTML = generarHTMLContrato();
+      card.innerHTML = `
+        ${imgHtml}
+        <div class="card-body">
+          <div class="card-date">
+            <span>📅 ${fecha} · 🕒 ${hora}</span>
+            <span class="badge">#${sig.id}</span>
+          </div>
+          <div class="card-row"><span class="tag">Entrada</span><span class="entry">${sig.entry || '-'}</span></div>
+          <div class="card-row"><span class="tag">SL</span><span class="sl">${sig.sl || '-'}</span></div>
+          <div class="card-row"><span class="tag">TP1</span><span class="tp">${sig.tp1 || '-'}</span></div>
+          <div class="card-row"><span class="tag">TP2</span><span class="tp">${sig.tp2 || '-'}</span></div>
+          <div class="card-row"><span class="tag">TP3</span><span class="tp">${sig.tp3 || '-'}</span></div>
+          <button class="delete-btn" onclick="removeSignal(${sig.id})">🗑 Eliminar esta señal</button>
+        </div>
+      `;
+      historyEl.appendChild(card);
+    });
+  }
 
-            // Crear un contenedor temporal para el PDF con estilo optimizado
-            const wrapper = document.createElement('div');
-            wrapper.style.cssText = 'padding: 0.4in; background: white; font-family: "Inter", sans-serif; max-width: 100%;';
-            wrapper.innerHTML = contenidoHTML;
-
-            // Agregar estilos para el PDF (optimizados para impresión y múltiples páginas)
-            const style = document.createElement('style');
-            style.textContent = `
-                * { margin: 0; padding: 0; box-sizing: border-box; }
-                body { font-family: 'Inter', sans-serif; background: white; padding: 0; margin: 0; }
-                .clausula { margin-bottom: 1.2rem; }
-                .clausula h3 { font-size: 1.1rem; font-weight: 700; color: #0b1a33; border-left: 4px solid #1e6f9f; padding-left: 0.8rem; margin-bottom: 0.3rem; }
-                .clausula ul { padding-left: 1.8rem; list-style: none; margin-top: 0.2rem; }
-                .clausula ul li::before { content: "—"; color: #1e6f9f; margin-right: 0.5rem; }
-                .advertencia { background: #f7f1ea; border-left: 6px solid #b8863a; padding: 0.8rem 1.2rem; margin: 0.8rem 0; border-radius: 0 8px 8px 0; }
-                .monto { font-weight: 700; font-size: 1.5rem; color: #a0672b; }
-                .firma-line { display: flex; justify-content: space-between; margin-top: 1.5rem; border-top: 2px solid #e6edf6; padding-top: 1.5rem; flex-wrap: wrap; gap: 1rem; }
-                .firma-bloco { flex: 1 1 180px; }
-                .firma-bloco .linea { border-bottom: 1.5px solid #b3a18e; width: 100%; height: 1.2rem; margin: 0.3rem 0 0.1rem; }
-                .firma-bloco .label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1.5px; color: #8a7a6a; }
-                .monedero-box { background: #f0f7fe; border: 1px solid #c8dce8; border-radius: 12px; padding: 0.8rem 1.2rem; margin: 0.8rem 0; display: flex; align-items: center; gap: 0.8rem; flex-wrap: wrap; }
-                .monedero-box .label { font-weight: 600; color: #0b1a33; }
-                .monedero-box .direccion { font-family: monospace; font-size: 0.85rem; background: white; padding: 0.3rem 0.8rem; border-radius: 8px; border: 1px solid #d6dee9; word-break: break-all; }
-                p { font-size: 0.95rem; line-height: 1.6; margin-bottom: 0.5rem; }
-                strong { color: #0b1a33; }
-                .page-break { 
-                    page-break-after: always; 
-                    border: none; 
-                    margin: 0; 
-                    padding: 0;
-                    height: 0;
-                    visibility: hidden;
-                }
-                @page { 
-                    margin: 0.4in; 
-                    size: A4;
-                }
-                @media print {
-                    .page-break { page-break-after: always; }
-                }
-            `;
-            wrapper.appendChild(style);
-
-            const opt = {
-                margin:        [0.4, 0.4, 0.4, 0.4],
-                filename:     `Contrato_Upcomer_${nombreInput.value.trim()}_${apellidoInput.value.trim()}.pdf`,
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { 
-                    scale: 2, 
-                    letterRendering: true, 
-                    useCORS: true, 
-                    logging: false,
-                    width: 800
-                },
-                jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' },
-                pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
-            };
-
-            html2pdf().set(opt).from(wrapper).save().then(() => {
-                btn.innerHTML = originalText;
-                btn.disabled = false;
-            }).catch((err) => {
-                console.error('Error PDF:', err);
-                alert('Error al generar el PDF. Intenta de nuevo.');
-                btn.innerHTML = originalText;
-                btn.disabled = false;
-            });
-        }
-
-        // --- Botón de descarga dentro de la vista previa ---
-        document.getElementById('descargarPdfDesdePreview').addEventListener('click', generarPDF);
-
-    })();
+  /* ============================================================
+     ELIMINAR SEÑAL
+     ============================================================ */
+  async function removeSignal(id) {
+    if (!confirm('¿Eliminar esta señal del historial?')) return;
+    await dbDelete(id);
+    await renderHistory();
+  }
 </script>
 
 </body>
